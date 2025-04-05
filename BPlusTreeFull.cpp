@@ -50,10 +50,45 @@ void BPlusTree::insert(int key, string value) {
     // TODO: Handle insertion. Call insertInternal and handle new root creation if split occurs.
 }
 
+/**
+ * @brief insert key-value recursively to correct leaf
+ * 
+ * @param key int
+ * @param value string
+ * @param node pointer of BPlusNode 
+ * @param newChild reference of pointer of new BPlusNode child
+ * @param newKey reference of newKey
+ */
 void BPlusTree::insertInternal(int key, string value, BPlusNode* node, BPlusNode*& newChild, int& newKey) {
-    // TODO: Recursively insert key-value into correct leaf.
+    // TODO: Recursively insert key-value into correct leaf
     // If node is leaf, insert and split if necessary.
-    // If internal, delegate to appropriate child and handle potential split from below.
+    // If internal, send to child and handle potential split from below. If parent keys overflow, 
+    // split again
+
+    if(node->isLeaf){
+        // find the key to insert;
+        auto insert_pos = lower_bound(node->entries.begin(), node->entries.end(), key,[](const Entry& x, int y){return x.key < y;} );
+        node->entries.insert(insert_pos, {key,value}); // insert {key,value} in node entries
+        // Split if node entries greater than order
+        if(node->entries.size() >= ORDER){
+            splitLeaf(node, newChild, newKey);
+        } 
+        return;
+    }
+    // internal nodes, recursively insert new key to child until leaf
+    int insert_pos = upper_bound(node->keys.begin(), node->keys.end(), key) - node->keys.begin();
+    BPlusNode* child = node->children[insert_pos];
+    BPlusNode* tempChild = nullptr;
+    int tempKey;
+    insertInternal(key,value,child,tempChild,tempKey);
+    if(tempChild){
+        node->keys.insert(insert_pos + node->keys.begin(), tempKey);
+        node->children.insert(insert_pos + node->children.begin() + 1, tempChild);
+        if (node->keys.size() >= ORDER){
+            splitInternal(node, newChild, newKey);
+        }
+    }
+
 }
 
 void BPlusTree::splitLeaf(BPlusNode* node, BPlusNode*& newChild, int& newKey) {
@@ -68,27 +103,32 @@ void BPlusTree::splitInternal(BPlusNode* node, BPlusNode*& newChild, int& newKey
 
 void BPlusTree::remove(int key) {
     // TODO: Call deleteEntry. If root becomes empty, demote it to its only child.
+    // Zirui
 }
 
 bool BPlusTree::deleteEntry(BPlusNode* node, int key) {
     // TODO: Delete key from leaf or recurse into internal node.
     // Handle underflow in leaf by borrowing or merging.
     // Return true if deletion happened, false otherwise.
+    //Zirui
 }
 
 void BPlusTree::borrowLeaf(BPlusNode* node) {
     // TODO: Borrow entry from sibling leaf (either prev or next).
     // If borrowing is not possible, fallback to merging.
+    //Yian
 }
 
 void BPlusTree::mergeLeaf(BPlusNode* node) {
     // TODO: Merge current leaf node with its sibling.
     // Update linked list pointers and delete the node.
+    //Yian
 }
 
 string BPlusTree::search(int key) {
     // TODO: Traverse the tree to find the leaf node.
     // Then search through entries to find the value.
+    // Yian
     return "";
 }
 
