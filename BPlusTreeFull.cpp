@@ -115,10 +115,31 @@ string BPlusTree::search(int key) {
 
 void BPlusTree::print() {
     // TODO: Print the entire B+ tree structure for debugging.
+    printTree(root, 0);
 }
 
 void BPlusTree::printTree(BPlusNode* node, int level) {
     // TODO: Recursively print node data and structure with indentation.
+    if(!node) return;
+    cout << string (level * 4, ' ') ;
+    if (node -> isLeaf){
+        cout << "Leaf: ";
+        for (const auto& entry : node->entries) {
+            cout << "(" << entry.key << ", " << entry.value << ") ";
+        }
+    }
+    else{
+        cout << "Internal: ";
+        for (const auto& key : node->keys) {
+            cout << key << " ";
+        }
+    }
+    cout << endl;
+    if (!(node -> isLeaf))
+        for (auto child : node->children) {
+            printTree(child, level + 1);
+        }
+
 }
 
 void BPlusTree::printLeaves() {
