@@ -1,20 +1,23 @@
-#pragma once
+#ifndef BPLUSTREE_NODE_H
+#define BPLUSTREE_NODE_H
 #include <vector>
 #include <string>
+using namespace std;
 
 struct Entry {
     int key;
-    std::string value;
+    string value;
 };
 
 class BPlusNode {
 public:
     bool isLeaf;
-    std::vector<int> keys;
-    std::vector<BPlusNode*> children;
-    std::vector<Entry> entries;
+    vector<int> keys;
+    vector<BPlusNode*> children;
+    vector<Entry> entries;
     BPlusNode* next;
     BPlusNode* prev;
 
     BPlusNode(bool leaf);
 };
+#endif // BPLUSTREE_NODE_H
