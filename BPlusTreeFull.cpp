@@ -1,4 +1,4 @@
-// B+ Tree with (key, value) pairs, insert/delete, split/merge support (skeleton with TODOs)
+// B+ Tree with (key, value) pairs, insert/delete, split/merge support (skeleton functions)
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -36,7 +36,6 @@ void BPlusTree::insert(int key, string value) {
  * @param newKey reference of newKey
  */
 void BPlusTree::insertInternal(int key, string value, BPlusNode* node, BPlusNode*& newChild, int& newKey) {
-    // TODO: Recursively insert key-value into correct leaf
     // If node is leaf, insert and split if necessary.
     // If internal, send to child and handle potential split from below. If parent keys overflow, 
     // split again
