@@ -3,48 +3,13 @@
 #include <vector>
 #include <algorithm>
 #include <map>
+#include "BPlusNode.h"
+#include "BPlusTree.h"
+
 using namespace std;
 
 const int ORDER = 3; // Max keys per node = ORDER - 1
 
-struct Entry {
-    int key;
-    string value;
-};
-
-class BPlusNode {
-public:
-    bool isLeaf;
-    vector<int> keys;
-    vector<BPlusNode*> children;              // internal node children
-    vector<Entry> entries;                    // leaf node entries
-    BPlusNode* next = nullptr;                // for leaf node traversal
-    BPlusNode* prev = nullptr;
-
-    BPlusNode(bool leaf): isLeaf(leaf) {}
-};
-
-class BPlusTree {
-private:
-    BPlusNode* root;
-
-    void insertInternal(int key, string value, BPlusNode* node, BPlusNode*& newChild, int& newKey);
-    void splitLeaf(BPlusNode* node, BPlusNode*& newChild, int& newKey);
-    void splitInternal(BPlusNode* node, BPlusNode*& newChild, int& newKey);
-    bool deleteEntry(BPlusNode* node, int key);
-    void mergeLeaf(BPlusNode* node);
-    void borrowLeaf(BPlusNode* node);
-    void printTree(BPlusNode* node, int level);
-
-public:
-    BPlusTree() { root = new BPlusNode(true); }
-
-    void insert(int key, string value);
-    void remove(int key);
-    void print();
-    void printLeaves();
-    string search(int key);
-};
 
 void BPlusTree::insert(int key, string value) {
     // TODO: Handle insertion. Call insertInternal and handle new root creation if split occurs.
@@ -143,18 +108,21 @@ bool BPlusTree::deleteEntry(BPlusNode* node, int key) {
     // Handle underflow in leaf by borrowing or merging.
     // Return true if deletion happened, false otherwise.
     //Zirui
+    return 0;
 }
 
 void BPlusTree::borrowLeaf(BPlusNode* node) {
     // TODO: Borrow entry from sibling leaf (either prev or next).
     // If borrowing is not possible, fallback to merging.
     //Yian
+    return;
 }
 
 void BPlusTree::mergeLeaf(BPlusNode* node) {
     // TODO: Merge current leaf node with its sibling.
     // Update linked list pointers and delete the node.
     //Yian
+    return;
 }
 
 string BPlusTree::search(int key) {
@@ -195,4 +163,5 @@ void BPlusTree::printTree(BPlusNode* node, int level) {
 
 void BPlusTree::printLeaves() {
     // TODO: Traverse to the leftmost leaf and print all entries left-to-right.
+    return;
 }

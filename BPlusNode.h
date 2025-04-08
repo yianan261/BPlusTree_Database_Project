@@ -10,14 +10,14 @@ struct Entry {
 };
 
 class BPlusNode {
-public:
-    bool isLeaf;
-    vector<int> keys;
-    vector<BPlusNode*> children;
-    vector<Entry> entries;
-    BPlusNode* next;
-    BPlusNode* prev;
-
-    BPlusNode(bool leaf);
-};
+    public:
+        bool isLeaf;
+        vector<int> keys;
+        vector<BPlusNode*> children;              // internal node children
+        vector<Entry> entries;                    // leaf node entries
+        BPlusNode* next = nullptr;                // for leaf node traversal
+        BPlusNode* prev = nullptr;
+    
+        BPlusNode(bool leaf): isLeaf(leaf) {}
+    };
 #endif // BPLUSTREE_NODE_H
