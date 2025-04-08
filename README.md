@@ -8,12 +8,14 @@ Implemented the B Plus Tree Algorithm in BPlusTreeFull.cpp and defining the skel
 
 # To Run The Program
 
+Git clone the project first
+
 ## Windows
 
 Run
 
 ```bash
-g++ \*.cpp -o output
+g++ *.cpp -o output
 ```
 
 then run
@@ -27,7 +29,7 @@ then run
 Run
 
 ```bash
-g++ -std=c++11 \*.cpp -o output
+g++ -std=c++11 *.cpp -o output
 ```
 
 then run
