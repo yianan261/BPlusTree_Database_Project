@@ -94,11 +94,32 @@ void BPlusTree::insertInternal(int key, string value, BPlusNode* node, BPlusNode
 void BPlusTree::splitLeaf(BPlusNode* node, BPlusNode*& newChild, int& newKey) {
     // TODO: Split a full leaf node into two and maintain linked list connections.
     // Assign newChild and newKey for parent node to handle.
+    newChild = new BPlusNode(true);
+    int midindex = ORDER / 2;
+
+    newChild->entries.assign(node->entries.begin() + midindex, node->entries.end());
+    newKey = newChild->entries.front().key;
+
+    if(node -> next) {
+        newChild -> next  = node -> next;
+        node -> next -> prev = newChild;
+    }
+    newChild -> prev = node;
+    node -> next = newChild;
 }
 
 void BPlusTree::splitInternal(BPlusNode* node, BPlusNode*& newChild, int& newKey) {
     // TODO: Split a full internal node and promote the middle key to the parent.
     // Assign newChild and newKey accordingly.
+    newChild = new BPlusNode(false);
+    int midindex = ORDER / 2;
+
+    newKey = node->keys[midindex];
+    newChild->keys.assign(node->keys.begin() + midindex + 1, node->keys.end());
+    newChild->children.assign(node->children.begin() + midindex + 1, node->children.end());
+    
+    node->keys.resize(midindex);
+    node->children.resize(midindex + 1);
 }
 
 void BPlusTree::remove(int key) {
@@ -134,10 +155,31 @@ string BPlusTree::search(int key) {
 
 void BPlusTree::print() {
     // TODO: Print the entire B+ tree structure for debugging.
+    printTree(root, 0);
 }
 
 void BPlusTree::printTree(BPlusNode* node, int level) {
     // TODO: Recursively print node data and structure with indentation.
+    if(!node) return;
+    cout << string (level * 4, ' ') ;
+    if (node -> isLeaf){
+        cout << "Leaf: ";
+        for (const auto& entry : node->entries) {
+            cout << "(" << entry.key << ", " << entry.value << ") ";
+        }
+    }
+    else{
+        cout << "Internal: ";
+        for (const auto& key : node->keys) {
+            cout << key << " ";
+        }
+    }
+    cout << endl;
+    if (!(node -> isLeaf))
+        for (auto child : node->children) {
+            printTree(child, level + 1);
+        }
+
 }
 
 void BPlusTree::printLeaves() {
