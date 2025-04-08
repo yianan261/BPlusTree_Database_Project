@@ -48,6 +48,17 @@ public:
 
 void BPlusTree::insert(int key, string value) {
     // TODO: Handle insertion. Call insertInternal and handle new root creation if split occurs.
+    BPlusNode* newChild = nullptr;
+    int newKey;
+    insertInternal(key,value, root, newChild, newKey);
+    if(newChild != nullptr){
+        BPlusNode* newRoot = new BPlusNode(false);
+        newRoot->keys.push_back(newKey);
+        newRoot->children.push_back(root);
+        newRoot->children.push_back(newChild);
+        root = newRoot;
+    }
+
 }
 
 /**
@@ -75,7 +86,7 @@ void BPlusTree::insertInternal(int key, string value, BPlusNode* node, BPlusNode
         } 
         return;
     }
-    // internal nodes, recursively insert new key to child until leaf
+    // internal nodes, recursively insert new key to child until leaf (sorted)
     int insert_pos = upper_bound(node->keys.begin(), node->keys.end(), key) - node->keys.begin();
     BPlusNode* child = node->children[insert_pos];
     BPlusNode* tempChild = nullptr;
