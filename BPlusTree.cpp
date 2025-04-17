@@ -1,6 +1,8 @@
 #include "BPlusTree.h"
 #include <iostream>
 #include <algorithm>
+#include <cassert>
+
 using namespace std;
 
 const int ORDER = 3;
@@ -203,6 +205,7 @@ void BPlusTree::print() {
 
 void BPlusTree::printTree(BPlusNode* node, int level) {
     // Recursively print node data and structure with indentation.
+    assert(node != nullptr);
     if (!node) return;
     cout << string(level * 4, ' ');
     if (node->isLeafNode()) {
