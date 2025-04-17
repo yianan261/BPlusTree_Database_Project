@@ -10,56 +10,48 @@ using namespace std;
 
 const int ORDER = 3; // Max keys per node = ORDER - 1
 
-
-void BPlusTree::insert(int key, string value) {
-    // TODO: Handle insertion. Call insertInternal and handle new root creation if split occurs.
-    BPlusNode* newChild = nullptr;
-    int newKey;
-    insertInternal(key,value, root, newChild, newKey);
-    if(newChild != nullptr){
-        BPlusNode* newRoot = new BPlusNode(false);
-        newRoot->keys.push_back(newKey);
-        newRoot->children.push_back(root);
-        newRoot->children.push_back(newChild);
-        root = newRoot;
-    }
-
+BPlusTree::BPlusTree() {
+    root = new LeafNode();
 }
 
-/**
- * @brief insert key-value recursively to correct leaf
- * 
- * @param key int
- * @param value string
- * @param node pointer of BPlusNode 
- * @param newChild reference of pointer of new BPlusNode child
- * @param newKey reference of newKey
- */
-void BPlusTree::insertInternal(int key, string value, BPlusNode* node, BPlusNode*& newChild, int& newKey) {
-    // If node is leaf, insert and split if necessary.
-    // If internal, send to child and handle potential split from below. If parent keys overflow, 
-    // split again
+void BPlusTree::insert(int key, string value) {
+    BPlusNode* newChild = nullptr;
+    int newKey;
+    insertInternal(key, value, root, newChild, newKey);
+    if (newChild != nullptr) {
+        InternalNode* newRoot = new InternalNode();
+        newRoot->getKeys().push_back(newKey);
+        newRoot->getChildren().push_back(root);
+        newRoot->getChildren().push_back(newChild);
+        root = newRoot;
+    }
+}
 
-    if(node->isLeaf){
-        // find the key to insert;
-        auto insert_pos = lower_bound(node->entries.begin(), node->entries.end(), key,[](const Entry& x, int y){return x.key < y;} );
-        node->entries.insert(insert_pos, {key,value}); // insert {key,value} in node entries
-        // Split if node entries greater than order
-        if(node->entries.size() >= ORDER){
+void BPlusTree::insertInternal(int key, string value, BPlusNode* node, BPlusNode*& newChild, int& newKey){
+    if (node->isLeafNode()){
+        auto& entries = static_cast<LeafNode*>(node)->getEntries();
+        //lower_bound(start, end, value, comparator)
+        auto insert_pos = lower_bound(entries.begin(), entries.end(), key, [](const Entry& a, int b){
+            return a.key < b;
+        });
+        entries.insert(insert_pos, {key, value});
+        if(entries.size() >= ORDER){
             splitLeaf(node, newChild, newKey);
-        } 
+        }
         return;
     }
-    // internal nodes, recursively insert new key to child until leaf (sorted)
-    int insert_pos = upper_bound(node->keys.begin(), node->keys.end(), key) - node->keys.begin();
-    BPlusNode* child = node->children[insert_pos];
+    auto& keys = node->getKeys();
+    auto& children = node->getChildren();
+    int insert_pos = upper_bound(keys.begin(), keys.end(), key) - keys.begin();
+    BPlusNode* child = children[insert_pos];
     BPlusNode* tempChild = nullptr;
     int tempKey;
-    insertInternal(key,value,child,tempChild,tempKey);
+    insertInternal(key, value, child, tempChild, tempKey);
     if(tempChild){
-        node->keys.insert(insert_pos + node->keys.begin(), tempKey);
-        node->children.insert(insert_pos + node->children.begin() + 1, tempChild);
-        if (node->keys.size() >= ORDER){
+        auto* internal = static_cast<InternalNode*>(node);
+        internal->getKeys().insert(keys.begin() + insert_pos, tempKey);
+        internal->getChildren().insert(children.begin()+insert_pos+1, tempChild);
+        if (internal->getKeys().size() >= ORDER){
             splitInternal(node, newChild, newKey);
         }
     }
@@ -67,34 +59,45 @@ void BPlusTree::insertInternal(int key, string value, BPlusNode* node, BPlusNode
 }
 
 void BPlusTree::splitLeaf(BPlusNode* node, BPlusNode*& newChild, int& newKey) {
-    // TODO: Split a full leaf node into two and maintain linked list connections.
+    // Split a full leaf node into two and maintain linked list connections.
     // Assign newChild and newKey for parent node to handle.
-    newChild = new BPlusNode(true);
-    int midindex = ORDER / 2;
+    LeafNode* newLeaf = new LeafNode();
+    auto& entries = static_cast<LeafNode*>(node)->getEntries();
+    auto& newEntries = newLeaf->getEntries();
 
-    newChild->entries.assign(node->entries.begin() + midindex, node->entries.end());
-    newKey = newChild->entries.front().key;
+    int mid = ORDER/2;
+    newEntries.assign(entries.begin()+mid, entries.end());
+    entries.resize(mid);
 
-    if(node -> next) {
-        newChild -> next  = node -> next;
-        node -> next -> prev = newChild;
-    }
-    newChild -> prev = node;
-    node -> next = newChild;
+    newKey = newEntries.front().key; // promote to parent
+
+    newLeaf->setNext(node->getNext());
+    if(node->getNext()) node->getNext()->setPrev(newLeaf);
+    newLeaf->setPrev(node);
+    node->setNext(newLeaf);
+
+    newChild = newLeaf;
 }
 
 void BPlusTree::splitInternal(BPlusNode* node, BPlusNode*& newChild, int& newKey) {
     // TODO: Split a full internal node and promote the middle key to the parent.
     // Assign newChild and newKey accordingly.
-    newChild = new BPlusNode(false);
-    int midindex = ORDER / 2;
+    InternalNode* newInternal = new InternalNode();
+    auto& keys = node->getKeys();
+    auto& children = node->getChildren();
+    auto& newKeys = newInternal->getKeys();
+    auto& newChildren = newInternal->getChildren();
 
-    newKey = node->keys[midindex];
-    newChild->keys.assign(node->keys.begin() + midindex + 1, node->keys.end());
-    newChild->children.assign(node->children.begin() + midindex + 1, node->children.end());
+    int mid = ORDER/2;
+    newKey = keys[mid];
     
-    node->keys.resize(midindex);
-    node->children.resize(midindex + 1);
+    newKeys.assign(keys.begin() + mid + 1, keys.end());
+    newChildren.assign(children.begin() + mid + 1, children.end());
+
+    keys.resize(mid);
+    children.resize(mid+1);
+
+    newChild = newInternal;
 }
 
 void BPlusTree::remove(int key) {
@@ -114,6 +117,7 @@ void BPlusTree::borrowLeaf(BPlusNode* node) {
     // TODO: Borrow entry from sibling leaf (either prev or next).
     // If borrowing is not possible, fallback to merging.
     //Yian
+    
     return;
 }
 
@@ -138,25 +142,26 @@ void BPlusTree::print() {
 
 void BPlusTree::printTree(BPlusNode* node, int level) {
     // TODO: Recursively print node data and structure with indentation.
-    if(!node) return;
-    cout << string (level * 4, ' ') ;
-    if (node -> isLeaf){
+    if (!node) return;
+    cout << string(level * 4, ' ');
+    if (node->isLeafNode()) {
+        auto& entries = static_cast<LeafNode*>(node)->getEntries();
         cout << "Leaf: ";
-        for (const auto& entry : node->entries) {
-            cout << "(" << entry.key << ", " << entry.value << ") ";
+        for (const auto& e : entries) {
+            cout << "(" << e.key << ", " << e.value << ") ";
         }
-    }
-    else{
+    } else {
         cout << "Internal: ";
-        for (const auto& key : node->keys) {
-            cout << key << " ";
+        for (int k : node->getKeys()) {
+            cout << k << " ";
         }
     }
     cout << endl;
-    if (!(node -> isLeaf))
-        for (auto child : node->children) {
+    if (!node->isLeafNode()) {
+        for (BPlusNode* child : node->getChildren()) {
             printTree(child, level + 1);
         }
+    }
 
 }
 
