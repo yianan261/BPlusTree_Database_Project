@@ -1,70 +1,54 @@
-#include "BPlusTree.h"
-#include "BPlusNode.h"
+#include "LeaderDB.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
 using namespace std;
 
 int main() {
-    BPlusTree tree;
-
-    ifstream file("data.csv");
+    LeaderDB db;
+    string path = "./dataset_project/data.csv";
+    ifstream file(path);
     if (!file.is_open()) {
-        cerr << "Error opening file" << endl;
+        cerr << "Could not open data.csv\n";
         return 1;
     }
+
+    string headerLine;
+    getline(file, headerLine);
+
     string line;
     while (getline(file, line)) {
         stringstream ss(line);
-        string keyStr, value;
-        if(!getline(ss, keyStr, ',')) {
-            cerr << "Error reading key from line: " << line << endl;
-            continue;
-        }
-        if(!getline(ss, value)) {
-            cerr << "Error reading value from line: " << line << endl;
-            continue;
-        }
-        try{
-            int key = stoi(keyStr);
-            tree.insert(key, value);
-            
-        }   catch (const invalid_argument& e) {
-            cerr << "Invalid key format in line: " << line << endl;
-        } 
-        
+        string invoiceNo, stockCode, description, quantity, invoiceDate, unitPrice, customerID, country;
+
+        getline(ss, invoiceNo, ',');
+        getline(ss, stockCode, ',');
+        getline(ss, description, ',');
+        getline(ss, quantity, ',');
+        getline(ss, invoiceDate, ',');
+        getline(ss, unitPrice, ',');
+        getline(ss, customerID, ',');
+        getline(ss, country, ',');
+
+        db.set(invoiceNo, description);
     }
 
     file.close();
-    /*
-        tree.insert(10, "ten");
-        tree.insert(20, "twenty");
-        tree.insert(5, "five");
-    */
 
+    cout << "Finished loading dataset.\n";
 
-    int number;
-    cout << "please enter the number of key-value pairs you want to insert" << endl;
-    cin >> number;
-    while(number--){
-        int a;
-        string b;
-        cout << "please enter the key number you want to insert(it must be an integer)" << endl;
-        cin >> a;
-        cout << "please enter the value you want to insert(it must be a string)" << endl;
-        cin >> b;
-        tree.insert(a, b);
+    string input;
+    while (true) {
+        cout << "Enter InvoiceNo to look up (or 'exit'): ";
+        cin >> input;
+        if (input == "exit") break;
+
+        string result = db.get(input);
+        if (!result.empty())
+            cout << "Description: " << result << "\n";
+        else
+            cout << "Key not found.\n";
     }
-    cout << "Here is the B+ tree after inserting:" << endl;
 
-
-    tree.print();
-    //cout << "Search 10: " << tree.search(10) << endl;
-
-    //tree.remove(10);
-    //tree.printLeaves();
-
-    
     return 0;
 }
