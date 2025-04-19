@@ -13,12 +13,16 @@ int main() {
         return 1;
     }
 
+
+    /*
     string headerLine;
     getline(file, headerLine);
+
 
     string line;
     while (getline(file, line)) {
         stringstream ss(line);
+        //cout << "Line: " << line << "\n";
         string invoiceNo, stockCode, description, quantity, invoiceDate, unitPrice, customerID, country;
 
         getline(ss, invoiceNo, ',');
@@ -33,6 +37,17 @@ int main() {
         db.set(invoiceNo, description);
     }
 
+    */
+    string line;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string key, value;
+
+        getline(ss, key, ',');
+        getline(ss, value, ',');
+
+        db.set(key, value);
+    }
     file.close();
 
     cout << "Finished loading dataset.\n";
