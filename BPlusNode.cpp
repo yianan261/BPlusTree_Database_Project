@@ -37,7 +37,8 @@ void BPlusNode::setPrev(BPlusNode* p) {
 InternalNode::InternalNode() : BPlusNode(false) {}
 
 vector<Entry>& InternalNode::getEntries(){
-    throw logic_error("InternalNode does not store entries.");
+    //throw logic_error("InternalNode does not store entries.");
+    return entries; // This is just a placeholder. Internal nodes typically do not have entries.
 }
 
 bool InternalNode::isLeafNode() const {

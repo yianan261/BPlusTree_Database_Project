@@ -4,15 +4,17 @@
 #include <string>
 #include <vector>
 
+using namespace std;
+
 class BTreeIndex {
 private:
     BPlusTree tree;
 
 public:
-    void insert(const std::string& key, const std::string& value);
-    std::string search(const std::string& key);
-    std::vector<std::string> rangeQuery(const std::string& lowKey, const std::string& highKey);
-    void remove(const std::string& key);
+    void insert(const string& key, const string& value);
+    string search(const string& key);
+    vector<string> rangeQuery(const string& lowKey, const string& highKey);
+    void remove(const string& key);
     void print();
 };
 
