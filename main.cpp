@@ -4,6 +4,16 @@
 #include <sstream>
 using namespace std;
 
+void printHelp() {
+    cout << "\nAvailable commands:\n"
+         << "1. get <key>     - Retrieve value for a specific key\n"
+         << "2. set           - Add new key-value pair\n"
+         << "3. delete <key>  - Delete a specific key\n"
+         << "4. prefix <str>  - Find all entries with given prefix\n"
+         << "5. help         - Show this help message\n"
+         << "6. exit         - Exit the program\n\n";
+}
+
 int main() {
     LeaderDB db;
     string path = "./dataset_project/data.csv";
@@ -13,31 +23,6 @@ int main() {
         return 1;
     }
 
-
-    /*
-    string headerLine;
-    getline(file, headerLine);
-
-
-    string line;
-    while (getline(file, line)) {
-        stringstream ss(line);
-        //cout << "Line: " << line << "\n";
-        string invoiceNo, stockCode, description, quantity, invoiceDate, unitPrice, customerID, country;
-
-        getline(ss, invoiceNo, ',');
-        getline(ss, stockCode, ',');
-        getline(ss, description, ',');
-        getline(ss, quantity, ',');
-        getline(ss, invoiceDate, ',');
-        getline(ss, unitPrice, ',');
-        getline(ss, customerID, ',');
-        getline(ss, country, ',');
-
-        db.set(invoiceNo, description);
-    }
-
-    */
     string line;
     while (getline(file, line)) {
         stringstream ss(line);
@@ -51,19 +36,64 @@ int main() {
     file.close();
 
     cout << "Finished loading dataset.\n";
+    cout << "Welcome to LeaderDB Command Line Interface!\n";
+    printHelp();
 
-    string input;
+    string command, input;
     while (true) {
-        cout << "Enter InvoiceNo to look up (or 'exit'): ";
-        cin >> input;
-        if (input == "exit") break;
+        cout << "\nEnter command (type 'help' for commands): ";
+        cin >> command;
 
-        string result = db.get(input);
-        if (!result.empty())
-            cout << "Description: " << result << "\n";
-        else
-            cout << "Key not found.\n";
+        if (command == "exit") {
+            break;
+        }
+        else if (command == "help") {
+            printHelp();
+        }
+        else if (command == "get") {
+            cout << "Enter key to look up: ";
+            cin >> input;
+            string result = db.get(input);
+            if (!result.empty())
+                cout << "Value: " << result << "\n";
+            else
+                cout << "Key not found.\n";
+        }
+        else if (command == "set") {
+            string key, value;
+            cout << "Enter key: ";
+            cin >> key;
+            cout << "Enter value: ";
+            cin.ignore();
+            getline(cin, value);
+            db.set(key, value);
+            cout << "Record added successfully.\n";
+        }
+        else if (command == "delete") {
+            cout << "Enter key to delete: ";
+            cin >> input;
+            db.deleteKey(input);
+            cout << "Record deleted (if existed).\n";
+        }
+        else if (command == "prefix") {
+            cout << "Enter prefix to search: ";
+            cin >> input;
+            vector<string> results = db.getPrefix(input);
+            if (results.empty()) {
+                cout << "No matches found.\n";
+            } else {
+                cout << "Matching entries:\n";
+                for (const auto& result : results) {
+                    cout << result << "\n";
+                }
+                cout << "Total matches: " << results.size() << "\n";
+            }
+        }
+        else {
+            cout << "Unknown command. Type 'help' for available commands.\n";
+        }
     }
 
+    cout << "Thank you for using LeaderDB!\n";
     return 0;
 }
