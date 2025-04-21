@@ -13,6 +13,10 @@ void BTreeIndex::remove(const string& key) {
     tree.remove(stoi(key));
 }
 
+void BTreeIndex::clear(){
+    tree = BPlusTree(); // reinitialize new tree
+}
+
 //TODO: maybe add later
 vector<string> BTreeIndex::rangeQuery(const string& lowKey, const string& highKey) {
     return {};

@@ -15,6 +15,7 @@ public:
     string search(const string& key);
     vector<string> rangeQuery(const string& lowKey, const string& highKey);
     void remove(const string& key);
+    void clear();
     void print();
 };
 

@@ -16,6 +16,7 @@ public:
     string get(const string& key);
     void deleteKey(const string& key);
     vector<string> getPrefix(const string& prefix);
+    void clear();
 };
 
 #endif

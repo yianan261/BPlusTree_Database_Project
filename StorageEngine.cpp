@@ -25,3 +25,7 @@ vector<string> StorageEngine::getPrefix(const string& prefix) {
     }
     return result;
 }
+
+void StorageEngine::clear(){
+    kvStore.clear();
+}
