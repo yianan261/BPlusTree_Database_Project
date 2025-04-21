@@ -2,9 +2,9 @@
 #include <algorithm>
 
 void StorageEngine::set(const string& key, const string& value) {
-    //kvStore[key] = value;
+    kvStore[key] = value;
     // Using emplace to substitute the above line for better performance
-    kvStore.emplace(key, value); 
+    // kvStore.emplace(key, value); 
 }
 
 string StorageEngine::get(const string& key) {
