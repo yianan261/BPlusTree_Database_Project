@@ -4,14 +4,27 @@
 #include "BTreeIndex.h"
 #include <string>
 #include <vector>
+#include <map>
 
 using namespace std;
 
 class StorageEngine {
 private:
-    BTreeIndex tree;  
+    map<string, BTreeIndex> tables;  // 表名到B树索引的映射
+    string currentTable;             // 当前活动表名
 
 public:
+    StorageEngine() : currentTable("default") {
+        tables["default"] = BTreeIndex();
+    }
+
+    void createTable(const string& tableName);
+    void dropTable(const string& tableName);
+    void switchTable(const string& tableName);
+    string getCurrentTable() const;
+    bool hasTable(const string& tableName) const;
+    vector<string> listTables() const;
+
     void set(const string& key, const vector<string>& attrs);
     vector<string> get(const string& key);
     vector<vector<string>> getPrefix(const string& prefix);

@@ -7,18 +7,23 @@
 
 using namespace std;
 
-/* ─────────────── CLI 帮助 ─────────────── */
+/* ─────────────── help ─────────────── */
 void printHelp() {
     cout << "\nAvailable commands:\n"
-         << "1. get <key>     - Retrieve one record (all attributes)\n"
-         << "2. set           - Add/overwrite a record (comma‑separated attributes)\n"
-         << "3. delete <key>  - Delete a specific key\n"
-         << "4. prefix <str>  - List all records whose key starts with <str>\n"
-         << "5. help          - Show this help message\n"
-         << "6. exit          - Exit the program\n\n";
+         << "1. get <key>           - Retrieve one record (all attributes)\n"
+         << "2. set                 - Add/overwrite a record (comma‑separated attributes)\n"
+         << "3. delete <key>        - Delete a specific key\n"
+         << "4. prefix <str>        - List all records whose key starts with <str>\n"
+         << "5. create <table>      - Create a new table\n"
+         << "6. drop <table>        - Delete a table\n"
+         << "7. use <table>         - Switch to a table\n"
+         << "8. tables              - List all tables\n"
+         << "9. current             - Show current table name\n"
+         << "10. help               - Show this help message\n"
+         << "11. exit               - Exit the program\n\n";
 }
 
-/* ─────────────── 把一行 CSV 切成字段 ─────────────── */
+/* ─────────────── splitCSV ─────────────── */
 static vector<string> splitCSV(const string& line) {
     vector<string> fields;
     string field;
@@ -30,7 +35,7 @@ static vector<string> splitCSV(const string& line) {
 int main() {
     LeaderDB db;
 
-    /* ① 批量加载 CSV */
+    
     const string path = "./dataset_project/data.csv";
     ifstream file(path);
     if (!file.is_open()) {
@@ -43,21 +48,21 @@ int main() {
         auto fields = splitCSV(line);
         if (fields.empty()) continue;
 
-        string            key   = fields.front();
-        vector<string>    attrs(fields.begin() + 1, fields.end());
+        string key = fields.front();
+        vector<string> attrs(fields.begin() + 1, fields.end());
 
-        db.set(key, attrs);                // 存入所有属性
+        db.set(key, attrs);                
     }
     file.close();
     cout << "Finished loading dataset.\n";
 
-    /* ② 交互式 CLI */
+    
     cout << "Welcome to LeaderDB Command Line Interface!\n";
     printHelp();
 
     string command;
     while (true) {
-        cout << "\n> ";
+        cout << "[" << db.getCurrentTable() << "] ";
         if (!(cin >> command)) break;
 
         if (command == "exit") break;
@@ -85,7 +90,7 @@ int main() {
             cout << "Key: ";
             cin  >> key;
             cout << "Attributes (comma separated): ";
-            cin.ignore();              // flush '\n'
+            cin.ignore();              
             getline(cin, line);
             auto attrs = splitCSV(line);
             db.set(key, attrs);
@@ -102,7 +107,7 @@ int main() {
         /* ---------- PREFIX ---------- */
         else if (command == "prefix") {
             string pre; cin >> pre;
-            auto rows = db.getPrefix(pre);          // vector<vector<string>>
+            auto rows = db.getPrefix(pre);          
             if (rows.empty()) {
                 cout << "No matches.\n";
             } else {
@@ -116,6 +121,55 @@ int main() {
                 }
                 cout << "Total: " << rows.size() << '\n';
             }
+        }
+
+        /* ---------- CREATE ---------- */
+        else if (command == "create") {
+            string tableName; cin >> tableName;
+            if (db.hasTable(tableName)) {
+                cout << "Table already exists.\n";
+            } else {
+                db.createTable(tableName);
+                cout << "Table created.\n";
+            }
+        }
+
+        /* ---------- DROP ---------- */
+        else if (command == "drop") {
+            string tableName; cin >> tableName;
+            if (tableName == "default") {
+                cout << "Cannot drop default table.\n";
+            } else if (!db.hasTable(tableName)) {
+                cout << "Table does not exist.\n";
+            } else {
+                db.dropTable(tableName);
+                cout << "Table dropped.\n";
+            }
+        }
+
+        /* ---------- USE ---------- */
+        else if (command == "use") {
+            string tableName; cin >> tableName;
+            if (!db.hasTable(tableName)) {
+                cout << "Table does not exist.\n";
+            } else {
+                db.switchTable(tableName);
+                cout << "Switched to table: " << tableName << "\n";
+            }
+        }
+
+        /* ---------- TABLES ---------- */
+        else if (command == "tables") {
+            auto tables = db.listTables();
+            cout << "Tables:\n";
+            for (const auto& table : tables) {
+                cout << "- " << table << "\n";
+            }
+        }
+
+        /* ---------- CURRENT ---------- */
+        else if (command == "current") {
+            cout << "Current table: " << db.getCurrentTable() << "\n";
         }
 
         /* ---------- UNKNOWN ---------- */
