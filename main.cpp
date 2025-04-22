@@ -2,98 +2,128 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <vector>
+#include <string>
+
 using namespace std;
 
+/* ─────────────── CLI 帮助 ─────────────── */
 void printHelp() {
     cout << "\nAvailable commands:\n"
-         << "1. get <key>     - Retrieve value for a specific key\n"
-         << "2. set           - Add new key-value pair\n"
+         << "1. get <key>     - Retrieve one record (all attributes)\n"
+         << "2. set           - Add/overwrite a record (comma‑separated attributes)\n"
          << "3. delete <key>  - Delete a specific key\n"
-         << "4. prefix <str>  - Find all entries with given prefix\n"
-         << "5. help         - Show this help message\n"
-         << "6. exit         - Exit the program\n\n";
+         << "4. prefix <str>  - List all records whose key starts with <str>\n"
+         << "5. help          - Show this help message\n"
+         << "6. exit          - Exit the program\n\n";
+}
+
+/* ─────────────── 把一行 CSV 切成字段 ─────────────── */
+static vector<string> splitCSV(const string& line) {
+    vector<string> fields;
+    string field;
+    stringstream ss(line);
+    while (getline(ss, field, ',')) fields.push_back(field);
+    return fields;
 }
 
 int main() {
     LeaderDB db;
-    string path = "./dataset_project/data.csv";
+
+    /* ① 批量加载 CSV */
+    const string path = "./dataset_project/data.csv";
     ifstream file(path);
     if (!file.is_open()) {
-        cerr << "Could not open data.csv\n";
+        cerr << "Could not open " << path << '\n';
         return 1;
     }
 
     string line;
     while (getline(file, line)) {
-        stringstream ss(line);
-        string key, value;
+        auto fields = splitCSV(line);
+        if (fields.empty()) continue;
 
-        getline(ss, key, ',');
-        getline(ss, value, ',');
+        string            key   = fields.front();
+        vector<string>    attrs(fields.begin() + 1, fields.end());
 
-        db.set(key, value);
+        db.set(key, attrs);                // 存入所有属性
     }
     file.close();
-
     cout << "Finished loading dataset.\n";
+
+    /* ② 交互式 CLI */
     cout << "Welcome to LeaderDB Command Line Interface!\n";
     printHelp();
 
-    string command, input;
+    string command;
     while (true) {
-        cout << "\nEnter command (type 'help' for commands): ";
-        cin >> command;
+        cout << "\n> ";
+        if (!(cin >> command)) break;
 
-        if (command == "exit") {
-            break;
-        }
-        else if (command == "help") {
-            printHelp();
-        }
+        if (command == "exit") break;
+        else if (command == "help") printHelp();
+
+        /* ---------- GET ---------- */
         else if (command == "get") {
-            cout << "Enter key to look up: ";
-            cin >> input;
-            string result = db.get(input);
-            if (!result.empty())
-                cout << "Value: " << result << "\n";
-            else
+            string key;  cin >> key;
+            auto attrs = db.get(key);
+            if (attrs.empty())
                 cout << "Key not found.\n";
-        }
-        else if (command == "set") {
-            string key, value;
-            cout << "Enter key: ";
-            cin >> key;
-            cout << "Enter value: ";
-            cin.ignore();
-            getline(cin, value);
-            db.set(key, value);
-            cout << "Record added successfully.\n";
-        }
-        else if (command == "delete") {
-            cout << "Enter key to delete: ";
-            cin >> input;
-            db.deleteKey(input);
-            cout << "Record deleted (if existed).\n";
-        }
-        else if (command == "prefix") {
-            cout << "Enter prefix to search: ";
-            cin >> input;
-            vector<string> results = db.getPrefix(input);
-            if (results.empty()) {
-                cout << "No matches found.\n";
-            } else {
-                cout << "Matching entries:\n";
-                for (const auto& result : results) {
-                    cout << result << "\n";
+            else {
+                cout << "Record: ";
+                for (size_t i = 0; i < attrs.size(); ++i) {
+                    if (i) cout << ", ";
+                    cout << attrs[i];
                 }
-                cout << "Total matches: " << results.size() << "\n";
+                cout << '\n';
             }
         }
+
+        /* ---------- SET ---------- */
+        else if (command == "set") {
+            string key;
+            cout << "Key: ";
+            cin  >> key;
+            cout << "Attributes (comma separated): ";
+            cin.ignore();              // flush '\n'
+            getline(cin, line);
+            auto attrs = splitCSV(line);
+            db.set(key, attrs);
+            cout << "Record added/updated.\n";
+        }
+
+        /* ---------- DELETE ---------- */
+        else if (command == "delete") {
+            string key; cin >> key;
+            db.deleteKey(key);
+            cout << "Record deleted (if existed).\n";
+        }
+
+        /* ---------- PREFIX ---------- */
+        else if (command == "prefix") {
+            string pre; cin >> pre;
+            auto rows = db.getPrefix(pre);          // vector<vector<string>>
+            if (rows.empty()) {
+                cout << "No matches.\n";
+            } else {
+                cout << "Matches:\n";
+                for (const auto& attrs : rows) {
+                    for (size_t i = 0; i < attrs.size(); ++i) {
+                        if (i) cout << ", ";
+                        cout << attrs[i];
+                    }
+                    cout << '\n';
+                }
+                cout << "Total: " << rows.size() << '\n';
+            }
+        }
+
+        /* ---------- UNKNOWN ---------- */
         else {
-            cout << "Unknown command. Type 'help' for available commands.\n";
+            cout << "Unknown command. Type 'help' for help.\n";
         }
     }
 
-    cout << "Thank you for using LeaderDB!\n";
+    cout << "Bye!\n";
     return 0;
 }

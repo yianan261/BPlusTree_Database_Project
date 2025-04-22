@@ -1,7 +1,7 @@
 #ifndef STORAGEENGINE_H
 #define STORAGEENGINE_H
 
-#include <unordered_map>
+#include "BTreeIndex.h"
 #include <string>
 #include <vector>
 
@@ -9,13 +9,13 @@ using namespace std;
 
 class StorageEngine {
 private:
-    unordered_map<string, string> kvStore;
+    BTreeIndex tree;  
 
 public:
-    void set(const string& key, const string& value);
-    string get(const string& key);
+    void set(const string& key, const vector<string>& attrs);
+    vector<string> get(const string& key);
+    vector<vector<string>> getPrefix(const string& prefix);
     void deleteKey(const string& key);
-    vector<string> getPrefix(const string& prefix);
     void clear();
 };
 

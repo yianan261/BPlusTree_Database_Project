@@ -1,33 +1,33 @@
 #include "LeaderDB.h"
 
-void LeaderDB::set(const string& key, const string& value) {
-    wal.logWrite(key,value); // log before writing
-    storage.set(key, value);
-    index.insert(key, value);
+void LeaderDB::set(const string& key, const vector<string>& attrs) {
+    wal.logWrite(key, attrs); 
+    storage.set(key, attrs); 
+    index.insert(key, attrs);
 }
 
-void LeaderDB::recoverFromWAL(){
+void LeaderDB::recoverFromWAL() {
     storage.clear();
-    index.clear();
     auto entries = wal.loadLog();
-    for (const auto& [key,val]: entries){
-        storage.set(key,val);
-        index.insert(key,val);
+    for (const auto& [key, val]: entries) {
+        storage.set(key, val);
+        vector<string> attrs = {val};  // 将 string 转换为 vector<string>
+        index.insert(key, attrs);
     }
 }
 
-string LeaderDB::get(const string& key) {
-    if (index.search(key) != "") {
-    return storage.get(key);
-}
-    return "Not Found";
+vector<string> LeaderDB::get(const string& key) {
+    auto results = index.search(key);
+    if (!results.empty()) {
+        return storage.get(key);
+    }
+    return {};
 }
 
 void LeaderDB::deleteKey(const string& key) {
     storage.deleteKey(key);
-    index.remove(key);
 }
 
-vector<string> LeaderDB::getPrefix(const string& prefixKey) {
+vector<vector<string>> LeaderDB::getPrefix(const string& prefixKey) {
     return storage.getPrefix(prefixKey);
 }

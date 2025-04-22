@@ -13,8 +13,8 @@ private:
 
 public:
     WriteAheadLog();  
-    void logWrite(const string& key, const string& value);
-    vector<pair<string, string>> loadLog();  // for recovery
+    void logWrite(const string& key, const vector<string>& attrs);
+    vector<pair<string, vector<string>>> loadLog();
 };
 
 #endif

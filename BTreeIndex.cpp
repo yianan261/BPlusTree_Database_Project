@@ -1,11 +1,12 @@
 #include "BTreeIndex.h"
 #include <sstream>
 
-void BTreeIndex::insert(const string& key, const string& value) {
-    tree.insert(stoi(key), value);
+void BTreeIndex::insert(const string& key, const vector<string>& attrs){
+    tree.insert(stoi(key), attrs);   
 }
 
-string BTreeIndex::search(const string& key) {
+vector<string> BTreeIndex::search(const string& key)
+{
     return tree.search(stoi(key));
 }
 
@@ -18,7 +19,7 @@ void BTreeIndex::clear(){
 }
 
 //TODO: maybe add later
-vector<string> BTreeIndex::rangeQuery(const string& lowKey, const string& highKey) {
+vector<vector<string>> BTreeIndex::rangeQuery(const string& lowKey, const string& highKey) {
     return {};
 }
 

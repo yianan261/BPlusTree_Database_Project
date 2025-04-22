@@ -11,9 +11,9 @@ private:
     BPlusTree tree;
 
 public:
-    void insert(const string& key, const string& value);
-    string search(const string& key);
-    vector<string> rangeQuery(const string& lowKey, const string& highKey);
+    void insert(const string& key, const vector<string>& attrs);
+    vector<string> search(const string& key);
+    vector<vector<string>> rangeQuery(const string& lowKey, const string& highKey);
     void remove(const string& key);
     void clear();
     void print();

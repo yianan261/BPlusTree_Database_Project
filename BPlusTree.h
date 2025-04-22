@@ -9,7 +9,7 @@ class BPlusTree {
 private:
     BPlusNode* root;
 
-    void insertInternal(int key, std::string value, BPlusNode* node, BPlusNode*& newChild, int& newKey);
+    void insertInternal(int key, const vector<string>& attrs, BPlusNode* node, BPlusNode*& newChild, int& newKey);
     void splitLeaf(BPlusNode* node, BPlusNode*& newChild, int& newKey);
     void splitInternal(BPlusNode* node, BPlusNode*& newChild, int& newKey);
     bool deleteEntry(BPlusNode* node, int key);
@@ -20,9 +20,9 @@ private:
 public:
     BPlusTree();
 
-    void insert(int key, string value);
+    void insert(int key, const vector<string>& attrs);
     void remove(int key);
-    string search(int key);
+    vector<string> search(int key);
     void print();
     void printLeaves();
 };

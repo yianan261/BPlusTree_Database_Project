@@ -12,15 +12,17 @@ WriteAheadLog::WriteAheadLog(){
     }
 }
 
-void WriteAheadLog::logWrite(const string& key, const string& value){
-    if(logFile.is_open()){
-        logFile << key << "," << value << "\n";
-        logFile.flush(); 
-    }
+void WriteAheadLog::logWrite(const string& key, const vector<string>& attrs){
+        if(!logFile.is_open()) return;
+        logFile << key;
+        for (size_t i = 0; i < attrs.size(); ++i) {
+            logFile << (i==0 ? "," : "|") << attrs[i];  // ,key|attr1|attr2...
+        }
+       logFile << "\n";
 }
 
-vector<pair<string, string>> WriteAheadLog::loadLog(){
-    vector<pair<string, string>> logEntries;
+vector<pair<string, vector<string>>> WriteAheadLog::loadLog() {
+    vector<pair<string, vector<string>>> logEntries;
     ifstream infile("wal.log");
 
     if(!infile.is_open()){
@@ -31,11 +33,14 @@ vector<pair<string, string>> WriteAheadLog::loadLog(){
     string line;
     while(getline(infile,line)){
         stringstream ss(line);
-        string key, value;
-        if(getline(ss,key,',') && getline(ss,value)){
-            logEntries.emplace_back(key,value);
+        string key, rest;
+        if(getline(ss, key, ',') && getline(ss, rest)){
+            vector<string> attrs;
+            string attr;
+            stringstream ss2(rest);
+            while(getline(ss2, attr, '|')) attrs.push_back(attr);
+            logEntries.emplace_back(key, attrs);
         }
     }
-
     return logEntries;
 }

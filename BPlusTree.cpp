@@ -12,10 +12,10 @@ BPlusTree::BPlusTree() {
     root = new LeafNode();
 }
 
-void BPlusTree::insert(int key, string value) {
+void BPlusTree::insert(int key, const vector<string>& attrs) {
     BPlusNode* newChild = nullptr;
     int newKey;
-    insertInternal(key, value, root, newChild, newKey);
+    insertInternal(key, attrs, root, newChild, newKey);
     if (newChild != nullptr) {
         InternalNode* newRoot = new InternalNode();
         newRoot->getKeys().push_back(newKey);
@@ -25,14 +25,14 @@ void BPlusTree::insert(int key, string value) {
     }
 }
 
-void BPlusTree::insertInternal(int key, string value, BPlusNode* node, BPlusNode*& newChild, int& newKey){
+void BPlusTree::insertInternal(int key, const vector<string>& attrs, BPlusNode* node, BPlusNode*& newChild, int& newKey){
     if (node->isLeafNode()){
         auto& entries = static_cast<LeafNode*>(node)->getEntries();
         //lower_bound(start, end, value, comparator)
         auto insert_pos = lower_bound(entries.begin(), entries.end(), key, [](const Entry& a, int b){
             return a.key < b;
         });
-        entries.insert(insert_pos, {key, value});
+        entries.insert(insert_pos, {key, attrs});
         if(entries.size() >= ORDER){
             splitLeaf(node, newChild, newKey);
         }
@@ -44,7 +44,7 @@ void BPlusTree::insertInternal(int key, string value, BPlusNode* node, BPlusNode
     BPlusNode* child = children[insert_pos];
     BPlusNode* tempChild = nullptr;
     int tempKey;
-    insertInternal(key, value, child, tempChild, tempKey);
+    insertInternal(key, attrs, child, tempChild, tempKey);
     if(tempChild){
         auto* internal = static_cast<InternalNode*>(node);
         internal->getKeys().insert(keys.begin() + insert_pos, tempKey);
@@ -180,7 +180,7 @@ void BPlusTree::mergeLeaf(BPlusNode* node) {
     
 }
 
-string BPlusTree::search(int key) {
+vector<string> BPlusTree::search(int key) {
     // Traverse the tree to find the leaf node.
     // Then search through entries to find the value.
     BPlusNode* node = root;
@@ -193,9 +193,9 @@ string BPlusTree::search(int key) {
 
     auto& entries = static_cast<LeafNode*>(node)->getEntries();
     for (const auto& entry : entries) {
-        if (entry.key == key) return entry.value;
+        if (entry.key == key) return entry.attrs;
     }
-    return ""; // if no entry found
+    return {}; // if no entry found
 }
 
 void BPlusTree::print() {
@@ -212,7 +212,8 @@ void BPlusTree::printTree(BPlusNode* node, int level) {
         auto& entries = static_cast<LeafNode*>(node)->getEntries();
         cout << "Leaf: ";
         for (const auto& e : entries) {
-            cout << "(" << e.key << ", " << e.value << ") ";
+            cout << "(" << e.key << ", " << (e.attrs.empty() ? "" : e.attrs[0]) << ") ";
+
         }
     } else {
         cout << "Internal: ";
@@ -238,7 +239,7 @@ void BPlusTree::printLeaves() {
     while (node) {
         auto& entries = static_cast<LeafNode*>(node)->getEntries();
         for (const auto& e : entries) {
-            cout << "(" << e.key << ", " << e.value << ") ";
+            cout << "(" << e.key << ", " << (e.attrs.empty() ? "" : e.attrs[0]) << ") ";
         }
         node = node->getNext();
     }

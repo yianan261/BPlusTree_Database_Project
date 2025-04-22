@@ -6,7 +6,9 @@ using namespace std;
 
 struct Entry {
     int key;
-    string value;
+    vector <string> attrs; 
+    Entry() : key(0) {} 
+    Entry(int k, const vector<string>& v) : key(k), attrs(v) {}
 };
 
 // base class
