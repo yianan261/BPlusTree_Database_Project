@@ -20,7 +20,8 @@ void printHelp() {
          << "8. tables              - List all tables\n"
          << "9. current             - Show current table name\n"
          << "10. help               - Show this help message\n"
-         << "11. exit               - Exit the program\n\n";
+         << "11. load <filepath>    - Load data from CSV file into current table\n"
+         << "12. exit               - Exit the program\n\n";
 }
 
 /* ─────────────── splitCSV ─────────────── */
@@ -170,6 +171,19 @@ int main() {
         /* ---------- CURRENT ---------- */
         else if (command == "current") {
             cout << "Current table: " << db.getCurrentTable() << "\n";
+        }
+
+        /* ---------- LOAD ---------- */
+        else if (command == "load") {
+            string filepath;
+            cout << "Enter CSV file path: ";
+            cin >> filepath;
+            
+            if (db.loadFromFile(db.getCurrentTable(), filepath)) {
+                cout << "Data loaded successfully into table: " << db.getCurrentTable() << "\n";
+            } else {
+                cout << "Failed to load data from " << filepath << "\n";
+            }
         }
 
         /* ---------- UNKNOWN ---------- */

@@ -70,3 +70,30 @@ void LeaderDB::recoverFromWAL() {
         tables[currentTable].insert(key, {val});
     }
 }
+
+bool LeaderDB::loadFromFile(const string& tableName, const string& filepath) {
+    if (tables.find(tableName) == tables.end()) {
+        return false;
+    }
+
+    ifstream file(filepath);
+    if (!file.is_open()) {
+        return false;
+    }
+
+    string line;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string field, key;
+        vector<string> attrs;
+        
+        if (getline(ss, key, ',')) {
+            while (getline(ss, field, ',')) {
+                attrs.push_back(field);
+            }
+            tables[tableName].insert(key, attrs);
+        }
+    }
+    file.close();
+    return true;
+}

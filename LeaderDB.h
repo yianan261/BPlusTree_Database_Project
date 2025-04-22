@@ -5,6 +5,7 @@
 #include "BTreeIndex.h"
 #include "WriteAheadLog.h"
 #include <map>
+#include <sstream>
 
 using namespace std;
 
@@ -33,6 +34,9 @@ public:
     vector<string> listTables() const;
     string getCurrentTable() const;
     void recoverFromWAL();
+
+    // file import functionality
+    bool loadFromFile(const string& tableName, const string& filepath);
 };
 
 #endif
