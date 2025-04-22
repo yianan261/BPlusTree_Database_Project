@@ -10,8 +10,8 @@ using namespace std;
 
 class StorageEngine {
 private:
-    map<string, BTreeIndex> tables;  // 表名到B树索引的映射
-    string currentTable;             // 当前活动表名
+    map<string, BTreeIndex> tables;  
+    string currentTable;             
 
 public:
     StorageEngine() : currentTable("default") {
