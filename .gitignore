@@ -1,5 +1,5 @@
 output
 output.exe
-.vscode
-.exe
-.log
+*.vscode
+*.exe
+*.log
