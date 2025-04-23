@@ -1,16 +1,28 @@
 #include "LeaderDB.h"
 
-void LeaderDB::set(const string& key, const vector<string>& attrs) {
-    wal.logWrite(key, attrs);
-    tables[currentTable].insert(key, attrs);
-}
-
 vector<string> LeaderDB::get(const string& key) {
     return tables[currentTable].search(key);
 }
 
 void LeaderDB::deleteKey(const string& key) {
     tables[currentTable].remove(key);
+}
+
+void LeaderDB::create(const string& key, const vector<string>& attrs) {
+    int keyInt = stoi(key);
+    if (tables[currentTable].contains(keyInt)) {
+        throw runtime_error("Key already exists. Use update instead.");
+    }
+    wal.logWrite(key, attrs);
+    tables[currentTable].insert(key, attrs);
+}
+
+void LeaderDB::update(const string& key, const vector<string>& attrs) {
+    if (!tables[currentTable].contains(stoi(key))) {
+        throw runtime_error("Key does not exist. Use create instead.");
+    }
+    wal.logWrite(key, attrs);
+    tables[currentTable].update(key, attrs);
 }
 
 vector<vector<string>> LeaderDB::getPrefix(const string& prefixKey) {

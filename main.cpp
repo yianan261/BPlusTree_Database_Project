@@ -9,19 +9,20 @@ using namespace std;
 
 /* ─────────────── help ─────────────── */
 void printHelp() {
-    cout << "\nAvailable commands:\n"
-         << "1. get <key>           - Retrieve one record (all attributes)\n"
-         << "2. set                 - Add/overwrite a record (comma‑separated attributes)\n"
-         << "3. delete <key>        - Delete a specific key\n"
-         << "4. prefix <str>        - List all records whose key starts with <str>\n"
-         << "5. create <table>      - Create a new table\n"
-         << "6. drop <table>        - Delete a table\n"
-         << "7. use <table>         - Switch to a table\n"
-         << "8. tables              - List all tables\n"
-         << "9. current             - Show current table name\n"
-         << "10. help               - Show this help message\n"
-         << "11. load <filepath>    - Load data from CSV file into current table\n"
-         << "12. exit               - Exit the program\n\n";
+     cout << "\nAvailable commands:\n"
+         << "1.  get <key>           - Retrieve one record (all attributes)\n"
+         << "2.  create              - Create a new record (fails if key exists)\n"
+         << "3.  update              - Update an existing record (fails if key does not exist)\n"
+         << "4.  delete <key>        - Delete a specific key\n"
+         << "5.  prefix <str>        - List all records whose key starts with <str>\n"
+         << "6.  create <table>      - Create a new table\n"
+         << "7.  drop <table>        - Delete a table\n"
+         << "8.  use <table>         - Switch to a table\n"
+         << "9.  tables              - List all tables\n"
+         << "10. current             - Show current table name\n"
+         << "11. load <filepath>     - Load data from CSV file into current table\n"
+         << "12. help                - Show this help message\n"
+         << "13. exit                - Exit the program\n\n";
 }
 
 /* ─────────────── splitCSV ─────────────── */
@@ -51,8 +52,12 @@ int main() {
 
         string key = fields.front();
         vector<string> attrs(fields.begin() + 1, fields.end());
-
-        db.set(key, attrs);                
+        try {
+            db.create(key, attrs);
+        } catch(const exception& e){
+            cout << "Error: " << e.what() << '\n';       
+        }
+                        
     }
     file.close();
     cout << "Finished loading dataset.\n";
@@ -85,8 +90,8 @@ int main() {
             }
         }
 
-        /* ---------- SET ---------- */
-        else if (command == "set") {
+        /* ---------- CREATE  ---------- */
+        else if (command == "create") {
             string key;
             cout << "Key: ";
             cin  >> key;
@@ -94,8 +99,26 @@ int main() {
             cin.ignore();              
             getline(cin, line);
             auto attrs = splitCSV(line);
-            db.set(key, attrs);
-            cout << "Record added/updated.\n";
+            try {
+                db.create(key, attrs);
+                cout << "Record created.\n";
+            } catch (const exception& e) {
+                cout << "Error: " << e.what() << '\n';
+            }
+        }
+        /* ---------- UPDATE ---------- */
+        else if (command == "update"){
+            string key;
+            cout << "Key: "; cin >> key;
+            cout << "Attributes (comma separated): ";
+            cin.ignore(); getline(cin, line);
+            auto attrs = splitCSV(line);
+            try{
+                db.update(key, attrs);
+                cout << "Record updated.\n";
+            }catch(const exception& e){
+                cout << "Error: " << e.what() << '\n';
+            }
         }
 
         /* ---------- DELETE ---------- */
@@ -121,17 +144,6 @@ int main() {
                     cout << '\n';
                 }
                 cout << "Total: " << rows.size() << '\n';
-            }
-        }
-
-        /* ---------- CREATE ---------- */
-        else if (command == "create") {
-            string tableName; cin >> tableName;
-            if (db.hasTable(tableName)) {
-                cout << "Table already exists.\n";
-            } else {
-                db.createTable(tableName);
-                cout << "Table created.\n";
             }
         }
 

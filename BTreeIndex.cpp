@@ -18,6 +18,10 @@ void BTreeIndex::clear(){
     tree = BPlusTree(); // reinitialize new tree
 }
 
+void BTreeIndex::update(const string& key, const vector<string>& attrs){
+    tree.update(stoi(key), attrs);
+}
+
 //TODO: maybe add later
 vector<vector<string>> BTreeIndex::rangeQuery(const string& lowKey, const string& highKey) {
     return {};
@@ -25,4 +29,8 @@ vector<vector<string>> BTreeIndex::rangeQuery(const string& lowKey, const string
 
 void BTreeIndex::print() {
     tree.print();
+}
+
+bool BTreeIndex::contains(int key) const {
+    return tree.contains(key);
 }

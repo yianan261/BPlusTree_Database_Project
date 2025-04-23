@@ -12,7 +12,22 @@ BPlusTree::BPlusTree() {
     root = new LeafNode();
 }
 
+void BPlusTree::update(int key, const vector<string>& attrs){
+    if(!keySet.count(key)){
+        throw runtime_error("Key does not exist. Use create instead.");
+    }
+    remove(key);
+    BPlusNode* tempChild = nullptr;
+    int tempKey;
+    insertInternal(key, attrs, root, tempChild, tempKey);
+}
+
 void BPlusTree::insert(int key, const vector<string>& attrs) {
+    if (keySet.count(key)){
+        throw runtime_error("Key already exists. Use update instead.");
+    }
+    keySet.insert(key);
+
     BPlusNode* newChild = nullptr;
     int newKey;
     insertInternal(key, attrs, root, newChild, newKey);
@@ -101,8 +116,11 @@ void BPlusTree::splitInternal(BPlusNode* node, BPlusNode*& newChild, int& newKey
 void BPlusTree::remove(int key) {
     // TODO: Call deleteEntry. If root becomes empty, demote it to its only child.
     // Zirui
-    if (deleteEntry(root, key) && !root->isLeafNode() && root->getKeys().empty()) {
-        root = root->getChildren().front();
+    if (deleteEntry(root, key)){
+        keySet.erase(key);
+        if(!root->isLeafNode() && root->getKeys().empty()) {
+            root = root->getChildren().front();
+        } 
     }
 
 }
@@ -196,6 +214,10 @@ vector<string> BPlusTree::search(int key) {
         if (entry.key == key) return entry.attrs;
     }
     return {}; // if no entry found
+}
+
+bool BPlusTree::contains(int key) const{
+    return keySet.count(key) > 0;
 }
 
 void BPlusTree::print() {
