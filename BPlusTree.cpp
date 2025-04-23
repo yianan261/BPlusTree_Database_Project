@@ -216,6 +216,32 @@ vector<string> BPlusTree::search(int key) {
     return {}; // if no entry found
 }
 
+vector<vector<string>> BPlusTree::rangeQuery(int lowKey, int highKey) {
+    vector<vector<string>> result;
+
+    BPlusNode* node = root;
+    while (!node->isLeafNode()) {
+        auto& keys = node->getKeys();
+        auto& children = node->getChildren();
+        int idx = upper_bound(keys.begin(), keys.end(), lowKey) - keys.begin();
+        node = children[idx];
+    }
+
+    while (node) {
+        auto& entries = static_cast<LeafNode*>(node)->getEntries();
+        for (const auto& entry : entries) {
+            if (entry.key > highKey) return result; 
+            if (entry.key >= lowKey) {
+                result.push_back(entry.attrs);
+            }
+        }
+        node = node->getNext(); // go to right sibling
+    }
+
+    return result;
+}
+
+
 bool BPlusTree::contains(int key) const{
     return keySet.count(key) > 0;
 }

@@ -22,9 +22,8 @@ void BTreeIndex::update(const string& key, const vector<string>& attrs){
     tree.update(stoi(key), attrs);
 }
 
-//TODO: maybe add later
 vector<vector<string>> BTreeIndex::rangeQuery(const string& lowKey, const string& highKey) {
-    return {};
+    return tree.rangeQuery(stoi(lowKey),stoi(highKey));
 }
 
 void BTreeIndex::print() {

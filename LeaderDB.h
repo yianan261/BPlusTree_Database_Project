@@ -26,6 +26,9 @@ public:
     vector<string> get(const string& key) override;
     void deleteKey(const string& key) override;
     vector<vector<string>> getPrefix(const string& prefixKey) override;
+
+    // range query
+    vector<vector<string>> getRange(const string& lowKey, const string& highKey);
     
     // multiple table management
     void createTable(const string& tableName);

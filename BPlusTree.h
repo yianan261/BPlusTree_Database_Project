@@ -26,6 +26,7 @@ public:
     void remove(int key);
     void update(int key, const vector<string>& attrs);
     vector<string> search(int key);
+    vector<vector<string>> rangeQuery(int lowKey, int highKey);
     bool contains(int key) const;
     void print();
     void printLeaves();

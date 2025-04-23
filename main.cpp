@@ -10,19 +10,20 @@ using namespace std;
 /* ─────────────── help ─────────────── */
 void printHelp() {
      cout << "\nAvailable commands:\n"
-         << "1.  get <key>           - Retrieve one record (all attributes)\n"
+        << "1.  get <key>           - Retrieve one record (all attributes)\n"
          << "2.  create              - Create a new record (fails if key exists)\n"
          << "3.  update              - Update an existing record (fails if key does not exist)\n"
          << "4.  delete <key>        - Delete a specific key\n"
          << "5.  prefix <str>        - List all records whose key starts with <str>\n"
-         << "6.  create <table>      - Create a new table\n"
-         << "7.  drop <table>        - Delete a table\n"
-         << "8.  use <table>         - Switch to a table\n"
-         << "9.  tables              - List all tables\n"
-         << "10. current             - Show current table name\n"
-         << "11. load <filepath>     - Load data from CSV file into current table\n"
-         << "12. help                - Show this help message\n"
-         << "13. exit                - Exit the program\n\n";
+         << "6.  range               - List all records whose key falls within a range\n"
+         << "7.  create <table>      - Create a new table\n"
+         << "8.  drop <table>        - Delete a table\n"
+         << "9.  use <table>         - Switch to a table\n"
+         << "10. tables              - List all tables\n"
+         << "11. current             - Show current table name\n"
+         << "12. load <filepath>     - Load data from CSV file into current table\n"
+         << "13. help                - Show this help message\n"
+         << "14. exit                - Exit the program\n\n";
 }
 
 /* ─────────────── splitCSV ─────────────── */
@@ -195,6 +196,29 @@ int main() {
                 cout << "Data loaded successfully into table: " << db.getCurrentTable() << "\n";
             } else {
                 cout << "Failed to load data from " << filepath << "\n";
+            }
+        }
+        /* ---------- RANGE ---------- */
+         else if (command == "range") {
+            string low, high;
+            cout << "Enter start range(inclusive): ";
+            cin >> low;
+            cout << "Enter end range(inclusive): ";
+            cin >> high;
+
+            auto results = db.getRange(low, high);
+            if (results.empty()) {
+                cout << "No matches found.\n";
+            } else {
+                cout << "Results in range [" << low << ", " << high << "]:\n";
+                for (const auto& row : results) {
+                    for (size_t i = 0; i < row.size(); ++i) {
+                        if (i > 0) cout << ", ";
+                        cout << row[i];
+                    }
+                    cout << '\n';
+                }
+                cout << "Total: " << results.size() << '\n';
             }
         }
 

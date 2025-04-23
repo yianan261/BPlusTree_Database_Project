@@ -34,6 +34,10 @@ vector<vector<string>> LeaderDB::getPrefix(const string& prefixKey) {
     return result;
 }
 
+vector<vector<string>> LeaderDB::getRange(const string& lowKey, const string& highKey){
+    return tables[currentTable].rangeQuery(lowKey, highKey);
+}
+
 
 void LeaderDB::createTable(const string& tableName) {
     if (tables.find(tableName) == tables.end()) {

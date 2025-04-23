@@ -1,0 +1,1116 @@
+id,Act,Scene,Description,work_id
+18704,1,1,"DUKE ORSINO’s palace.",1
+18705,1,2,"The sea-coast.",1
+18706,1,3,"OLIVIA’S house.",1
+18707,1,4,"DUKE ORSINO’s palace.",1
+18708,1,5,"OLIVIA’S house.",1
+18709,2,1,"The sea-coast.",1
+18710,2,2,"A street.",1
+18711,2,3,"OLIVIA’s house.",1
+18712,2,4,"DUKE ORSINO’s palace.",1
+18713,2,5,"OLIVIA’s garden.",1
+18714,3,1,"OLIVIA’s garden.",1
+18715,3,2,"OLIVIA’s house.",1
+18716,3,3,"A street.",1
+18717,3,4,"OLIVIA’s garden.",1
+18718,4,1,"Before OLIVIA’s house.",1
+18719,4,2,"OLIVIA’s house.",1
+18720,4,3,"OLIVIA’s garden.",1
+18721,5,1,"Before OLIVIA’s house.",1
+18722,1,1,"Rousillon. The COUNT’s palace.",2
+18723,1,2,"Paris. The KING’s palace.",2
+18724,1,3,"Rousillon. The COUNT’s palace.",2
+18725,2,1,"Paris. The KING’s palace.",2
+18726,2,2,"Rousillon. The COUNT’s palace.",2
+18727,2,3,"Paris. The KING’s palace.",2
+18728,2,4,"Paris. The KING’s palace.",2
+18729,2,5,"Paris. The KING’s palace.",2
+18730,3,1,"Florence. The DUKE’s palace.",2
+18731,3,2,"Rousillon. The COUNT’s palace.",2
+18732,3,3,"Florence. Before the DUKE’s palace.",2
+18733,3,4,"Rousillon. The COUNT’s palace.",2
+18734,3,5,"Florence. Without the walls. A tucket afar off.",2
+18735,3,6,"Camp before Florence.",2
+18736,3,7,"Florence. The Widow’s house.",2
+18737,4,1,"Without the Florentine camp.",2
+18738,4,2,"Florence. The Widow’s house.",2
+18739,4,3,"The Florentine camp.",2
+18740,4,4,"Florence. The Widow’s house.",2
+18741,4,5,"Rousillon. The COUNT’s palace.",2
+18742,5,1,"Marseilles. A street.",2
+18743,5,2,"Rousillon. Before the COUNT’s palace.",2
+18744,5,3,"Rousillon. The COUNT’s palace.",2
+18745,1,1,"Alexandria. A room in CLEOPATRA’s palace.",3
+18746,1,2,"The same. Another room.",3
+18747,1,3,"The same. Another room.",3
+18748,1,4,"Rome. OCTAVIUS CAESAR’s house.",3
+18749,1,5,"Alexandria. CLEOPATRA’s palace.",3
+18750,2,1,"Messina. POMPEY’s house.",3
+18751,2,2,"Rome. The house of LEPIDUS.",3
+18752,2,3,"The same. OCTAVIUS CAESAR’s house.",3
+18753,2,4,"The same. A street.",3
+18754,2,5,"Alexandria. CLEOPATRA’s palace.",3
+18755,2,6,"Near Misenum.",3
+18756,2,7,"On board POMPEY’s galley, off Misenum.",3
+18757,3,1,"A plain in Syria.",3
+18758,3,2,"Rome. An ante-chamber in OCTAVIUS CAESAR’s house.",3
+18759,3,3,"Alexandria. CLEOPATRA’s palace.",3
+18760,3,4,"Athens. A room in MARK ANTONY’s house.",3
+18761,3,5,"The same. Another room.",3
+18762,3,6,"Rome. OCTAVIUS CAESAR’s house.",3
+18763,3,7,"Near Actium. MARK ANTONY’s camp.",3
+18764,3,8,"A plain near Actium.",3
+18765,3,9,"Another part of the plain.",3
+18766,3,10,"Another part of the plain.
+",3
+18767,3,11,"Alexandria. CLEOPATRA’s palace.
+",3
+18768,3,12,"Egypt. OCTAVIUS CAESAR’s camp.
+",3
+18769,3,13,"Alexandria. CLEOPATRA’s palace.
+",3
+18770,4,1,"Before Alexandria. OCTAVIUS CAESAR’s camp.",3
+18771,4,2,"Alexandria. CLEOPATRA’s palace.",3
+18772,4,3,"The same. Before the palace.",3
+18773,4,4,"The same. A room in the palace.",3
+18774,4,5,"Alexandria. MARK ANTONY’s camp.",3
+18775,4,6,"Alexandria. OCTAVIUS CAESAR’s camp.",3
+18776,4,7,"Field of battle between the camps.",3
+18777,4,8,"Under the walls of Alexandria.",3
+18778,4,9,"OCTAVIUS CAESAR’s camp.",3
+18779,4,10,"Between the two camps.
+",3
+18780,4,11,"Another part of the same.
+",3
+18781,4,12,"Another part of the same.
+",3
+18782,4,13,"Alexandria. Cleopatra’s palace.
+",3
+18783,4,14,"The same. Another room.
+",3
+18784,4,15,"The same. A monument.
+",3
+18785,5,1,"Alexandria. OCTAVIUS CAESAR’s camp.",3
+18786,5,2,"Alexandria. A room in the monument.",3
+18787,1,1,"Orchard of OLIVER’S house",4
+18788,1,2,"A lawn before the DUKE’S palace",4
+18789,1,3,"The DUKE’s palace",4
+18790,2,1,"The Forest of Arden",4
+18791,2,2,"The DUKE’S palace",4
+18792,2,3,"Before OLIVER’S house",4
+18793,2,4,"The Forest of Arden",4
+18794,2,5,"Another part of the forest",4
+18795,2,6,"The forest",4
+18796,2,7,"The forest",4
+18797,3,1,"The palace",4
+18798,3,2,"The forest",4
+18799,3,3,"The forest",4
+18800,3,4,"The forest",4
+18801,3,5,"Another part of the forest",4
+18802,4,1,"The forest",4
+18803,4,2,"The forest",4
+18804,4,3,"The forest",4
+18805,5,1,"The forest",4
+18806,5,2,"The forest",4
+18807,5,3,"The forest",4
+18808,5,4,"The forest",4
+18809,1,1,"A hall in DUKE SOLINUS’S palace.",5
+18810,1,2,"The Mart.",5
+18811,2,1,"The house of ANTIPHOLUS of Ephesus.",5
+18812,2,2,"A public place.",5
+18813,3,1,"Before the house of ANTIPHOLUS of Ephesus.",5
+18814,3,2,"The same.",5
+18815,4,1,"A public place.",5
+18816,4,2,"The house of ANTIPHOLUS of Ephesus.",5
+18817,4,3,"A public place.",5
+18818,4,4,"A street.",5
+18819,5,1,"A street before a Priory.",5
+18820,1,1,"Rome. A street.",6
+18821,1,2,"Corioli. The Senate-house.",6
+18822,1,3,"Rome. A room in CORIOLANUS’ house.",6
+18823,1,4,"Before Corioli.",6
+18824,1,5,"Corioli. A street.",6
+18825,1,6,"Near the camp of Cominius.",6
+18826,1,7,"The gates of Corioli.",6
+18827,1,8,"A field of battle.",6
+18828,1,9,"The Roman camp.",6
+18829,1,10,"The camp of the Volsces.
+",6
+18830,2,1,"Rome. A public place.",6
+18831,2,2,"The same. The Capitol.",6
+18832,2,3,"The same. The Forum.",6
+18833,3,1,"Rome. A street.",6
+18834,3,2,"A room in CORIOLANUS’S house.",6
+18835,3,3,"The same. The Forum.",6
+18836,4,2,"The same. A street near the gate.",6
+18837,4,3,"A highway between Rome and Antium.",6
+18838,4,4,"Antium. Before Aufidius’s house.",6
+18839,4,5,"The same. A hall in Aufidius’s house.",6
+18840,4,6,"Rome. A public place.",6
+18841,4,7,"A camp, at a small distance from Rome.",6
+18842,5,1,"Rome. A public place.",6
+18843,5,2,"Entrance of the Volscian camp before Rome.",6
+18844,5,3,"The tent of Coriolanus.",6
+18845,5,4,"Rome. A public place.",6
+18846,5,5,"The same. A street near the gate.",6
+18847,5,6,"Antium. A public place.",6
+18848,1,1,"Britain. The garden of Cymbeline’s palace.",7
+18849,1,2,"The same. A public place.",7
+18850,1,3,"A room in Cymbeline’s palace.",7
+18851,1,4,"Rome. Philario’s house.",7
+18852,1,5,"Britain. A room in Cymbeline’s palace.",7
+18853,1,6,"The same. Another room in the palace.",7
+18854,2,1,"Britain. Before Cymbeline’s palace.",7
+18855,2,2,"Imogen’s bedchamber in Cymbeline’s palace:",7
+18856,2,3,"An ante-chamber adjoining Imogen’s apartments.",7
+18857,2,4,"Rome. Philario’s house.",7
+18858,2,5,"Another room in Philario’s house.",7
+18859,3,1,"Britain. A hall in Cymbeline’s palace.",7
+18860,3,2,"Another room in the palace.",7
+18861,3,3,"Wales: a mountainous country with a cave.",7
+18862,3,4,"Country near Milford-Haven.",7
+18863,3,5,"A room in Cymbeline’s palace.",7
+18864,3,6,"Wales. Before the cave of Belarius.",7
+18865,3,7,"Rome. A public place.",7
+18866,4,1,"Wales: near the cave of Belarius.",7
+18867,4,2,"Before the cave of Belarius.",7
+18868,4,3,"A room in Cymbeline’s palace.",7
+18869,4,4,"Wales: before the cave of Belarius.",7
+18870,5,1,"Britain. The Roman camp.",7
+18871,5,2,"Field of battle between the British and Roman camps.",7
+18872,5,3,"Another part of the field.",7
+18873,5,4,"A British prison.",7
+18874,5,5,"Cymbeline’s tent.",7
+18875,1,1,"Elsinore. A platform before the Castle.",8
+18876,1,2,"Elsinore. A room of state in the Castle.",8
+18877,1,3,"Elsinore. A room in the house of Polonius.",8
+18878,1,4,"Elsinore. The platform before the Castle.",8
+18879,1,5,"Elsinore. The Castle. Another part of the fortifications.",8
+18880,2,1,"Elsinore. A room in the house of Polonius.",8
+18881,2,2,"Elsinore. A room in the Castle.",8
+18882,3,1,"Elsinore. A room in the Castle.",8
+18883,3,2,"Elsinore. hall in the Castle.",8
+18884,3,3,"A room in the Castle.",8
+18885,3,4,"The Queen’s closet.",8
+18886,4,1,"Elsinore. A room in the Castle.",8
+18887,4,2,"Elsinore. A passage in the Castle.",8
+18888,4,3,"Elsinore. A room in the Castle.",8
+18889,4,4,"Near Elsinore.",8
+18890,4,5,"Elsinore. A room in the Castle.",8
+18891,4,6,"Elsinore. Another room in the Castle.",8
+18892,4,7,"Elsinore. Another room in the Castle.",8
+18893,5,1,"Elsinore. A churchyard.",8
+18894,5,2,"Elsinore. A hall in the Castle.",8
+18895,1,1,"London. The palace.",9
+18896,1,2,"London. An apartment of the Prince’s.",9
+18897,1,3,"London. The palace.",9
+18898,2,1,"Rochester. An inn yard.",9
+18899,2,2,"The highway, near Gadshill.",9
+18900,2,3,"Warkworth castle",9
+18901,2,4,"The Boar’s-Head Tavern, Eastcheap.",9
+18902,3,1,"Bangor. The Archdeacon’s house.",9
+18903,3,2,"London. The palace.",9
+18904,3,3,"Eastcheap. The Boar’s-Head Tavern.",9
+18905,4,1,"The rebel camp near Shrewsbury.",9
+18906,4,2,"A public road near Coventry.",9
+18907,4,3,"The rebel camp near Shrewsbury.",9
+18908,4,4,"York. The ARCHBISHOP’S palace.",9
+18909,5,1,"KING HENRY IV’s camp near Shrewsbury.",9
+18910,5,2,"The rebel camp.",9
+18911,5,3,"Plain between the camps.",9
+18912,5,4,"Another part of the field.",9
+18913,5,5,"Another part of the field.",9
+18914,0,1,"Warkworth. Before NORTHUMBERLAND’S Castle",10
+18915,1,1,"Warkworth. Before NORTHUMBERLAND’S Castle",10
+18916,1,2,"London. A street",10
+18917,1,3,"York. The ARCHBISHOP’S palace",10
+18918,2,1,"London. A street",10
+18919,2,2,"London. Another street",10
+18920,2,3,"Warkworth. Before the castle",10
+18921,2,4,"London. The Boar’s Head Tavern in Eastcheap",10
+18922,3,1,"Westminster. The palace",10
+18923,3,2,"Gloucestershire. Before Justice, SHALLOW’S house",10
+18924,4,1,"Yorkshire. Within the Forest of Gaultree",10
+18925,4,2,"Another part of the forest",10
+18926,4,3,"Another part of the forest",10
+18927,4,4,"Westminster. The Jerusalem Chamber",10
+18928,4,5,"Westminster. Another chamber",10
+18929,5,1,"Gloucestershire. SHALLOW’S house",10
+18930,5,2,"Westminster. The palace",10
+18931,5,3,"Gloucestershire. SHALLOW’S orchard",10
+18932,5,4,"London. A street",10
+18933,5,5,"Westminster. Near the Abbey",10
+18934,0,1,Prologue.,11
+18935,1,1,"London. An ante-chamber in the KING’S palace.",11
+18936,1,2,"The same. The Presence chamber.",11
+18937,2,0,Prologue.,11
+18938,2,1,"London. A street.",11
+18939,2,2,"Southampton. A council-chamber.",11
+18940,2,3,"London. Before a tavern.",11
+18941,2,4,"France. The KING’S palace.",11
+18942,3,0,Prologue.,11
+18943,3,1,"France. Before Harfleur.",11
+18944,3,2,"The same.",11
+18945,3,3,"The same. Before the gates.",11
+18946,3,4,"The FRENCH KING’s palace.",11
+18947,3,5,"The same.",11
+18948,3,6,"The English camp in Picardy.",11
+18949,3,7,"The French camp, near Agincourt:",11
+18950,4,0,Prologue.,11
+18951,4,1,"The English camp at Agincourt.",11
+18952,4,2,"The French camp.",11
+18953,4,3,"The English camp.",11
+18954,4,4,"The field of battle.",11
+18955,4,5,"Another part of the field.",11
+18956,4,6,"Another part of the field.",11
+18957,4,7,"Another part of the field.",11
+18958,4,8,"Before KING HENRY’S pavilion.",11
+18959,5,0,Prologue.,11
+18960,5,1,"France. The English camp.",11
+18961,5,2,"France. A royal palace.",11
+18962,1,1,"Westminster Abbey.",12
+18963,1,2,"France. Before Orleans.",12
+18964,1,3,"London. Before the Tower.",12
+18965,1,4,Orleans.,12
+18966,1,5,"The same.",12
+18967,1,6,"The same.",12
+18968,2,1,"Before Orleans.",12
+18969,2,2,"Orleans. Within the town.",12
+18970,2,3,"Auvergne. The COUNTESS’s castle.",12
+18971,2,4,"London. The Temple-garden.",12
+18972,2,5,"The Tower of London.",12
+18973,3,1,"London. The Parliament-house.",12
+18974,3,2,"France. Before Rouen.",12
+18975,3,3,"The plains near Rouen.",12
+18976,3,4,"Paris. The palace.",12
+18977,4,1,"Paris. A hall of state.",12
+18978,4,2,"Before Bourdeaux.",12
+18979,4,3,"Plains in Gascony.",12
+18980,4,4,"Other plains in Gascony.",12
+18981,4,5,"The English camp near Bourdeaux.",12
+18982,4,6,"A field of battle.",12
+18983,4,7,"Another part of the field.",12
+18984,5,1,"London. The palace.",12
+18985,5,2,"France. Plains in Anjou.",12
+18986,5,3,"Before Angiers.",12
+18987,5,4,"Camp of the YORK in Anjou.",12
+18988,5,5,"London. The palace.",12
+18989,1,1,"London. The palace.",13
+18990,1,2,"GLOUCESTER’S house.",13
+18991,1,3,"The palace.",13
+18992,1,4,"GLOUCESTER’s garden.",13
+18993,2,1,"Saint Alban’s.",13
+18994,2,2,"London. YORK’S garden.",13
+18995,2,3,"A hall of justice.",13
+18996,2,4,"A street.",13
+18997,3,1,"The Abbey at Bury St. Edmund’s.",13
+18998,3,2,"Bury St. Edmund’s. A room of state.",13
+18999,3,3,"A bedchamber.",13
+19000,4,1,"The coast of Kent.",13
+19001,4,2,Blackheath.,13
+19002,4,3,"Another part of Blackheath.",13
+19003,4,4,"London. The palace.",13
+19004,4,5,"London. The Tower.",13
+19005,4,6,"London. Cannon Street.",13
+19006,4,7,"London. Smithfield.",13
+19007,4,8,Southwark.,13
+19008,4,9,"Kenilworth Castle.",13
+19009,4,10,"Kent. IDEN’s garden.
+",13
+19010,5,1,"Fields between Dartford and Blackheath.",13
+19011,5,2,"Saint Alban’s.",13
+19012,5,3,"Fields near St. Alban’s.",13
+19013,1,1,"London. The Parliament-house.",14
+19014,1,2,"Sandal Castle.",14
+19015,1,3,"Field of battle betwixt Sandal Castle and Wakefield.",14
+19016,1,4,"Another part of the field.",14
+19017,2,1,"A plain near Mortimer’s Cross in Herefordshire.",14
+19018,2,2,"Before York.",14
+19019,2,3,"A field of battle between Towton and Saxton, in",14
+19020,2,4,"Another part of the field.",14
+19021,2,5,"Another part of the field.",14
+19022,2,6,"Another part of the field.",14
+19023,3,1,"A forest in the north of England.",14
+19024,3,2,"London. The palace.",14
+19025,3,3,"France. KING LEWIS XI’s palace.",14
+19026,4,1,"London. The palace.",14
+19027,4,2,"A plain in Warwickshire.",14
+19028,4,3,"Edward’s camp, near Warwick.",14
+19029,4,4,"London. The palace.",14
+19030,4,5,"A park near Middleham Castle In Yorkshire.",14
+19031,4,6,"London. The Tower.",14
+19032,4,7,"Before York.",14
+19033,4,8,"London. The palace.",14
+19034,5,1,Coventry.,14
+19035,5,2,"A field of battle near Barnet.",14
+19036,5,3,"Another part of the field.",14
+19037,5,4,"Plains near Tewksbury.",14
+19038,5,5,"Another part of the field.",14
+19039,5,6,"London. The Tower.",14
+19040,5,7,"London. The palace.",14
+19041,1,0,Prologue.,15
+19042,1,1,"London. An ante-chamber in the palace.",15
+19043,1,2,"The same. The council-chamber.",15
+19044,1,3,"An ante-chamber in the palace.",15
+19045,1,4,"A Hall in York Place.",15
+19046,2,1,"Westminster. A street.",15
+19047,2,2,"An ante-chamber in the palace.",15
+19048,2,3,"An ante-chamber of the QUEEN’S apartments.",15
+19049,2,4,"A hall in Black-Friars.",15
+19050,3,1,"London. QUEEN KATHARINE’s apartments.",15
+19051,3,2,"Ante-chamber to KING HENRY VIII’s apartment.",15
+19052,4,1,"A street in Westminster.",15
+19053,4,2,Kimbolton.,15
+19054,5,1,"London. A gallery in the palace.",15
+19055,5,2,"Before the council-chamber. Pursuivants, Pages, &c.",15
+19056,5,3,"The Council-Chamber.",15
+19057,5,4,"The palace yard.",15
+19058,5,5,"The palace.",15
+19059,1,1,"Rome. A street.",16
+19060,1,2,"A public place.",16
+19061,1,3,"The same. A street.",16
+19062,2,1,"Rome. BRUTUS’s orchard.",16
+19063,2,2,"CAESAR’s house.",16
+19064,2,3,"A street near the Capitol.",16
+19065,2,4,"Another part of the same street, before the house of BRUTUS.",16
+19066,3,1,"Rome. Before the Capitol; the Senate sitting above.",16
+19067,3,2,"The Forum.",16
+19068,3,3,"A street.",16
+19069,4,1,"A house in Rome.",16
+19070,4,2,"Camp near Sardis. Before BRUTUS’s tent.",16
+19071,4,3,"Brutus’s tent.",16
+19072,5,1,"The plains of Philippi.",16
+19073,5,2,"The same. The field of battle.",16
+19074,5,3,"Another part of the field.",16
+19075,5,4,"Another part of the field.",16
+19076,5,5,"Another part of the field.",16
+19077,1,1,"KING JOHN’S palace.",17
+19078,2,1,"France. Before Angiers.",17
+19079,3,1,"The French King’s pavilion.",17
+19080,3,2,"The same. Plains near Angiers.",17
+19081,3,3,"The same.",17
+19082,3,4,"The same. KING PHILIP’S tent.",17
+19083,4,1,"A room in a castle.",17
+19084,4,2,"KING JOHN’S palace.",17
+19085,4,3,"Before the castle.",17
+19086,5,1,"KING JOHN’S palace.",17
+19087,5,2,"LEWIS’s camp at St. Edmundsbury.",17
+19088,5,3,"The field of battle.",17
+19089,5,4,"Another part of the field.",17
+19090,5,5,"The French camp.",17
+19091,5,6,"An open place in the neighbourhood of Swinstead Abbey.",17
+19092,5,7,"The orchard in Swinstead Abbey.",17
+19093,1,1,"King Lear’s Palace.",18
+19094,1,2,"The Earl of Gloucester’s Castle.",18
+19095,1,3,"The Duke of Albany’s Palace.",18
+19096,1,4,"The Duke of Albany’s Palace. Enter Kent, [disguised].",18
+19097,1,5,"Court before the Duke of Albany’s Palace. Enter Lear, Kent, and Fool.",18
+19098,2,1,"A court within the Castle of the Earl of Gloucester.",18
+19099,2,2,"Before Gloucester’s Castle. Enter Kent and [Oswald the] Steward, severally.",18
+19100,2,3,"The open country.",18
+19101,2,4,"Before Gloucester’s Castle; Kent in the stocks.",18
+19102,3,1,"A heath. Storm still.",18
+19103,3,2,"Another part of the heath. Storm still.",18
+19104,3,3,"Gloucester’s Castle.",18
+19105,3,4,"The heath. Before a hovel. Storm still.",18
+19106,3,5,"Gloucester’s Castle.",18
+19107,3,6,"A farmhouse near Gloucester’s Castle.",18
+19108,3,7,"Gloucester’s Castle. Enter Cornwall, Regan, Goneril, [Edmund the] Bastard, and Servants.",18
+19109,4,1,"The heath.",18
+19110,4,2,"Before the Duke of Albany’s Palace.",18
+19111,4,3,"The French camp near Dover.",18
+19112,4,4,"The French camp.",18
+19113,4,5,"Gloucester’s Castle.",18
+19114,4,6,"The country near Dover. Enter Gloucester, and Edgar [like a Peasant].",18
+19115,4,7,"A tent in the French camp.",18
+19116,5,1,"The British camp near Dover.",18
+19117,5,2,"A field between the two camps. Alarum within.",18
+19118,5,3,"The British camp, near Dover.",18
+19119,1,1,"A Lover’s Complaint.",19
+19120,1,1,"The king of Navarre’s park.",20
+19121,1,2,"The same.",20
+19122,2,1,"The same.",20
+19123,3,1,"The same.",20
+19124,4,1,"The same.",20
+19125,4,2,"The same.",20
+19126,4,3,"The same.",20
+19127,5,1,"The same.",20
+19128,5,2,"The same.",20
+19129,1,1,"A desert place.",21
+19130,1,2,"A camp near Forres.",21
+19131,1,3,"A heath near Forres.",21
+19132,1,4,"Forres. The palace.",21
+19133,1,5,"Inverness. Macbeth’s castle.",21
+19134,1,6,"Before Macbeth’s castle.",21
+19135,1,7,"Macbeth’s castle.",21
+19136,2,1,"Court of Macbeth’s castle.",21
+19137,2,2,"The same.",21
+19138,2,3,"The same.",21
+19139,2,4,"Outside Macbeth’s castle.",21
+19140,3,1,"Forres. The palace.",21
+19141,3,2,"The palace.",21
+19142,3,3,"A park near the palace.",21
+19143,3,4,"The same. Hall in the palace.",21
+19144,3,5,"A Heath.",21
+19145,3,6,"Forres. The palace.",21
+19146,4,1,"A cavern. In the middle, a boiling cauldron.",21
+19147,4,2,"Fife. Macduff’s castle.",21
+19148,4,3,"England. Before the King’s palace.",21
+19149,5,1,"Dunsinane. Ante-room in the castle.",21
+19150,5,2,"The country near Dunsinane.",21
+19151,5,3,"Dunsinane. A room in the castle.",21
+19152,5,4,"Country near Birnam wood.",21
+19153,5,5,"Dunsinane. Within the castle.",21
+19154,5,6,"Dunsinane. Before the castle.",21
+19155,5,7,"Another part of the field.",21
+19156,5,8,"Another part of the field.",21
+19157,1,1,"An apartment in the DUKE’S palace.",22
+19158,1,2,"A Street.",22
+19159,1,3,"A monastery.",22
+19160,1,4,"A nunnery.",22
+19161,2,1,"A hall In ANGELO’s house.",22
+19162,2,2,"Another room in the same.",22
+19163,2,3,"A room in a prison.",22
+19164,2,4,"A room in ANGELO’s house.",22
+19165,3,1,"A room in the prison.",22
+19166,3,2,"The street before the prison.",22
+19167,4,1,"The moated grange at ST. LUKE’s.",22
+19168,4,2,"A room in the prison.",22
+19169,4,3,"Another room in the same.",22
+19170,4,4,"A room in ANGELO’s house.",22
+19171,4,5,"Fields without the town.",22
+19172,4,6,"Street near the city gate.",22
+19173,5,1,"The city gate.",22
+19174,1,1,"Venice. A street.",23
+19175,1,2,"Belmont. A room in PORTIA’S house.",23
+19176,1,3,"Venice. A public place.",23
+19177,2,1,"Belmont. A room in PORTIA’S house.",23
+19178,2,2,"Venice. A street.",23
+19179,2,3,"The same. A room in SHYLOCK’S house.",23
+19180,2,4,"The same. A street.",23
+19181,2,5,"The same. Before SHYLOCK’S house.",23
+19182,2,6,"The same.",23
+19183,2,7,"Belmont. A room in PORTIA’S house.",23
+19184,2,8,"Venice. A street.",23
+19185,2,9,"Belmont. A room in PORTIA’S house.",23
+19186,3,1,"Venice. A street.",23
+19187,3,2,"Belmont. A room in PORTIA’S house.",23
+19188,3,3,"Venice. A street.",23
+19189,3,4,"Belmont. A room in PORTIA’S house.",23
+19190,3,5,"The same. A garden.",23
+19191,4,1,"Venice. A court of justice.",23
+19192,4,2,"The same. A street.",23
+19193,5,1,"Belmont. Avenue to PORTIA’S house.",23
+19194,1,1,"Windsor. Before PAGE’s house.",24
+19195,1,2,"The same.",24
+19196,1,3,"A room in the Garter Inn.",24
+19197,1,4,"A room in DOCTOR CAIUS’ house.",24
+19198,2,1,"Before PAGE’S house.",24
+19199,2,2,"A room in the Garter Inn.",24
+19200,2,3,"A field near Windsor.",24
+19201,3,1,"A field near Frogmore.",24
+19202,3,2,"A street.",24
+19203,3,3,"A room in FORD’S house.",24
+19204,3,4,"A room in PAGE’S house.",24
+19205,3,5,"A room in the Garter Inn.",24
+19206,4,1,"A street.",24
+19207,4,2,"A room in FORD’S house.",24
+19208,4,3,"A room in the Garter Inn.",24
+19209,4,4,"A room in FORD’S house.",24
+19210,4,5,"A room in the Garter Inn.",24
+19211,4,6,"Another room in the Garter Inn.",24
+19212,5,1,"A room in the Garter Inn.",24
+19213,5,2,"Windsor Park.",24
+19214,5,3,"A street leading to the Park.",24
+19215,5,4,"Windsor Park.",24
+19216,5,5,"Another part of the Park.",24
+19217,1,1,"Athens. The palace of THESEUS.",25
+19218,1,2,"Athens. QUINCE’S house.",25
+19219,2,1,"A wood near Athens.",25
+19220,2,2,"Another part of the wood.",25
+19221,3,1,"The wood. TITANIA lying asleep.",25
+19222,3,2,"Another part of the wood.",25
+19223,4,1,"The same. LYSANDER, DEMETRIUS, HELENA, and HERMIA",25
+19224,4,2,"Athens. QUINCE’S house.",25
+19225,5,1,"Athens. The palace of THESEUS.",25
+19226,1,1,"Before LEONATO’S house.",26
+19227,1,2,"A room in LEONATO’s house.",26
+19228,1,3,"The same.",26
+19229,2,1,"A hall in LEONATO’S house.",26
+19230,2,2,"The same.",26
+19231,2,3,"LEONATO’S orchard.",26
+19232,3,1,"LEONATO’S garden.",26
+19233,3,2,"A room in LEONATO’S house",26
+19234,3,3,"A street.",26
+19235,3,4,"HERO’s apartment.",26
+19236,3,5,"Another room in LEONATO’S house.",26
+19237,4,1,"A church.",26
+19238,4,2,"A prison.",26
+19239,5,1,"Before LEONATO’S house.",26
+19240,5,2,"LEONATO’S garden.",26
+19241,5,3,"A church.",26
+19242,5,4,"A room in LEONATO’S house.",26
+19243,1,1,"Venice. A street.",27
+19244,1,2,"Another street.",27
+19245,1,3,"A council-chamber.",27
+19246,2,1,"A Sea-port in Cyprus. An open place near the quay.",27
+19247,2,2,"A street.",27
+19248,2,3,"A hall in the castle.",27
+19249,3,1,"Before the castle.",27
+19250,3,2,"A room in the castle.",27
+19251,3,3,"The garden of the castle.",27
+19252,3,4,"Before the castle.",27
+19253,4,1,"Cyprus. Before the castle.",27
+19254,4,2,"A room in the castle.",27
+19255,4,3,"Another room in the castle.",27
+19256,5,1,"Cyprus. A street.",27
+19257,5,2,"A bedchamber in the castle: DESDEMONA in bed asleep;",27
+19258,1,1,---,28
+19259,1,2,---,28
+19260,1,3,---,28
+19261,1,4,---,28
+19262,1,5,---,28
+19263,1,6,---,28
+19264,1,7,---,28
+19265,1,8,---,28
+19266,1,9,---,28
+19267,1,10,"---
+",28
+19268,1,11,"---
+",28
+19269,1,12,"---
+",28
+19270,1,13,"---
+",28
+19271,1,14,"---
+",28
+19272,1,15,"---
+",28
+19273,1,16,"Sonnet to sundry notes of music
+",28
+19274,1,17,"Sonnet to sundry notes of music
+",28
+19275,1,18,"Sonnet to sundry notes of music
+",28
+19276,1,19,"Sonnet to sundry notes of music
+",28
+19277,1,20,"Sonnet to sundry notes of music
+",28
+19278,1,21,"Sonnet to sundry notes of music
+",28
+19279,1,0,Prologue.,29
+19280,1,1,"Antioch. A room in the palace.",29
+19281,1,2,"Tyre. A room in the palace.",29
+19282,1,3,"Tyre. An ante-chamber in the palace.",29
+19283,1,4,"Tarsus. A room in the Governor’s house.",29
+19284,2,1,"Pentapolis. An open place by the sea-side.",29
+19285,2,2,"The same. A public way or platform leading to the",29
+19286,2,3,"The same. A hall of state: a banquet prepared.",29
+19287,2,4,"Tyre. A room in the Governor’s house.",29
+19288,2,5,"Pentapolis. A room in the palace.",29
+19289,3,0,Chorus.,29
+19290,3,1,"On ship.",29
+19291,3,2,"Ephesus. A room in CERIMON’s house.",29
+19292,3,3,"Tarsus. A room in CLEON’s house.",29
+19293,3,4,"Ephesus. A room in CERIMON’s house.",29
+19294,4,0,"Near the seashore.",29
+19295,4,1,"Tarsus. An open place near the sea-shore.",29
+19296,4,2,"Mytilene. A room in a brothel.",29
+19297,4,3,"Tarsus. A room in CLEON’s house.",29
+19298,4,4,Chorus.,29
+19299,4,5,"Mytilene. A street before the brothel.",29
+19300,4,6,"The same. A room in the brothel.",29
+19301,5,0,Chorus.,29
+19302,5,1,"On board PERICLES’ ship, off Mytilene. A close",29
+19303,5,2,Chorus.,29
+19304,5,3,"The temple of Diana at Ephesus; THAISA standing",29
+19305,1,1,"The Phoenix and the Turtle",30
+19306,1,0,Dedication,31
+19307,1,1,"The Argument",31
+19308,1,2,"The Rape of Lucrece",31
+19309,1,1,"London. KING RICHARD II’s palace.",32
+19310,1,2,"The DUKE OF LANCASTER’S palace.",32
+19311,1,3,"The lists at Coventry.",32
+19312,1,4,"The court.",32
+19313,2,1,"Ely House.",32
+19314,2,2,"The palace.",32
+19315,2,3,"Wilds in Gloucestershire.",32
+19316,2,4,"A camp in Wales.",32
+19317,3,1,"Bristol. Before the castle.",32
+19318,3,2,"The coast of Wales. A castle in view.",32
+19319,3,3,"Wales. Before Flint castle.",32
+19320,3,4,"LANGLEY. The DUKE OF YORK’s garden.",32
+19321,4,1,"Westminster Hall.",32
+19322,5,1,"London. A street leading to the Tower.",32
+19323,5,2,"The DUKE OF YORK’s palace.",32
+19324,5,3,"A royal palace.",32
+19325,5,4,"The same.",32
+19326,5,5,"Pomfret castle.",32
+19327,5,6,"Windsor castle.",32
+19328,1,1,"London. A street.",33
+19329,1,2,"The same. Another street.",33
+19330,1,3,"The palace.",33
+19331,1,4,"London. The Tower.",33
+19332,2,1,"London. The palace.",33
+19333,2,2,"The palace.",33
+19334,2,3,"London. A street.",33
+19335,2,4,"London. The palace.",33
+19336,3,1,"London. A street.",33
+19337,3,2,"Before Lord Hastings’ house.",33
+19338,3,3,"Pomfret Castle.",33
+19339,3,4,"The Tower of London.",33
+19340,3,5,"The Tower-walls.",33
+19341,3,6,"The same.",33
+19342,3,7,"Baynard’s Castle.",33
+19343,4,1,"Before the Tower.",33
+19344,4,2,"London. The palace.",33
+19345,4,3,"The same.",33
+19346,4,4,"Before the palace.",33
+19347,4,5,"Lord Derby’s house.",33
+19348,5,1,"Salisbury. An open place.",33
+19349,5,2,"The camp near Tamworth.",33
+19350,5,3,"Bosworth Field.",33
+19351,5,4,"Another part of the field.",33
+19352,5,5,"Another part of the field.",33
+19353,0,1,"Verona: Mantua.",34
+19354,1,1,"Verona. A public place.",34
+19355,1,2,"A street.",34
+19356,1,3,"A room in Capulet’s house.",34
+19357,1,4,"A street.",34
+19358,1,5,"A hall in Capulet’s house.",34
+19359,2,0,Prologue.,34
+19360,2,1,"A lane by the wall of Capulet’s orchard.",34
+19361,2,2,"Capulet’s orchard.",34
+19362,2,3,"Friar Laurence’s cell.",34
+19363,2,4,"A street.",34
+19364,2,5,"Capulet’s orchard.",34
+19365,2,6,"Friar Laurence’s cell.",34
+19366,3,1,"A public place.",34
+19367,3,2,"Capulet’s orchard.",34
+19368,3,3,"Friar Laurence’s cell.",34
+19369,3,4,"A room in Capulet’s house.",34
+19370,3,5,"Capulet’s orchard.",34
+19371,4,1,"Friar Laurence’s cell.",34
+19372,4,2,"Hall in Capulet’s house.",34
+19373,4,3,"Juliet’s chamber.",34
+19374,4,4,"Hall in Capulet’s house.",34
+19375,4,5,"Juliet’s chamber.",34
+19376,5,1,"Mantua. A street.",34
+19377,5,2,"Friar Laurence’s cell.",34
+19378,5,3,"A churchyard; in it a tomb belonging to the Capulets.",34
+19379,1,1,---,35
+19380,1,2,---,35
+19381,1,3,---,35
+19382,1,4,---,35
+19383,1,5,---,35
+19384,1,6,---,35
+19385,1,7,---,35
+19386,1,8,---,35
+19387,1,9,---,35
+19388,1,10,"---
+",35
+19389,1,11,"---
+",35
+19390,1,12,"---
+",35
+19391,1,13,"---
+",35
+19392,1,14,"---
+",35
+19393,1,15,"---
+",35
+19394,1,16,"---
+",35
+19395,1,17,"---
+",35
+19396,1,18,"---
+",35
+19397,1,19,"---
+",35
+19398,1,20,"---
+",35
+19399,1,21,"---
+",35
+19400,1,22,"---
+",35
+19401,1,23,"---
+",35
+19402,1,24,"---
+",35
+19403,1,25,"---
+",35
+19404,1,26,"---
+",35
+19405,1,27,"---
+",35
+19406,1,28,"---
+",35
+19407,1,29,"---
+",35
+19408,1,30,"---
+",35
+19409,1,31,"---
+",35
+19410,1,32,"---
+",35
+19411,1,33,"---
+",35
+19412,1,34,"---
+",35
+19413,1,35,"---
+",35
+19414,1,36,"---
+",35
+19415,1,37,"---
+",35
+19416,1,38,"---
+",35
+19417,1,39,"---
+",35
+19418,1,40,"---
+",35
+19419,1,41,"---
+",35
+19420,1,42,"---
+",35
+19421,1,43,"---
+",35
+19422,1,44,"---
+",35
+19423,1,45,"---
+",35
+19424,1,46,"---
+",35
+19425,1,47,"---
+",35
+19426,1,48,"---
+",35
+19427,1,49,"---
+",35
+19428,1,50,"---
+",35
+19429,1,51,"---
+",35
+19430,1,52,"---
+",35
+19431,1,53,"---
+",35
+19432,1,54,"---
+",35
+19433,1,55,"---
+",35
+19434,1,56,"---
+",35
+19435,1,57,"---
+",35
+19436,1,58,"---
+",35
+19437,1,59,"---
+",35
+19438,1,60,"---
+",35
+19439,1,61,"---
+",35
+19440,1,62,"---
+",35
+19441,1,63,"---
+",35
+19442,1,64,"---
+",35
+19443,1,65,"---
+",35
+19444,1,66,"---
+",35
+19445,1,67,"---
+",35
+19446,1,68,"---
+",35
+19447,1,69,"---
+",35
+19448,1,70,"---
+",35
+19449,1,71,"---
+",35
+19450,1,72,"---
+",35
+19451,1,73,"---
+",35
+19452,1,74,"---
+",35
+19453,1,75,"---
+",35
+19454,1,76,"---
+",35
+19455,1,77,"---
+",35
+19456,1,78,"---
+",35
+19457,1,79,"---
+",35
+19458,1,80,"---
+",35
+19459,1,81,"---
+",35
+19460,1,82,"---
+",35
+19461,1,83,"---
+",35
+19462,1,84,"---
+",35
+19463,1,85,"---
+",35
+19464,1,86,"---
+",35
+19465,1,87,"---
+",35
+19466,1,88,"---
+",35
+19467,1,89,"---
+",35
+19468,1,90,"---
+",35
+19469,1,91,"---
+",35
+19470,1,92,"---
+",35
+19471,1,93,"---
+",35
+19472,1,94,"---
+",35
+19473,1,95,"---
+",35
+19474,1,96,"---
+",35
+19475,1,97,"---
+",35
+19476,1,98,"---
+",35
+19477,1,99,"---
+",35
+19478,1,100,"---
+",35
+19479,1,101,"---
+",35
+19480,1,102,"---
+",35
+19481,1,103,"---
+",35
+19482,1,104,"---
+",35
+19483,1,105,"---
+",35
+19484,1,106,"---
+",35
+19485,1,107,"---
+",35
+19486,1,108,"---
+",35
+19487,1,109,"---
+",35
+19488,1,110,"---
+",35
+19489,1,111,"---
+",35
+19490,1,112,"---
+",35
+19491,1,113,"---
+",35
+19492,1,114,"---
+",35
+19493,1,115,"---
+",35
+19494,1,116,"---
+",35
+19495,1,117,"---
+",35
+19496,1,118,"---
+",35
+19497,1,119,"---
+",35
+19498,1,120,"---
+",35
+19499,1,121,"---
+",35
+19500,1,122,"---
+",35
+19501,1,123,"---
+",35
+19502,1,124,"---
+",35
+19503,1,125,"---
+",35
+19504,1,126,"---
+",35
+19505,1,127,"---
+",35
+19506,1,128,"---
+",35
+19507,1,129,"---
+",35
+19508,1,130,"---
+",35
+19509,1,131,"---
+",35
+19510,1,132,"---
+",35
+19511,1,133,"---
+",35
+19512,1,134,"---
+",35
+19513,1,135,"---
+",35
+19514,1,136,"---
+",35
+19515,1,137,"---
+",35
+19516,1,138,"---
+",35
+19517,1,139,"---
+",35
+19518,1,140,"---
+",35
+19519,1,141,"---
+",35
+19520,1,142,"---
+",35
+19521,1,143,"---
+",35
+19522,1,144,"---
+",35
+19523,1,145,"---
+",35
+19524,1,146,"---
+",35
+19525,1,147,"---
+",35
+19526,1,148,"---
+",35
+19527,1,149,"---
+",35
+19528,1,150,"---
+",35
+19529,1,151,"---
+",35
+19530,1,152,"---
+",35
+19531,1,153,"---
+",35
+19532,1,154,"---
+",35
+19533,0,1,"Before an alehouse on a heath",36
+19534,0,2,"A bedchamber in the LORD’S house",36
+19535,1,1,"Padua. A public place",36
+19536,1,2,"Padua. Before HORTENSIO’S house",36
+19537,2,1,"Padua. BAPTISTA’S house",36
+19538,3,1,"Padua. BAPTISTA’S house",36
+19539,3,2,"Padua. Before BAPTISTA’So house",36
+19540,4,1,"PETRUCHIO’S country house",36
+19541,4,2,"Padua. Before BAPTISTA’S house",36
+19542,4,3,"PETRUCHIO’S house",36
+19543,4,4,"Padua. Before BAPTISTA’S house",36
+19544,4,5,"A public road",36
+19545,5,1,"Padua. Before LUCENTIO’S house",36
+19546,5,2,"LUCENTIO’S house",36
+19547,1,1,"On a ship at sea: a tempestuous noise",37
+19548,1,2,"The island. Before PROSPERO’S cell.",37
+19549,2,1,"Another part of the island.",37
+19550,2,2,"Another part of the island.",37
+19551,3,1,"Before PROSPERO’S Cell.",37
+19552,3,2,"Another part of the island.",37
+19553,3,3,"Another part of the island.",37
+19554,4,1,"Before PROSPERO’S cell.",37
+19555,5,1,"Before PROSPERO’S cell.",37
+19556,1,1,"Athens. A hall in Timon’s house.",38
+19557,1,2,"A banqueting-room in Timon’s house.",38
+19558,2,1,"A Senator’s house.",38
+19559,2,2,"The same. A hall in Timon’s house.",38
+19560,3,1,"A room in Lucullus’ house.",38
+19561,3,2,"A public place.",38
+19562,3,3,"A room in Sempronius’ house.",38
+19563,3,4,"The same. A hall in Timon’s house.",38
+19564,3,5,"The same. The senate-house. The Senate sitting.",38
+19565,3,6,"The same. A banqueting-room in Timon’s house.",38
+19566,4,1,"Without the walls of Athens.",38
+19567,4,2,"Athens. A room in Timon’s house.",38
+19568,4,3,"Woods and cave, near the seashore.",38
+19569,5,1,"The woods. Before Timon’s cave.",38
+19570,5,2,"Before the walls of Athens.",38
+19571,5,3,"The woods. Timon’s cave, and a rude tomb seen.",38
+19572,5,4,"Before the walls of Athens.",38
+19573,1,1,"Rome. Before the Capitol.",39
+19574,2,1,"Rome. Before the Palace.",39
+19575,2,2,"A forest near Rome. Horns and cry of hounds heard.",39
+19576,2,3,"A lonely part of the forest.",39
+19577,2,4,"Another part of the forest.",39
+19578,3,1,"Rome. A street.",39
+19579,3,2,"A room in Titus’s house. A banquet set out.",39
+19580,4,1,"Rome. Titus’s garden.",39
+19581,4,2,"The same. A room in the palace.",39
+19582,4,3,"The same. A public place.",39
+19583,4,4,"The same. Before the palace.",39
+19584,5,1,"Plains near Rome.",39
+19585,5,2,"Rome. Before TITUS’s house.",39
+19586,5,3,"Court of TITUS’s house. A banquet set out.",39
+19587,1,0,Prologue.,40
+19588,1,1,"Troy. Before Priam’s palace.",40
+19589,1,2,"The Same. A street.",40
+19590,1,3,"The Grecian camp. Before Agamemnon’s tent.",40
+19591,2,1,"A part of the Grecian camp.",40
+19592,2,2,"Troy. A room in Priam’s palace.",40
+19593,2,3,"The Grecian camp. Before Achilles’ tent.",40
+19594,3,1,"Troy. Priam’s palace.",40
+19595,3,2,"The same. Pandarus’ orchard.",40
+19596,3,3,"The Grecian camp. Before Achilles’ tent.",40
+19597,4,1,"Troy. A street.",40
+19598,4,2,"The same. Court of Pandarus’ house.",40
+19599,4,3,"The same. Street before Pandarus’ house.",40
+19600,4,4,"The same. Pandarus’ house.",40
+19601,4,5,"The Grecian camp. Lists set out.",40
+19602,5,1,"The Grecian camp. Before Achilles’ tent.",40
+19603,5,2,"The same. Before Calchas’ tent.",40
+19604,5,3,"Troy. Before Priam’s palace.",40
+19605,5,4,"Plains between Troy and the Grecian camp.",40
+19606,5,5,"Another part of the plains.",40
+19607,5,6,"Another part of the plains.",40
+19608,5,7,"Another part of the plains.",40
+19609,5,8,"Another part of the plains.",40
+19610,5,9,"Another part of the plains.",40
+19611,5,10,"Another part of the plains.
+",40
+19612,1,1,"Verona. An open place.",41
+19613,1,2,"The same. Garden of JULIA’s house.",41
+19614,1,3,"The same. ANTONIO’s house.",41
+19615,2,1,"Milan. The DUKE’s palace.",41
+19616,2,2,"Verona. JULIA’S house.",41
+19617,2,3,"The same. A street.",41
+19618,2,4,"Milan. The DUKE’s palace.",41
+19619,2,5,"The same. A street.",41
+19620,2,6,"The same. The DUKE’S palace.",41
+19621,2,7,"Verona. JULIA’S house.",41
+19622,3,1,"Milan. The DUKE’s palace.",41
+19623,3,2,"The same. The DUKE’s palace.",41
+19624,4,1,"The frontiers of Mantua. A forest.",41
+19625,4,2,"Milan. Outside the DUKE’s palace, under SILVIA’s chamber.",41
+19626,4,3,"The same.",41
+19627,4,4,"The same.",41
+19628,5,1,"Milan. An abbey.",41
+19629,5,2,"The same. The DUKE’s palace.",41
+19630,5,3,"The frontiers of Mantua. The forest.",41
+19631,5,4,"Another part of the forest.",41
+19632,1,0,Dedication.,42
+19633,1,1,"Venus and Adonis.",42
+19634,1,1,"Antechamber in LEONTES’ palace.",43
+19635,1,2,"A room of state in the same.",43
+19636,2,1,"A room in LEONTES’ palace.",43
+19637,2,2,"A prison.",43
+19638,2,3,"A room in LEONTES’ palace.",43
+19639,3,1,"A sea-port in Sicilia.",43
+19640,3,2,"A court of Justice.",43
+19641,3,3,"Bohemia. A desert country near the sea.",43
+19642,4,1,"Chorus as Time speaks.",43
+19643,4,2,"Bohemia. The palace of POLIXENES.",43
+19644,4,3,"A road near the Shepherd’s cottage.",43
+19645,4,4,"The Shepherd’s cottage.",43
+19646,5,1,"A room in LEONTES’ palace.",43
+19647,5,2,"Before LEONTES’ palace.",43
+19648,5,3,"A chapel in PAULINA’S house.",43
