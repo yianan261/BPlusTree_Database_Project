@@ -2,7 +2,8 @@
 #include <algorithm>
 
 void SecondaryIndex::insert(const vector<string>& attrs, int pk) {
-    if(attrs.empty() || col >= attrs.size()) return;
+    if(attrs.empty() || col >= attrs.size()) 
+        return;
     string val = attrs[col];
 
     vector<int> findit = tree.search(val);
@@ -21,13 +22,15 @@ void SecondaryIndex::insert(const vector<string>& attrs, int pk) {
 
 void SecondaryIndex::remove(const vector<string>& attrs, int pk)
 {
-    if (col >= (int)attrs.size()) return;
+    if (col >= (int)attrs.size()) 
+        return;
     auto val = attrs[col];
     auto list = tree.search(val);
     if (list.empty()) return;
     list.erase(std::remove(list.begin(), list.end(), pk), list.end());
     tree.remove(val);
-    if (!list.empty()) tree.insert(val, list);
+    if (!list.empty()) 
+        tree.insert(val, list);
 }
 
 vector<int> SecondaryIndex::searchPK(const string& v)

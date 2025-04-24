@@ -23,7 +23,7 @@ private:
 
 public:
     BPlusTree();
-    void insert(K& key, const P& attrs);  // 修改为 const 引用
+    void insert(K& key, const P& attrs);  
     void update(K& key, P& attrs);
     void remove(K& key);
     P search(K& key);

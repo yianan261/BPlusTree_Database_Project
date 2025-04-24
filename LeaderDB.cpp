@@ -8,7 +8,8 @@ void LeaderDB::deleteKey(const string& key) {
     auto oldAttrs = tables[currentTable].search(key);
     int pk = stoi(key);
     tables[currentTable].remove(key);
-    for (auto& [c, idx] : secondary[currentTable]) idx.remove(oldAttrs, pk);
+    for (auto& [c, idx] : secondary[currentTable]) 
+        idx.remove(oldAttrs, pk);
 }
 
 void LeaderDB::create(const string& key, const vector<string>& attrs) {
@@ -18,7 +19,8 @@ void LeaderDB::create(const string& key, const vector<string>& attrs) {
     }
     wal.logWrite(key, attrs);
     tables[currentTable].insert(key, attrs);
-    for (auto& [c, idx] : secondary[currentTable]) idx.insert(attrs, keyInt);
+    for (auto& [c, idx] : secondary[currentTable]) 
+        idx.insert(attrs, keyInt);
 }
 
 void LeaderDB::update(const string& key, const vector<string>& attrs) {

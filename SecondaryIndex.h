@@ -14,7 +14,7 @@ class SecondaryIndex {
     TreeType tree;
 
 public:
-    explicit SecondaryIndex(int column = 0) : col(column) {}  // 添加默认值
+    explicit SecondaryIndex(int column = 0) : col(column) {}  
 
     void insert(const vector<string>& attrs, int pk);
     void remove(const vector<string>& attrs, int pk);
