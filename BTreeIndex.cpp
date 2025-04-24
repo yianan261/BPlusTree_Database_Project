@@ -2,24 +2,30 @@
 #include <sstream>
 
 void BTreeIndex::insert(const string& key, const vector<string>& attrs){
-    tree.insert(stoi(key), attrs);   
+    auto attrsCopy = attrs;
+    int intKey = stoi(key);
+    tree.insert(intKey, attrsCopy);   
 }
 
 vector<string> BTreeIndex::search(const string& key)
 {
-    return tree.search(stoi(key));
+    int intKey = stoi(key);
+    return tree.search(intKey);
 }
 
 void BTreeIndex::remove(const string& key) {
-    tree.remove(stoi(key));
+    int intKey = stoi(key);
+    tree.remove(intKey);
 }
 
 void BTreeIndex::clear(){
-    tree = BPlusTree(); // reinitialize new tree
+    tree = PrimTree(); // reinitialize new tree
 }
 
 void BTreeIndex::update(const string& key, const vector<string>& attrs){
-    tree.update(stoi(key), attrs);
+    auto attrsCopy = attrs;
+    int intKey = stoi(key);
+    tree.update(intKey, attrsCopy);
 }
 
 vector<vector<string>> BTreeIndex::rangeQuery(const string& lowKey, const string& highKey) {

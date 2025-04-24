@@ -22,8 +22,11 @@ void printHelp() {
          << "10. tables              - List all tables\n"
          << "11. current             - Show current table name\n"
          << "12. load <filepath>     - Load data from CSV file into current table\n"
-         << "13. help                - Show this help message\n"
-         << "14. exit                - Exit the program\n\n";
+         << "13. recover             - Recover database from WAL\n"
+         << "14. help                - Show this help message\n"
+         << "15. createindex <col>   - Build secondary index on column number <col>\n"
+         << "16. select <cols>|* where <col>=<val> - Query with projection and condition\n"
+         << "17. exit                - Exit the program\n\n";
 }
 
 /* ─────────────── splitCSV ─────────────── */
@@ -71,9 +74,13 @@ int main() {
     while (true) {
         cout << "[" << db.getCurrentTable() << "] ";
         if (!(cin >> command)) break;
-
+        
         if (command == "exit") break;
         else if (command == "help") printHelp();
+        else if (command == "recover") {
+            db.recoverFromWAL();
+            cout << "Database recovered from WAL\n";
+        }
 
         /* ---------- GET ---------- */
         else if (command == "get") {
@@ -91,20 +98,33 @@ int main() {
             }
         }
 
-        /* ---------- CREATE  ---------- */
+        /* ---------- CREATE ---------- */
         else if (command == "create") {
-            string key;
-            cout << "Key: ";
-            cin  >> key;
-            cout << "Attributes (comma separated): ";
-            cin.ignore();              
-            getline(cin, line);
-            auto attrs = splitCSV(line);
-            try {
-                db.create(key, attrs);
-                cout << "Record created.\n";
-            } catch (const exception& e) {
-                cout << "Error: " << e.what() << '\n';
+            string type; cin >> type;
+            if (type == "table") {
+                string tableName; cin >> tableName;
+                if (tableName == "default") {
+                    cout << "Cannot create table named 'default'.\n";
+                } else if (db.hasTable(tableName)) {
+                    cout << "Table " << tableName << " already exists.\n";
+                } else {
+                    db.createTable(tableName);
+                    cout << "Table " << tableName << " created.\n";
+                }
+            } else {
+                string key;
+                cout << "Key: ";
+                cin >> key;
+                cout << "Attributes (comma separated): ";
+                cin.ignore();              
+                getline(cin, line);
+                auto attrs = splitCSV(line);
+                try {
+                    db.create(key, attrs);
+                    cout << "Record created.\n";
+                } catch (const exception& e) {
+                    cout << "Error: " << e.what() << '\n';
+                }
             }
         }
         /* ---------- UPDATE ---------- */
@@ -220,6 +240,78 @@ int main() {
                 }
                 cout << "Total: " << results.size() << '\n';
             }
+        }
+        /* build secondary index */
+        else if (command == "createindex") {
+            int col; 
+            cin >> col;
+            db.createSecondaryIdx(col);
+            cout << "Secondary index built on column " << col << ".\n";
+        }
+        /* indexed find */
+        else if (command == "find") {
+            int col; 
+            string val; 
+            cin >> col >> val;
+            auto rows = db.findByAttr(col, val);
+            if (rows.empty()) cout << "No match.\n";
+            else {
+                for (auto& a : rows) {
+                    for (size_t i= 0; i < a.size(); i++){
+                        if(i)   
+                            cout << ", ";
+                        cout << a[i];
+                    }
+                    cout << '\n';
+                }
+                cout << "Total: " << rows.size() << '\n';
+            }
+        }
+        else if (command == "select") {
+            cin.ignore();          
+            getline(cin, line);    
+            stringstream ss(line);
+        
+            
+            string colPart;
+            ss >> colPart;                             
+            vector<int> proj;
+            if (colPart != "*") {
+                stringstream cs(colPart);
+                string tok;
+                while (getline(cs, tok, ','))
+                    proj.push_back(stoi(tok));
+            }
+        
+            
+            string whereKw;
+            ss >> whereKw;
+            if (whereKw != "where") {
+                cout << "Syntax error: expected 'where'.\n"; continue;
+            }
+        
+            
+            string cond;
+            ss >> cond;                                
+            auto pos = cond.find('=');
+            if (pos == string::npos) {
+                cout << "Syntax error: expected '='.\n"; continue;
+            }
+            int whereCol = stoi(cond.substr(0,pos));
+            string whereVal = cond.substr(pos+1);
+        
+            
+            auto rows = db.selectWhere(proj, whereCol, whereVal);
+            if (rows.empty()) { cout << "No match.\n"; continue; }
+        
+            for (auto& r : rows) {
+                for (size_t i=0;i<r.size();++i){
+                    if(i) cout << ", ";
+                    cout << r[i];
+                }
+                cout << '\n';
+            }
+            cout << "Total: " << rows.size() << '\n';
         }
 
         /* ---------- UNKNOWN ---------- */

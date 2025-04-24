@@ -4,7 +4,9 @@
 #include "DBInstance.h"
 #include "BTreeIndex.h"
 #include "WriteAheadLog.h"
+#include "SecondaryIndex.h"
 #include <map>
+#include <unordered_map>
 #include <sstream>
 
 using namespace std;
@@ -13,7 +15,8 @@ class LeaderDB : public DBInstance {
 private:
     WriteAheadLog wal;
     map<string, BTreeIndex> tables;  
-    string currentTable;             
+    string currentTable;  
+    unordered_map<string, unordered_map<int, SecondaryIndex>> secondary;           
 
 public:
     LeaderDB() : currentTable("default") {
@@ -41,6 +44,11 @@ public:
 
     // file import functionality
     bool loadFromFile(const string& tableName, const string& filepath);
+
+    // secondary index management WHERE
+    void createSecondaryIdx(int attrIdx);
+    vector<vector<string>> findByAttr(int attrIdx, const string& value);
+    vector<vector<string>> selectWhere(const vector<int>& projCols, int whereCol, const string& whereVal);
 };
 
 #endif

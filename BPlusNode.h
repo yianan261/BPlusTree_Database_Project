@@ -4,50 +4,64 @@
 #include <string>
 using namespace std;
 
+template<typename KeyT, typename PayloadT>
 struct Entry {
-    int key;
-    vector <string> attrs; 
-    Entry() : key(0) {} 
-    Entry(int k, const vector<string>& v) : key(k), attrs(v) {}
+    KeyT key;
+    PayloadT attrs; 
+
+    Entry() = default;
+    Entry(const KeyT& k, const PayloadT& v) : key(k), attrs(v) {}
+    bool operator<(const KeyT& rhs) const { return key < rhs; }
 };
 
 // base class
+template<typename KeyT, typename PayloadT>
 class BPlusNode {
     protected:
         bool isLeaf;
-        vector<int> keys;
+        vector<KeyT> keys;
         vector<BPlusNode*> children;               // internal node children (no values only keys)
-        vector<Entry> entries;                    // leaf node entries
+        vector<Entry<KeyT, PayloadT>> entries;                    // leaf node entries
         BPlusNode* next = nullptr;                // for leaf node traversal
         BPlusNode* prev = nullptr;
 
     public:
-        BPlusNode(bool leaf);
+        explicit BPlusNode(bool leaf);
 
         virtual ~BPlusNode() = default;
         
         virtual bool isLeafNode() const;
-        vector<int>& getKeys();
+        vector<KeyT>& getKeys();
+        const vector<KeyT>& getKeys() const;
+        
         vector<BPlusNode*>& getChildren();
-        virtual vector<Entry>& getEntries();
+        const vector<BPlusNode*>& getChildren() const;
+        
+        virtual vector<Entry<KeyT, PayloadT>>& getEntries();
+        virtual const vector<Entry<KeyT, PayloadT>>& getEntries() const;
+        
         BPlusNode* getNext() const;
         BPlusNode* getPrev() const;
         void setNext(BPlusNode* n);
         void setPrev(BPlusNode* p);
+};
 
-    };
-
-class InternalNode: public BPlusNode {
+template<typename KeyT, typename PayloadT>
+class InternalNode: public BPlusNode<KeyT, PayloadT> {
     public:
         InternalNode();
-        vector<Entry>& getEntries() override;
+        vector<Entry<KeyT, PayloadT>>& getEntries() override;
+        const vector<Entry<KeyT, PayloadT>>& getEntries() const override;
         bool isLeafNode() const override;
 };
 
-class LeafNode: public BPlusNode {
+template<typename KeyT, typename PayloadT>
+class LeafNode: public BPlusNode<KeyT, PayloadT> {
     public:
         LeafNode();
+        vector<Entry<KeyT, PayloadT>>& getEntries() override;
+        const vector<Entry<KeyT, PayloadT>>& getEntries() const override;
         bool isLeafNode() const override;
 };
 
-#endif // BPLUSTREE_NODE_H
+#endif 

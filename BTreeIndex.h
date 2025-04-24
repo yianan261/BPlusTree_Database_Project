@@ -6,9 +6,10 @@
 
 using namespace std;
 
+using PrimTree = BPlusTree<int, vector<string>>;
 class BTreeIndex {
 private:
-    BPlusTree tree;
+    PrimTree tree;
 
 public:
     void insert(const string& key, const vector<string>& attrs);
@@ -19,6 +20,7 @@ public:
     void remove(const string& key);
     void clear();
     void print();
+    PrimTree& raw() { return tree; }
 };
 
 #endif

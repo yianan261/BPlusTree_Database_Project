@@ -5,7 +5,10 @@ vector<string> LeaderDB::get(const string& key) {
 }
 
 void LeaderDB::deleteKey(const string& key) {
+    auto oldAttrs = tables[currentTable].search(key);
+    int pk = stoi(key);
     tables[currentTable].remove(key);
+    for (auto& [c, idx] : secondary[currentTable]) idx.remove(oldAttrs, pk);
 }
 
 void LeaderDB::create(const string& key, const vector<string>& attrs) {
@@ -15,14 +18,24 @@ void LeaderDB::create(const string& key, const vector<string>& attrs) {
     }
     wal.logWrite(key, attrs);
     tables[currentTable].insert(key, attrs);
+    for (auto& [c, idx] : secondary[currentTable]) idx.insert(attrs, keyInt);
 }
 
 void LeaderDB::update(const string& key, const vector<string>& attrs) {
-    if (!tables[currentTable].contains(stoi(key))) {
+
+    int pk = stoi(key);
+    if (!tables[currentTable].contains(pk))
         throw runtime_error("Key does not exist. Use create instead.");
-    }
     wal.logWrite(key, attrs);
+
+    auto oldAttrs = tables[currentTable].search(key);
+    for (auto& [c, idx] : secondary[currentTable])
+        idx.remove(oldAttrs, pk);
+
     tables[currentTable].update(key, attrs);
+
+    for (auto& [c, idx] : secondary[currentTable])
+        idx.insert(attrs, pk);
 }
 
 vector<vector<string>> LeaderDB::getPrefix(const string& prefixKey) {
@@ -112,4 +125,61 @@ bool LeaderDB::loadFromFile(const string& tableName, const string& filepath) {
     }
     file.close();
     return true;
+}
+void LeaderDB::createSecondaryIdx(int col)
+{
+    auto& secMap = secondary[currentTable];
+    if (secMap.count(col)) return;
+    secMap.emplace(col, SecondaryIndex(col));
+
+    auto& prim = tables[currentTable].raw();
+    vector<pair<int,vector<string>>> rows;
+    prim.forEachLeaf([&](const Entry<int, vector<string>>& e){  
+        rows.emplace_back(e.key, e.attrs);
+    });
+    secMap[col].bulkBuild(rows.begin(), rows.end());
+}
+
+/* ---------- findByAttr ---------- */
+vector<vector<string>> LeaderDB::findByAttr(int col, const string& val)
+{
+    auto& secMap = secondary[currentTable];
+    if (!secMap.count(col)) return {};
+    auto pks = secMap[col].searchPK(val);
+
+    vector<vector<string>> res;
+    for (int pk : pks)
+        res.push_back(tables[currentTable].search(to_string(pk)));
+    return res;
+}
+
+
+vector<vector<string>> LeaderDB::selectWhere(const vector<int>& projCols, int whereCol, const string& whereVal)
+{
+    vector<vector<string>> rows;
+    
+    auto tIt = secondary.find(currentTable);
+    if (tIt != secondary.end() && tIt->second.count(whereCol)) {
+        rows = findByAttr(whereCol, whereVal);
+    } else {
+        
+        auto& prim = tables[currentTable].raw();
+        prim.forEachLeaf([&](const Entry<int,vector<string>>& e){
+            if (whereCol < (int)e.attrs.size() &&
+                e.attrs[whereCol] == whereVal)
+                rows.push_back(e.attrs);
+        });
+    }
+
+    
+    if (projCols.empty()) return rows;              
+    vector<vector<string>> proj;
+    proj.reserve(rows.size());
+    for (auto& r : rows) {
+        vector<string> tmp;
+        for (int c : projCols)
+            if (c < (int)r.size()) tmp.push_back(r[c]);
+        proj.push_back(move(tmp));
+    }
+    return proj;
 }

@@ -2,34 +2,47 @@
 #define BPLUSTREE_H
 
 #include "BPlusNode.h"
-#include <string>
 #include <set>
+#include <vector>
+#include <string>
 using namespace std;
 
+template<typename K, typename P>
 class BPlusTree {
 private:
-    BPlusNode* root;
-    set<int> keySet;
-
-    void insertInternal(int key, const vector<string>& attrs, BPlusNode* node, BPlusNode*& newChild, int& newKey);
-    void splitLeaf(BPlusNode* node, BPlusNode*& newChild, int& newKey);
-    void splitInternal(BPlusNode* node, BPlusNode*& newChild, int& newKey);
-    bool deleteEntry(BPlusNode* node, int key);
-    void borrowLeaf(BPlusNode* node);
-    void mergeLeaf(BPlusNode* node);
-    void printTree(BPlusNode* node, int level);
+    BPlusNode<K,P>* root;
+    set<K> keySet;
+    
+    void splitLeaf(BPlusNode<K,P>* node, BPlusNode<K,P>*& newChild, K& newKey);
+    void splitInternal(BPlusNode<K,P>* node, BPlusNode<K,P>*& newChild, K& newKey);
+    void insertInternal(K& key, P& attrs, BPlusNode<K,P>* node, BPlusNode<K,P>*& newChild, K& newKey);
+    bool deleteEntry(BPlusNode<K,P>* node, const K& key);
+    void borrowLeaf(BPlusNode<K,P>* node);
+    void mergeLeaf(BPlusNode<K,P>* node);
+    void printTree(BPlusNode<K,P>* node, int level);
 
 public:
     BPlusTree();
-
-    void insert(int key, const vector<string>& attrs);
-    void remove(int key);
-    void update(int key, const vector<string>& attrs);
-    vector<string> search(int key);
-    vector<vector<string>> rangeQuery(int lowKey, int highKey);
-    bool contains(int key) const;
+    void insert(K& key, const P& attrs);  // 修改为 const 引用
+    void update(K& key, P& attrs);
+    void remove(K& key);
+    P search(K& key);
+    vector<P> rangeQuery(K lowKey, K highKey);
+    bool contains(K& key) const;
     void print();
     void printLeaves();
+    
+    template<typename Fn>
+    void forEachLeaf(Fn&& f) const {
+        const BPlusNode<K,P>* node = root;
+        while (!node->isLeafNode()) {
+            node = node->getChildren().front();
+        }
+        while (node) {
+            for (const auto& e : static_cast<const LeafNode<K,P>*>(node)->getEntries()) f(e);
+            node = node->getNext();
+        }
+    }
 };
 
-#endif // BPLUSTREE_H
+#endif

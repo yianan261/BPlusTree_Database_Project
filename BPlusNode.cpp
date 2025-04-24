@@ -1,52 +1,100 @@
 #include "BPlusNode.h"
+template struct Entry<int, vector<string>>;
+template class BPlusNode<int, vector<string>>;
+template class InternalNode<int, vector<string>>;
+template class LeafNode<int, vector<string>>;
 
-BPlusNode::BPlusNode(bool leaf) : isLeaf(leaf), next(nullptr), prev(nullptr) {}
+template<typename K, typename P>
+BPlusNode<K,P>::BPlusNode(bool leaf) : isLeaf(leaf), next(nullptr), prev(nullptr) {}
 
-bool BPlusNode::isLeafNode() const {
+template<typename K, typename P>
+bool BPlusNode<K,P>::isLeafNode() const {
     return isLeaf;
 }
 
-vector<int>& BPlusNode::getKeys() {
+template<typename K, typename P>
+vector<K>& BPlusNode<K,P>::getKeys() {
     return keys;
 }
 
-vector<BPlusNode*>& BPlusNode::getChildren() {
+template<typename K, typename P>
+vector<BPlusNode<K,P>*>& BPlusNode<K,P>::getChildren() {
     return children;
 }
 
-vector<Entry>& BPlusNode::getEntries() {
+template<typename K, typename P>
+const vector<BPlusNode<K,P>*>& BPlusNode<K,P>::getChildren() const {
+    return children;
+}
+
+template<typename K, typename P>
+vector<Entry<K, P>>& BPlusNode<K,P>::getEntries() {
     return entries;
 }
 
-BPlusNode* BPlusNode::getNext() const {
+template<typename K, typename P>
+const vector<Entry<K, P>>& BPlusNode<K,P>::getEntries() const {
+    return entries;
+}
+
+template<typename K, typename P>
+BPlusNode<K,P>* BPlusNode<K,P>::getNext() const {
     return next;
 }
 
-BPlusNode* BPlusNode::getPrev() const {
+template<typename K, typename P>
+BPlusNode<K,P>* BPlusNode<K,P>::getPrev() const {
     return prev;
 }
 
-void BPlusNode::setNext(BPlusNode* n) {
+template<typename K, typename P>
+void BPlusNode<K,P>::setNext(BPlusNode<K,P>* n) {
     next = n;
 }
 
-void BPlusNode::setPrev(BPlusNode* p) {
+template<typename K, typename P>
+void BPlusNode<K,P>::setPrev(BPlusNode<K,P>* p) {
     prev = p;
 }
 
-InternalNode::InternalNode() : BPlusNode(false) {}
+template<typename K, typename P>
+InternalNode<K, P>::InternalNode() : BPlusNode<K,P>(false) {}
 
-vector<Entry>& InternalNode::getEntries(){
-    //throw logic_error("InternalNode does not store entries.");
-    return entries; // This is just a placeholder. Internal nodes typically do not have entries.
+template<typename K, typename P>
+vector<Entry<K, P>>& InternalNode<K, P>::getEntries(){
+    return this->entries; 
 }
 
-bool InternalNode::isLeafNode() const {
+template<typename K, typename P>
+const vector<Entry<K, P>>& InternalNode<K, P>::getEntries() const {
+    return this->entries;
+}
+
+template<typename K, typename P>
+bool InternalNode<K, P>::isLeafNode() const {
     return false;
 }
 
-LeafNode::LeafNode() : BPlusNode(true) {}
+template<typename K, typename P>
+LeafNode<K, P>::LeafNode() : BPlusNode<K,P>(true) {}
 
-bool LeafNode::isLeafNode() const {
+template<typename K, typename P>
+vector<Entry<K, P>>& LeafNode<K, P>::getEntries(){
+    return this->entries;
+}
+
+template<typename K, typename P>
+const vector<Entry<K, P>>& LeafNode<K, P>::getEntries() const {
+    return this->entries;
+}
+
+template<typename K, typename P>
+bool LeafNode<K, P>::isLeafNode() const {
     return true;
 }
+
+
+template struct Entry<string, vector<int>>;
+template class  BPlusNode<string, vector<int>>;
+template class  InternalNode<string, vector<int>>;
+template class  LeafNode<string, vector<int>>;
