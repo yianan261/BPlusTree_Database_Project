@@ -1,8 +1,5 @@
 #include "BPlusNode.h"
-template struct Entry<int, vector<string>>;
-template class BPlusNode<int, vector<string>>;
-template class InternalNode<int, vector<string>>;
-template class LeafNode<int, vector<string>>;
+
 
 template<typename K, typename P>
 BPlusNode<K,P>::BPlusNode(bool leaf) : isLeaf(leaf), next(nullptr), prev(nullptr) {}
@@ -14,6 +11,11 @@ bool BPlusNode<K,P>::isLeafNode() const {
 
 template<typename K, typename P>
 vector<K>& BPlusNode<K,P>::getKeys() {
+    return keys;
+}
+
+template<typename K, typename P>
+const vector<K>& BPlusNode<K,P>::getKeys() const {
     return keys;
 }
 
@@ -93,6 +95,11 @@ bool LeafNode<K, P>::isLeafNode() const {
     return true;
 }
 
+
+template struct Entry<int, vector<string>>;
+template class BPlusNode<int, vector<string>>;
+template class InternalNode<int, vector<string>>;
+template class LeafNode<int, vector<string>>;
 
 template struct Entry<string, vector<int>>;
 template class  BPlusNode<string, vector<int>>;

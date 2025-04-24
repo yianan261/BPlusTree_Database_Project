@@ -181,7 +181,7 @@ vector<vector<string>> LeaderDB::selectWhere(const vector<int>& projCols, int wh
         vector<string> tmp;
         for (int c : projCols)
             if (c < (int)r.size()) tmp.push_back(r[c]);
-        proj.push_back(move(tmp));
+        proj.push_back(std::move(tmp));
     }
     return proj;
 }

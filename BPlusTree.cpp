@@ -49,7 +49,7 @@ void BPlusTree<K, P>::insertInternal(K& key, P& attrs, BPlusNode<K, P>* node, BP
         auto& entries = static_cast<LeafNode<K, P>*>(node)->getEntries();
         //lower_bound(start, end, value, comparator)
         auto insert_pos = lower_bound(entries.begin(), entries.end(), key, [](const Entry<K, P>& a, const K& b){
-            return a.key < b;  // 现在比较相同类型
+            return a.key < b;  
         });
         entries.insert(insert_pos, {key, attrs});
         if(entries.size() >= ORDER){
@@ -277,9 +277,9 @@ void BPlusTree<K, P>::printTree(BPlusNode<K, P>* node, int level) {
         for (const auto& e : entries) {
             cout << "(" << e.key << ", ";
             if (!e.attrs.empty()) {
-                if constexpr(std::is_same_v<P, std::vector<std::string>>)
+                if (std::is_same<P, std::vector<std::string>>::value)
                     cout << e.attrs[0];
-                else if constexpr(std::is_same_v<P, std::vector<int>>)
+                else if (std::is_same<P, std::vector<int>>::value)
                     cout << e.attrs[0];
             }
             cout << ") ";
@@ -310,9 +310,9 @@ void BPlusTree<K, P>::printLeaves() {
         for (const auto& e : entries) {
             cout << "(" << e.key << ", ";
             if (!e.attrs.empty()) {
-                if constexpr(std::is_same_v<P, std::vector<std::string>>)
+                if (std::is_same<P, std::vector<std::string>>::value)
                     cout << e.attrs[0];
-                else if constexpr(std::is_same_v<P, std::vector<int>>)
+                else if (std::is_same<P, std::vector<int>>::value)
                     cout << e.attrs[0];
             }
             cout << ") ";
