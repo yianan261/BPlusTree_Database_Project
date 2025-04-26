@@ -1,4 +1,7 @@
 #include "LeaderDB.h"
+#include "CsvParser.h"
+#include "FileUtils.h"
+#include "DataInserter.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -8,6 +11,8 @@
 #include <ctime>
 
 using namespace std;
+
+void uploadSavedPlaces(const string& userId);
 
 /* ─────────────── help ─────────────── */
 void printHelp() {
@@ -362,10 +367,17 @@ int main() {
             }catch(const exception& e){
                 cout << "Error: " << e.what() << '\n';
             }
+            
+            cout << "Would you like to upload your Saved Places? (yes/no): ";
+            string ans;
+            cin >> ans;
+            if (ans == "yes") {
+                uploadSavedPlaces(db, to_string(userId));
             db.switchTable("default");
-
+}
 
         }
+
         /* ---------- UNKNOWN ---------- */
         else {
             cout << "Unknown command. Type 'help' for help.\n";
@@ -374,4 +386,38 @@ int main() {
 
     cout << "Bye!\n";
     return 0;
+}
+
+void uploadSavedPlaces(LeaderDB& db, const string& userId){
+    cout << "Enter folder path with Saved Places csv file: ";
+    string folderPath;
+    cin >> folderPath;
+
+    auto csvFiles = listCsvFiles(folderPath);
+    if (csvFiles.empty()){
+        cout << "No files in folder.\n";
+        return;
+    }
+
+    for(const auto& filePath: csvFiles){
+        auto places = parseCsvFile(filePath);
+        if(places.empty()){
+            cout << "Warning: " << filePath << "is empty or failed to parse.\n";
+            continue;
+        }
+        string listTitle = fileNameWithoutExtension(filePath);
+        string listId = generateRandomListId();
+
+        insertSavedList(db, userId, listId, listTitle);
+
+        for (const auto& place: places){
+            if(!placeExists(db, place.placeId)){
+                insertPlace(db, place);
+            }
+            insertListPlace(db, listId, place.placeId);
+        }
+        cout << "Uploaded list: " << listTitle << "( " << places.size() << "places) \n";
+    }
+
+ 
 }
