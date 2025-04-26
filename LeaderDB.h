@@ -32,6 +32,9 @@ public:
 
     // range query
     vector<vector<string>> getRange(const string& lowKey, const string& highKey);
+
+    // get btree index
+    BTreeIndex& getCurrentIndex();
     
     // multiple table management
     void createTable(const string& tableName);

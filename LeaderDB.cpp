@@ -53,6 +53,9 @@ vector<vector<string>> LeaderDB::getRange(const string& lowKey, const string& hi
     return tables[currentTable].rangeQuery(lowKey, highKey);
 }
 
+BTreeIndex& LeaderDB::getCurrentIndex(){
+    return tables[currentTable];
+}
 
 void LeaderDB::createTable(const string& tableName) {
     if (tables.find(tableName) == tables.end()) {

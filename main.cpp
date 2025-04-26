@@ -4,6 +4,8 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <random>
+#include <ctime>
 
 using namespace std;
 
@@ -312,8 +314,58 @@ int main() {
                 cout << '\n';
             }
             cout << "Total: " << rows.size() << '\n';
-        }
+        } /* ---------- CREATEUSER ---------- */
+        else if (command == "createuser"){
+            if(!db.hasTable("users")){
+                db.createTable("users");
+            }
+            db.switchTable("users");
 
+            string email;
+            cout << "Enter user email: ";
+            cin >> email;
+            auto matches = db.selectWhere({}, 0 , email); // email using column 0
+            if (!matches.empty()){
+                cout << "User email already registered.\n";
+                db.switchTable("default");
+                continue;
+            }
+            srand(time(0));
+            int userId;
+            // if userId already exists need to keep doing rand()
+            while(true){
+                userId = rand();
+                bool exists = false;
+                db.getCurrentIndex().raw().forEachLeaf([&](const Entry<int, vector<string>>& e){
+                if (e.attrs.size() > 1 && to_string(userId) == e.attrs[1]) {  // attrs[1] is userId
+                    exists = true;
+                }
+                });
+
+                if(!exists) break;
+            }
+
+            time_t timestamp;
+            struct tm* ti;
+            time(&timestamp);
+            ti = localtime(&timestamp);
+            string timeStr = asctime(ti);
+            if (!timeStr.empty() && timeStr.back() == '\n'){
+                timeStr.pop_back();
+            }
+            
+            // insert
+            vector<string> userRec = { email, to_string(userId), timeStr};
+            try{
+                db.create(email, userRec);
+                cout << "User created successfullly. \n";
+            }catch(const exception& e){
+                cout << "Error: " << e.what() << '\n';
+            }
+            db.switchTable("default");
+
+
+        }
         /* ---------- UNKNOWN ---------- */
         else {
             cout << "Unknown command. Type 'help' for help.\n";
