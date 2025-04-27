@@ -29,12 +29,14 @@ def process_file(input_path, output_folder, maps):
                                    f"{base_filename}_enriched.csv")
     with open(output_csv_path, 'w', encoding='utf-8', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(
-            ["placeId", "name", "address", "latitude", "longitude"])
+        writer.writerow([
+            "placeId", "name", "address", "latitude", "longitude",
+            "description"
+        ])
         for place in results:
             writer.writerow([
                 place["placeId"], place["name"], place["address"],
-                place["latitude"], place["longitude"]
+                place["latitude"], place["longitude"], place["description"]
             ])
 
     print(

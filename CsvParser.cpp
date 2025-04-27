@@ -24,6 +24,7 @@ vector<Place> parseCsvFile(const string& filePath){
         getline(ss, p.address, ',');
         getline(ss, p.latitude, ',');
         getline(ss, p.longitude, ',');
+        getline(ss, p.description, ',');
         if (! p.placeId.empty()){
             places.push_back(p);
         }

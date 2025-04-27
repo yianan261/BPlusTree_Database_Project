@@ -11,6 +11,7 @@ struct Place {
     string address;
     string latitude;
     string longitude;
+    string description;
 };
 
 vector<Place> parseCsvFile(const string& filepath);

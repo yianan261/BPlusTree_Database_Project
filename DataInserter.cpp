@@ -50,7 +50,8 @@ void insertPlace(LeaderDB& db, const Place& p) {
         p.name,
         p.address,
         p.latitude,
-        p.longitude
+        p.longitude,
+        p.description
     };
 
     db.create(to_string(hashedId), attrs);
