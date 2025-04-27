@@ -25,17 +25,19 @@ The database schema supports users importing their saved places lists from Googl
 
 ### 1. Users Table (`users`)
 
-- `email` (PK): Email address (used as key).
-- `user_id`: Unique generated integer ID.
+- `email`: Email address (used as key).
+- `user_id`(PK): Random unique generated integer ID.
 - `created_at`: Account creation timestamp.
 
 ### 2. Places Table (`places`)
 
-- `place_id` (PK): Google Place ID.
+- Hashed Google Place ID(PK): The place_id is hashed to integers for primary key, and the original place id will be kept as a string attribute.
+- `place_id`: original place id kept as a string attribute.
 - `name`: Name of the place (e.g., "Central Park").
 - `address`: Formatted address.
 - `latitude`: Latitude coordinate.
 - `longitude`: Longitude coordinate.
+- `description`: Description of the place.
 
 ### 3. SavedLists Table (`savedlists`)
 
@@ -45,8 +47,8 @@ The database schema supports users importing their saved places lists from Googl
 
 ### 4. ListPlaces Table (`listplaces`)
 
-- Composite Primary Key: (`list_id`, `place_id`)
-- Links places to lists (many-to-many relationship).
+- Combined Primary Key: (`list_id`, `place_id`)
+- Links places to lists (many-to-many relationship)
 
 ---
 
@@ -62,13 +64,31 @@ make clean
 make
 ```
 
+### To Run the project
+
+After compiling, run
+
+```bash
+./leaderdb
+```
+
 ---
 
 ### To Upload Google Takeout File
 
 #### 1. Get Google API Key and keep in a .env file
 
+```bash
+GOOGLE_API_KEY=<your api key>
+```
+
 #### 2. Create and activate Python virtual environment
+
+```bash
+python -m venv myenv
+source myenv/bin/activate  # windows `myenv\Scripts\activate`
+pip install -r requirements.txt
+```
 
 #### 3. Install dependencies
 

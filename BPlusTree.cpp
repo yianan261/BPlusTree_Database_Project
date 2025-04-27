@@ -23,12 +23,12 @@ void BPlusTree<K, P>::update(K& key, P& attrs){
 }
 
 template<typename K, typename P>
-void BPlusTree<K, P>::insert(K &key, const P& attrs) {  // 修改为 const 引用
+void BPlusTree<K, P>::insert(K &key, const P& attrs) { 
     if (keySet.count(key)){
         throw runtime_error("Key already exists. Use update instead.");
     }
     keySet.insert(key);
-    treeSize++;  // 新增: 更新大小
+    treeSize++;  
 
     BPlusNode<K, P>* newChild = nullptr;
     K newKey;
