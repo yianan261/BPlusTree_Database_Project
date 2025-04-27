@@ -9,7 +9,7 @@ Implemented the B Plus Tree Algorithm in BPlusTreeFull.cpp and defining the skel
 
 ---
 
-## 📚 Project Components
+## Project Components
 
 **BPlusNode**: Represents a node (internal or leaf) in a B+ Tree. Handles splitting, merging, and traversal.
 **BPlusTree**: Manages the B+ Tree structure. Provides insert, delete, search, range search, prefix search operations.
