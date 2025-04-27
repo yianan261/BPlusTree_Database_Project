@@ -1,32 +1,42 @@
 #include "LeaderDB.h"
+#include "CsvParser.h"
+#include "FileUtils.h"
+#include "DataInserter.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <vector>
 #include <string>
+#include <random>
+#include <ctime>
+#include <filesystem>
 
 using namespace std;
 
-/* ─────────────── help ─────────────── */
+void uploadSavedPlaces(LeaderDB& db, const string& userId);
+
 void printHelp() {
-     cout << "\nAvailable commands:\n"
-        << "1.  get <key>           - Retrieve one record (all attributes)\n"
-         << "2.  create              - Create a new record (fails if key exists)\n"
-         << "3.  update              - Update an existing record (fails if key does not exist)\n"
-         << "4.  delete <key>        - Delete a specific key\n"
-         << "5.  prefix <str>        - List all records whose key starts with <str>\n"
-         << "6.  range               - List all records whose key falls within a range\n"
-         << "7.  create <table>      - Create a new table\n"
-         << "8.  drop <table>        - Delete a table\n"
-         << "9.  use <table>         - Switch to a table\n"
-         << "10. tables              - List all tables\n"
-         << "11. current             - Show current table name\n"
-         << "12. load <filepath>     - Load data from CSV file into current table\n"
-         << "13. recover             - Recover database from WAL\n"
-         << "14. help                - Show this help message\n"
-         << "15. createindex <col>   - Build secondary index on column number <col>\n"
-         << "16. select <cols>|* where <col>=<val> - Query with projection and condition\n"
-         << "17. exit                - Exit the program\n\n";
+    cout << "\nAvailable Commands:\n"
+         << "----------------------------------------------\n"
+         << "1.   get <key>                   - Retrieve one record (all attributes)\n"
+         << "2.   create                      - Create a new record (or create table)\n"
+         << "3.   update                      - Update an existing record\n"
+         << "4.   delete <key>                - Delete a record by key\n"
+         << "5.   prefix <str>                - List all records whose key starts with <str>\n"
+         << "6.   range                       - List all records whose key falls within a range\n"
+         << "7.   createindex <col>           - Build a secondary index on column number <col>\n"
+         << "8.   find <col> <value>          - Search records by indexed attribute\n"
+         << "9.   select <cols>|* where <col>=<val> - Query with projection and filtering\n"
+         << "10.  load <filepath>             - Load data from CSV into current table\n"
+         << "11.  createuser                  - Create a new user (and upload Saved Places)\n"
+         << "12.  recover                     - Recover the database from Write-Ahead Log (WAL)\n"
+         << "13.  tables                      - List all tables\n"
+         << "14.  current                     - Show current selected table\n"
+         << "15.  use <table>                 - Switch to another table\n"
+         << "16.  drop <table>                - Delete a table\n"
+         << "17.  help                        - Show this help menu\n"
+         << "18.  exit                        - Exit the program\n"
+         << "----------------------------------------------\n";
 }
 
 /* ─────────────── splitCSV ─────────────── */
@@ -40,7 +50,7 @@ static vector<string> splitCSV(const string& line) {
 
 int main() {
     LeaderDB db;
-
+    srand(0);
     
     const string path = "./dataset_project/data.csv";
     ifstream file(path);
@@ -65,6 +75,16 @@ int main() {
     }
     file.close();
     cout << "Finished loading dataset.\n";
+
+    // create tables for google takeout
+    vector<string> requiredTables = { "users", "places", "savedlists", "listplaces" };
+    for (const auto& table : requiredTables) {
+        if (!db.hasTable(table)) {
+            db.createTable(table);
+            cout << "✅ Created missing table: " << table << endl;
+        }
+    }
+
 
     
     cout << "Welcome to LeaderDB Command Line Interface!\n";
@@ -312,9 +332,68 @@ int main() {
                 cout << '\n';
             }
             cout << "Total: " << rows.size() << '\n';
+        } /* ---------- CREATEUSER ---------- */
+        else if (command == "createuser"){
+            if(!db.hasTable("users")){
+                db.createTable("users");
+            }
+            db.switchTable("users");
+
+            string email;
+            cout << "Enter user email: ";
+            cin >> email;
+
+            bool exists = false;
+            auto rows = db.getCurrentIndex().raw();
+            // check if email exists
+            rows.forEachLeaf([&](const Entry<int, vector<string>>& e) {
+                if (!e.attrs.empty() && e.attrs[0] == email) {
+                    exists = true;
+                }
+            });
+
+            if (exists) {
+                cout << "Email already registered.\n";
+                db.switchTable("default");
+                continue;
+            }
+
+            int userId;
+            while (true) {
+                userId = rand();
+                // Check if random userId is already taken
+                if (db.get(to_string(userId)).empty()) break;
+            }
+
+            time_t timestamp;
+            struct tm* ti;
+            time(&timestamp);
+            ti = localtime(&timestamp);
+            string timeStr = asctime(ti);
+            if (!timeStr.empty() && timeStr.back() == '\n'){
+                timeStr.pop_back();
+            }
+            
+            // insert
+            vector<string> userRec = { email, to_string(userId), timeStr};
+            try{
+                db.create(to_string(userId), userRec);
+                cout << "User created successfullly. \n";
+            }catch(const exception& e){
+                cout << "Error: " << e.what() << '\n';
+            }
+            
+            cout << "Would you like to upload your Saved Places? (yes/no): ";
+            string ans;
+            cin >> ans;
+            if (ans == "yes") {
+                uploadSavedPlaces(db, to_string(userId));
+            db.switchTable("default");
+}
+
         }
         else if (command == "join") {
-            // 示例: join A.1 B.2 0,2 *    （最后两个可省）
+            // 示例: join A.1 B.2 0,2 *    
             string tcolA, tcolB; cin >> tcolA >> tcolB;
             string projA = "*", projB = "*";
             if (cin.peek()==' ') cin >> projA;
@@ -356,4 +435,66 @@ int main() {
 
     cout << "Bye!\n";
     return 0;
+}
+
+void uploadSavedPlaces(LeaderDB& db, const string& userId){
+    cout << "Enter folder path with Saved Places csv file: ";
+    string folderPath;
+    cin >> folderPath;
+
+    vector<string> csvFiles;
+    try {
+        csvFiles = listCsvFiles(folderPath);
+    } catch (const filesystem::filesystem_error& e) {
+        cout << "Filesystem error: " << e.what() << '\n';
+        return;
+    }
+
+    if (csvFiles.empty()){
+        cout << "No files in folder.\n";
+        return;
+    }
+
+    for(const auto& filePath: csvFiles){
+        auto places = parseCsvFile(filePath);
+        if(places.empty()){
+            cout << "Warning: " << filePath << "is empty or failed to parse.\n";
+            continue;
+        }
+        string listTitle = fileNameWithoutExtension(filePath);
+        string listId = generateRandomListId();
+        db.switchTable("savedlists");
+        insertSavedList(db, userId, listId, listTitle);
+
+        // for (const auto& place: places){
+        //     if(!placeExists(db, place.placeId)){
+        //         insertPlace(db, place);
+        //     }
+        //     insertListPlace(db, listId, place.placeId);
+        // }
+        for (const auto& place : places) {
+            cout << "Processing placeId: " << place.placeId << " (" << place.name << ")\n";
+            db.switchTable("places"); 
+            try {
+                    if (!placeExists(db, place.placeId)) {
+                        cout << "Inserting new place into database.\n";
+                        insertPlace(db, place);
+                    } else {
+                        cout << "Place already exists in database. Skipping insert.\n";
+                    }
+                } catch (const exception& e) {
+                    cout << " Exception during place insertion: " << e.what() << endl;
+                }
+
+                db.switchTable("listplaces");  // Switch to listplaces table before inserting relation
+                try {
+                    insertListPlace(db, listId, place.placeId);
+                } catch (const exception& e) {
+                    cout << "Exception during list-place insertion: " << e.what() << endl;
+                }
+        }
+        cout << "Uploaded list: " << listTitle << "( " << places.size() << "places) \n";
+    }
+
+ 
 }

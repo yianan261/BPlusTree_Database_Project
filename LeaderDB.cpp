@@ -53,6 +53,9 @@ vector<vector<string>> LeaderDB::getRange(const string& lowKey, const string& hi
     return tables[currentTable].rangeQuery(lowKey, highKey);
 }
 
+BTreeIndex& LeaderDB::getCurrentIndex(){
+    return tables[currentTable];
+}
 
 void LeaderDB::createTable(const string& tableName) {
     if (tables.find(tableName) == tables.end()) {
@@ -208,21 +211,21 @@ vector<vector<string>> LeaderDB::join(const string& tabA, int colA, const string
         std::swap(outer,inner);
     }
 
-    /* 2. 预取 inner 的可能索引 */
+    
     bool innerHasIdx =
         secondary[innerName].count(iCol);
 
     vector<vector<string>> result;
 
-    /* 3. 遍历 outer */
+    
     outer->raw().forEachLeaf([&](const Entry<int,vector<string>>& eO){
         if (oCol >= (int)eO.attrs.size()) return;
         const string& matchVal = eO.attrs[oCol];
 
-        /* 3.1 获取 inner 匹配行集合 */
+        
         vector<vector<string>> rowsI;
         if (innerHasIdx)
-            rowsI = findByAttr(iCol, matchVal);               // uses index
+            rowsI = findByAttr(iCol, matchVal);              
         else {
             inner->raw().forEachLeaf([&](const auto& eI){
                 if (iCol < (int)eI.attrs.size() &&
@@ -231,16 +234,16 @@ vector<vector<string>> LeaderDB::join(const string& tabA, int colA, const string
             });
         }
 
-        /* 3.2 生成拼接输出 */
+        
         for (auto& rI : rowsI){
             vector<string> row;
-            // 投影 A
+            
             if (projA.empty()) row.insert(row.end(), eO.attrs.begin(), eO.attrs.end());
             else
                 for (int c:projA)
                     if (c < (int)eO.attrs.size()) 
                         row.push_back(eO.attrs[c]);
-            // 投影 B
+            
             if (projB.empty()) 
                 row.insert(row.end(), rI.begin(), rI.end());
             else

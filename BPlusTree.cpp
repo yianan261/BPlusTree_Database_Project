@@ -76,7 +76,7 @@ void BPlusTree<K, P>::insertInternal(K& key, P& attrs, BPlusNode<K, P>* node, BP
 
 template<typename K, typename P>
 void BPlusTree<K, P>::splitLeaf(BPlusNode<K, P>* node, BPlusNode<K, P>*& newChild, K& newKey) {
-    // Split a full leaf node into two and maintain linked list connections.
+    // Split a full leaf node into two (keep LL connections)
     // Assign newChild and newKey for parent node to handle.
     LeafNode<K, P>* newLeaf = new LeafNode<K, P>();
     auto& entries = static_cast<LeafNode<K, P>*>(node)->getEntries();
@@ -98,8 +98,8 @@ void BPlusTree<K, P>::splitLeaf(BPlusNode<K, P>* node, BPlusNode<K, P>*& newChil
 
 template<typename K, typename P>
 void BPlusTree<K, P>::splitInternal(BPlusNode<K, P>* node, BPlusNode<K, P>*& newChild, K& newKey) {
-    // TODO: Split a full internal node and promote the middle key to the parent.
-    // Assign newChild and newKey accordingly.
+    // TODO: Split a full internal node and promote middle key to the parent
+    // Assign newChild and newKey
     InternalNode<K, P>* newInternal = new InternalNode<K, P>();
     auto& keys = node->getKeys();
     auto& children = node->getChildren();
@@ -120,7 +120,6 @@ void BPlusTree<K, P>::splitInternal(BPlusNode<K, P>* node, BPlusNode<K, P>*& new
 
 template<typename K, typename P>
 void BPlusTree<K, P>::remove(K &key) {
-    // TODO: Call deleteEntry. If root becomes empty, demote it to its only child.
     // Zirui
     if (deleteEntry(root, key)){
         keySet.erase(key);
@@ -134,9 +133,9 @@ void BPlusTree<K, P>::remove(K &key) {
 
 template<typename K, typename P>
 bool BPlusTree<K, P>::deleteEntry(BPlusNode<K, P>* node, const K &key) {
-    // TODO: Delete key from leaf or recurse into internal node.
-    // Handle underflow in leaf by borrowing or merging.
-    // Return true if deletion happened, false otherwise.
+    // TODO: Delete key from leaf or recurse into internal node
+    // Handle underflow in leaf by borrow or merge
+    // Return true if delete happened, else false
     //Zirui
     if (node->isLeafNode()) {
         auto& entries = static_cast<LeafNode<K, P>*>(node)->getEntries();
@@ -160,7 +159,7 @@ bool BPlusTree<K, P>::deleteEntry(BPlusNode<K, P>* node, const K &key) {
 template<typename K, typename P>
 void BPlusTree<K, P>::borrowLeaf(BPlusNode<K, P>* node) {
     // Borrow entry from sibling leaf (either prev or next).
-    // If borrowing is not possible, fallback to merging.
+    // If cannot borrow, merge
     auto* leaf = static_cast<LeafNode<K, P>*>(node);
     auto* prev = node->getPrev(); //BPlusNode<K, P>* base pointer
     auto* next = node->getNext();
@@ -184,12 +183,12 @@ void BPlusTree<K, P>::borrowLeaf(BPlusNode<K, P>* node) {
 
 template<typename K, typename P>
 void BPlusTree<K, P>::mergeLeaf(BPlusNode<K, P>* node) {
-    // Merge current leaf node with its sibling.
-    // Update linked list pointers and delete the node.
+    // Merge curr leaf node with sibling.
+    // Update LL pointers and delete unused node
     auto* leaf = static_cast<LeafNode<K, P>*>(node);
     auto* prev = leaf->getPrev();
     auto* next = leaf->getNext();
-    // check previous or next leaf to merge
+    // check prev or next leaf to merge
     if (prev) {
         auto& prevEntries = static_cast<LeafNode<K, P>*>(prev)->getEntries();
         auto& entries = leaf->getEntries();
@@ -210,8 +209,8 @@ void BPlusTree<K, P>::mergeLeaf(BPlusNode<K, P>* node) {
 
 template<typename K, typename P>
 P BPlusTree<K, P>::search(K &key) {
-    // Traverse the tree to find the leaf node.
-    // Then search through entries to find the value.
+    // Traverse the tree to find leaf node
+    // search entries to find val
     BPlusNode<K, P>* node = root;
     while (!node->isLeafNode()) {
         auto& keys = node->getKeys();
@@ -228,7 +227,7 @@ P BPlusTree<K, P>::search(K &key) {
 }
 
 template<typename K, typename P>
-std::vector<P> BPlusTree<K, P>::rangeQuery(K lowKey, K highKey) {
+vector<P> BPlusTree<K, P>::rangeQuery(K lowKey, K highKey) {
     vector<P> result;
 
     BPlusNode<K, P>* node = root;
@@ -261,14 +260,14 @@ bool BPlusTree<K, P>::contains(K &key) const{
 
 template<typename K, typename P>
 void BPlusTree<K, P>::print() {
-    // TODO: Print the entire B+ tree structure for debugging.
+    // TODO: Print entire B+ tree structure for debugging
     printTree(root, 0);
 }
 
 template<typename K, typename P>
 void BPlusTree<K, P>::printTree(BPlusNode<K, P>* node, int level) {
     if (node == nullptr) {
-        throw std::runtime_error("Node is null.");
+        throw runtime_error("Node is null.");
     }
     cout << string(level * 4, ' ');
     if (node->isLeafNode()) {
@@ -277,9 +276,9 @@ void BPlusTree<K, P>::printTree(BPlusNode<K, P>* node, int level) {
         for (const auto& e : entries) {
             cout << "(" << e.key << ", ";
             if (!e.attrs.empty()) {
-                if (std::is_same<P, std::vector<std::string>>::value)
+                if (is_same<P, vector<string>>::value)
                     cout << e.attrs[0];
-                else if (std::is_same<P, std::vector<int>>::value)
+                else if (is_same<P, vector<int>>::value)
                     cout << e.attrs[0];
             }
             cout << ") ";
@@ -300,7 +299,7 @@ void BPlusTree<K, P>::printTree(BPlusNode<K, P>* node, int level) {
 
 template<typename K, typename P>
 void BPlusTree<K, P>::printLeaves() {
-    //Traverse to the leftmost leaf and print all entries left-to-right.
+    //go to the leftmost leaf and print all entries(left to right)
     BPlusNode<K, P>* node = root;
     while (!node->isLeafNode()) {
         node = node->getChildren().front();
@@ -310,9 +309,9 @@ void BPlusTree<K, P>::printLeaves() {
         for (const auto& e : entries) {
             cout << "(" << e.key << ", ";
             if (!e.attrs.empty()) {
-                if (std::is_same<P, std::vector<std::string>>::value)
+                if (is_same<P, vector<string>>::value)
                     cout << e.attrs[0];
-                else if (std::is_same<P, std::vector<int>>::value)
+                else if (is_same<P, vector<int>>::value)
                     cout << e.attrs[0];
             }
             cout << ") ";
