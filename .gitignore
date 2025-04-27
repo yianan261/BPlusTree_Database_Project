@@ -9,3 +9,4 @@ myenv
 .env
 venv
 venv/
+*.o
