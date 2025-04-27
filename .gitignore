@@ -4,3 +4,8 @@ main
 *.vscode
 *.exe
 *.log
+myenv/
+myenv
+.env
+venv
+venv/

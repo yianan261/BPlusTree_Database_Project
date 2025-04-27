@@ -20,7 +20,7 @@ public:
     void remove(const string& key);
     void clear();
     void print();
-    PrimTree& raw() { return tree; }
+    PrimTree& raw();
 };
 
 #endif

@@ -39,3 +39,7 @@ void BTreeIndex::print() {
 bool BTreeIndex::contains(int key) const {
     return tree.contains(key);
 }
+
+PrimTree& BTreeIndex::raw() {
+     return tree; 
+}

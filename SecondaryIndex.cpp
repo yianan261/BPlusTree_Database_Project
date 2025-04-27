@@ -2,7 +2,7 @@
 #include <algorithm>
 
 void SecondaryIndex::insert(const vector<string>& attrs, int pk) {
-    if(attrs.empty() || col >= attrs.size()) 
+    if (attrs.empty() || col < 0 || static_cast<size_t>(col) >= attrs.size()) 
         return;
     string val = attrs[col];
 
