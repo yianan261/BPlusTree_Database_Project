@@ -313,6 +313,40 @@ int main() {
             }
             cout << "Total: " << rows.size() << '\n';
         }
+        else if (command == "join") {
+            // 示例: join A.1 B.2 0,2 *    （最后两个可省）
+            string tcolA, tcolB; cin >> tcolA >> tcolB;
+            string projA = "*", projB = "*";
+            if (cin.peek()==' ') cin >> projA;
+            if (cin.peek()==' ') cin >> projB;
+        
+            auto parseTC = [](const string& s){      // "A.1"
+                auto dot=s.find('.');
+                return pair<string,int>{ s.substr(0,dot),
+                                         stoi(s.substr(dot+1)) };
+            };
+            auto [tA,cA]=parseTC(tcolA);
+            auto [tB,cB]=parseTC(tcolB);
+        
+            auto toVec = [](const string& s){
+                vector<int> v;
+                if (s=="*") return v;
+                stringstream ss(s); string tok;
+                while(getline(ss,tok,',')) v.push_back(stoi(tok));
+                return v;
+            };
+            auto res = db.join(tA,cA,tB,cB,toVec(projA),toVec(projB));
+            if(res.empty()) cout<<"No match.\n";
+            else{
+                for(auto& r:res){
+                    for(size_t i=0;i<r.size();++i){
+                        if(i) cout<<", ";
+                        cout<<r[i];
+                    } cout<<'\n';
+                }
+                cout<<"Total: "<<res.size()<<'\n';
+            }
+        }
 
         /* ---------- UNKNOWN ---------- */
         else {

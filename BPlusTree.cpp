@@ -9,9 +9,7 @@ const int ORDER = 3;
 const int MIN_ALLOWED = (ORDER - 1) / 2;
 
 template<typename K, typename P>
-BPlusTree<K, P>::BPlusTree() {
-    root = new LeafNode<K, P>();
-}
+BPlusTree<K, P>::BPlusTree() : root(new LeafNode<K, P>()), treeSize(0) {}
 
 template<typename K, typename P>
 void BPlusTree<K, P>::update(K& key, P& attrs){
@@ -30,6 +28,7 @@ void BPlusTree<K, P>::insert(K &key, const P& attrs) {  // 修改为 const 引�
         throw runtime_error("Key already exists. Use update instead.");
     }
     keySet.insert(key);
+    treeSize++;  // 新增: 更新大小
 
     BPlusNode<K, P>* newChild = nullptr;
     K newKey;
@@ -125,6 +124,7 @@ void BPlusTree<K, P>::remove(K &key) {
     // Zirui
     if (deleteEntry(root, key)){
         keySet.erase(key);
+        treeSize--;  // 新增: 更新大小
         if(!root->isLeafNode() && root->getKeys().empty()) {
             root = root->getChildren().front();
         } 

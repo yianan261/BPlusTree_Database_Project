@@ -180,8 +180,76 @@ vector<vector<string>> LeaderDB::selectWhere(const vector<int>& projCols, int wh
     for (auto& r : rows) {
         vector<string> tmp;
         for (int c : projCols)
-            if (c < (int)r.size()) tmp.push_back(r[c]);
+            if (c < (int)r.size()) 
+                tmp.push_back(r[c]);
         proj.push_back(std::move(tmp));
     }
     return proj;
+}
+
+vector<vector<string>> LeaderDB::join(const string& tabA, int colA, const string& tabB, int colB,
+    const vector<int>& projA, const vector<int>& projB)
+{
+
+    if (!tables.count(tabA) || !tables.count(tabB))
+        throw runtime_error("Table not found");
+
+    auto& tA = tables[tabA];
+    auto& tB = tables[tabB];
+
+    
+    auto outerName = tabA, innerName = tabB;
+    int  oCol = colA, iCol = colB;
+    auto *outer = &tA, *inner = &tB;
+
+    if (tB.size() < tA.size()){
+        outerName.swap(innerName);
+        std::swap(oCol,iCol);
+        std::swap(outer,inner);
+    }
+
+    /* 2. 预取 inner 的可能索引 */
+    bool innerHasIdx =
+        secondary[innerName].count(iCol);
+
+    vector<vector<string>> result;
+
+    /* 3. 遍历 outer */
+    outer->raw().forEachLeaf([&](const Entry<int,vector<string>>& eO){
+        if (oCol >= (int)eO.attrs.size()) return;
+        const string& matchVal = eO.attrs[oCol];
+
+        /* 3.1 获取 inner 匹配行集合 */
+        vector<vector<string>> rowsI;
+        if (innerHasIdx)
+            rowsI = findByAttr(iCol, matchVal);               // uses index
+        else {
+            inner->raw().forEachLeaf([&](const auto& eI){
+                if (iCol < (int)eI.attrs.size() &&
+                    eI.attrs[iCol]==matchVal)
+                    rowsI.push_back(eI.attrs);
+            });
+        }
+
+        /* 3.2 生成拼接输出 */
+        for (auto& rI : rowsI){
+            vector<string> row;
+            // 投影 A
+            if (projA.empty()) row.insert(row.end(), eO.attrs.begin(), eO.attrs.end());
+            else
+                for (int c:projA)
+                    if (c < (int)eO.attrs.size()) 
+                        row.push_back(eO.attrs[c]);
+            // 投影 B
+            if (projB.empty()) 
+                row.insert(row.end(), rI.begin(), rI.end());
+            else
+                for (int c:projB)
+                    if (c < (int)rI.size()) 
+                        row.push_back(rI[c]);
+
+            result.push_back(std::move(row));
+        }
+    });
+    return result;
 }

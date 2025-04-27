@@ -5,6 +5,7 @@
 #include "BTreeIndex.h"
 #include "WriteAheadLog.h"
 #include "SecondaryIndex.h"
+#include "BPlusTree.h"
 #include <map>
 #include <unordered_map>
 #include <sstream>
@@ -49,6 +50,10 @@ public:
     void createSecondaryIdx(int attrIdx);
     vector<vector<string>> findByAttr(int attrIdx, const string& value);
     vector<vector<string>> selectWhere(const vector<int>& projCols, int whereCol, const string& whereVal);
+
+    // join
+    vector<vector<string>> join(const string& tabA, int colA, const string& tabB, int colB, 
+        const vector<int>& projA, const vector<int>& projB);
 };
 
 #endif

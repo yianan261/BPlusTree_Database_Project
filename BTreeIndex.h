@@ -21,6 +21,7 @@ public:
     void clear();
     void print();
     PrimTree& raw() { return tree; }
+    size_t size() const { return tree.size(); }
 };
 
 #endif
