@@ -1,13 +1,14 @@
 #ifndef BTREEINDEX_H
 #define BTREEINDEX_H
 #include "BPlusTree.h"
+#include "Index.h"
 #include <string>
 #include <vector>
 
 using namespace std;
 
 using PrimTree = BPlusTree<int, vector<string>>;
-class BTreeIndex {
+class BTreeIndex : public Index {
 private:
     PrimTree tree;
 

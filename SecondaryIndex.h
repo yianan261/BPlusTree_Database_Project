@@ -1,12 +1,13 @@
 #ifndef SECONDARYINDEX_H
 #define SECONDARYINDEX_H
 #include "BPlusTree.h"
+#include "Index.h"
 #include <vector>
 #include <string>
 using namespace std;
 
 
-class SecondaryIndex {
+class SecondaryIndex : public Index {
     using PKList = vector<int>;
     using TreeType = BPlusTree<string, PKList>;   
 

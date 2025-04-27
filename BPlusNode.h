@@ -14,7 +14,6 @@ struct Entry {
     bool operator<(const KeyT& rhs) const { return key < rhs; }
 };
 
-// base class
 template<typename KeyT, typename PayloadT>
 class BPlusNode {
     protected:
