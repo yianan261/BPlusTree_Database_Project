@@ -227,7 +227,7 @@ P BPlusTree<K, P>::search(K &key) {
 }
 
 template<typename K, typename P>
-std::vector<P> BPlusTree<K, P>::rangeQuery(K lowKey, K highKey) {
+vector<P> BPlusTree<K, P>::rangeQuery(K lowKey, K highKey) {
     vector<P> result;
 
     BPlusNode<K, P>* node = root;
@@ -267,7 +267,7 @@ void BPlusTree<K, P>::print() {
 template<typename K, typename P>
 void BPlusTree<K, P>::printTree(BPlusNode<K, P>* node, int level) {
     if (node == nullptr) {
-        throw std::runtime_error("Node is null.");
+        throw runtime_error("Node is null.");
     }
     cout << string(level * 4, ' ');
     if (node->isLeafNode()) {
@@ -276,9 +276,9 @@ void BPlusTree<K, P>::printTree(BPlusNode<K, P>* node, int level) {
         for (const auto& e : entries) {
             cout << "(" << e.key << ", ";
             if (!e.attrs.empty()) {
-                if (std::is_same<P, std::vector<std::string>>::value)
+                if (is_same<P, vector<string>>::value)
                     cout << e.attrs[0];
-                else if (std::is_same<P, std::vector<int>>::value)
+                else if (is_same<P, vector<int>>::value)
                     cout << e.attrs[0];
             }
             cout << ") ";
@@ -309,9 +309,9 @@ void BPlusTree<K, P>::printLeaves() {
         for (const auto& e : entries) {
             cout << "(" << e.key << ", ";
             if (!e.attrs.empty()) {
-                if (std::is_same<P, std::vector<std::string>>::value)
+                if (is_same<P, vector<string>>::value)
                     cout << e.attrs[0];
-                else if (std::is_same<P, std::vector<int>>::value)
+                else if (is_same<P, vector<int>>::value)
                     cout << e.attrs[0];
             }
             cout << ") ";

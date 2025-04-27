@@ -3,14 +3,16 @@
 #include <string>
 #include <vector>
 
+using namespace std;
+
 struct Place {
-    std::string placeId;
-    std::string name;
-    std::string address;
-    std::string latitude;
-    std::string longitude;
+    string placeId;
+    string name;
+    string address;
+    string latitude;
+    string longitude;
 };
 
-std::vector<Place> parseCsvFile(const std::string& filepath);
+vector<Place> parseCsvFile(const string& filepath);
 
 #endif

@@ -3,15 +3,21 @@
 #include <cstdlib>
 #include <ctime>
 #include <sstream>
+#include <functional> 
 
 using namespace std;
 
 const int MAX_NUM =  1000000;
 
 string generateRandomListId(){
-    srand(time(0));
     int id = rand() % MAX_NUM;
     return to_string(id);
+}
+
+// hash placeID from string to int to save to DB
+int hashPlaceId(const string& placeId) {
+    hash<string> hasher;
+    return static_cast<int>(hasher(placeId) & 0x7FFFFFFF); 
 }
 
 /**
@@ -22,9 +28,10 @@ string generateRandomListId(){
  * @return true 
  * @return false 
  */
-bool placeExists(LeaderDB& db, const string& placeId){
+bool placeExists(LeaderDB& db, const string& placeId) {
     db.switchTable("places");
-    return db.getCurrentIndex().contains(stoi(placeId));
+    int hashedId = hashPlaceId(placeId);
+    return !db.get(to_string(hashedId)).empty();
 }
 
 /**
@@ -33,22 +40,24 @@ bool placeExists(LeaderDB& db, const string& placeId){
  * @param db LeaderDB address
  * @param place Place object
  */
-void insertPlace(LeaderDB& db, const Place& place){
+void insertPlace(LeaderDB& db, const Place& p) {
     db.switchTable("places");
-    if (placeExists(db, place.placeId)) return;
+
+    int hashedId = hashPlaceId(p.placeId); 
 
     vector<string> attrs = {
-        place.name,
-        place.address,
-        place.latitude,
-        place.longitude
+        p.placeId,
+        p.name,
+        p.address,
+        p.latitude,
+        p.longitude
     };
 
-    db.create(place.placeId, attrs);
+    db.create(to_string(hashedId), attrs);
 }
 
 /**
- * @brief Insert a new SavedList into "savedlists" table
+ * @brief Insert a new SavedList into "savedLists" table
  * 
  * @param db address of LeaderDB
  * @param userId address of userId (string)
@@ -70,14 +79,14 @@ void insertSavedList(LeaderDB& db, const string& userId, const string& listId, c
 }
 
 /**
- * @brief Insert mapping of SavedList and Place into "listplaces" table
+ * @brief Insert mapping of SavedList and Place into "listPlaces" table
  * 
  * @param db address of LeaderDB
  * @param listId address
  * @param placeId address
  */
 void insertListPlace(LeaderDB& db, const string& listId, const string& placeId){
-    db.switchTable("listplaces");
+    db.switchTable("listPlaces");
     // use listId_placeId for unique Id
     string combinedKey = listId + "_" + placeId;
     vector<string> attrs = {
