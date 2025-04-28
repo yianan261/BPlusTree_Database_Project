@@ -79,6 +79,13 @@ void insertSavedList(LeaderDB& db, const string& userId, const string& listId, c
     db.create(listId, attrs);
 }
 
+
+int generateCombinedKeyHash(const string& listId, const string& placeId) {
+    string combinedStr = listId + "_" + placeId;
+    hash<string> hasher;
+    return static_cast<int>(hasher(combinedStr) & 0x7FFFFFFF);
+}
+
 /**
  * @brief Insert mapping of SavedList and Place into "listPlaces" table
  * 
@@ -88,11 +95,10 @@ void insertSavedList(LeaderDB& db, const string& userId, const string& listId, c
  */
 void insertListPlace(LeaderDB& db, const string& listId, const string& placeId){
     db.switchTable("listPlaces");
-    // use listId_placeId for unique Id
-    string combinedKey = listId + "_" + placeId;
+    int combinedKey = generateCombinedKeyHash(listId, placeId);
     vector<string> attrs = {
         listId,
         placeId
     };
-    db.create(combinedKey, attrs);
+    db.create(to_string(combinedKey), attrs);
 }

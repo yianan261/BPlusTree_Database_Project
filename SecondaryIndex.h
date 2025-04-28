@@ -1,29 +1,28 @@
 #ifndef SECONDARYINDEX_H
 #define SECONDARYINDEX_H
 #include "BPlusTree.h"
-#include "Index.h"
 #include <vector>
 #include <string>
 using namespace std;
 
 
-class SecondaryIndex : public Index {
+class SecondaryIndex{
     using PKList = vector<int>;
     using TreeType = BPlusTree<string, PKList>;   
 
     int col;     
     TreeType tree;
 
-public:
-    explicit SecondaryIndex(int column = 0) : col(column) {}  
+    public:
+        explicit SecondaryIndex(int column = 0) : col(column) {}  
 
-    void insert(const vector<string>& attrs, int pk);
-    void remove(const vector<string>& attrs, int pk);
+        void insert(const vector<string>& attrs, int pk);
+        void remove(const vector<string>& attrs, int pk);
 
-    vector<int> searchPK(const string& value);
+        vector<int> searchPK(const string& value);
 
-    template<typename RowIter>
-    void bulkBuild(RowIter first, RowIter last);
+        template<typename RowIter>
+        void bulkBuild(RowIter first, RowIter last);
 };
 
 #endif

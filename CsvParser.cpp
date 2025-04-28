@@ -4,6 +4,27 @@
 #include <iostream>
 
 using namespace std;
+string parseField(stringstream& ss) {
+    string field;
+    
+    
+    if (ss.peek() == '"') {
+        ss.get(); 
+        
+        
+        getline(ss, field, '"');
+        
+        
+        if (ss.peek() == ',') {
+            ss.get();
+        }
+    } else {
+        
+        getline(ss, field, ',');
+    }
+    
+    return field;
+}
 
 vector<Place> parseCsvFile(const string& filePath){
     vector<Place> places;
@@ -19,13 +40,14 @@ vector<Place> parseCsvFile(const string& filePath){
     while(getline(file, line)){
         stringstream ss(line);
         Place p;
-        getline(ss, p.placeId, ',');
-        getline(ss, p.name, ',');
-        getline(ss, p.address, ',');
-        getline(ss, p.latitude, ',');
-        getline(ss, p.longitude, ',');
-        getline(ss, p.description, ',');
-        if (! p.placeId.empty()){
+        p.placeId = parseField(ss);
+        p.name = parseField(ss);
+        p.address = parseField(ss);
+        p.latitude = parseField(ss);
+        p.longitude = parseField(ss);
+        p.description = parseField(ss);
+
+        if (!p.placeId.empty()) {
             places.push_back(p);
         }
     }

@@ -1,5 +1,6 @@
 #include "BTreeIndex.h"
 #include <sstream>
+#include <algorithm>  
 
 void BTreeIndex::insert(const string& key, const vector<string>& attrs){
     auto attrsCopy = attrs;
@@ -40,6 +41,8 @@ bool BTreeIndex::contains(int key) const {
     return tree.contains(key);
 }
 
-PrimTree& BTreeIndex::raw() {
-     return tree; 
+int BTreeIndex::getColumnIndex(const string& columnName) const {
+    auto it = find(headers.begin(), headers.end(), columnName);
+    if(it == headers.end()) return -1;
+    return it - headers.begin();
 }

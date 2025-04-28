@@ -1,16 +1,16 @@
 #ifndef BTREEINDEX_H
 #define BTREEINDEX_H
 #include "BPlusTree.h"
-#include "Index.h"
 #include <string>
 #include <vector>
 
 using namespace std;
 
 using PrimTree = BPlusTree<int, vector<string>>;
-class BTreeIndex : public Index {
+class BTreeIndex {
 private:
     PrimTree tree;
+    vector<string> headers; 
 
 public:
     void insert(const string& key, const vector<string>& attrs);
@@ -23,6 +23,9 @@ public:
     void print();
     PrimTree& raw() { return tree; }
     size_t size() const { return tree.size(); }
+    void setHeaders(const vector<string>& h) { headers = h; }
+    const vector<string>& getHeaders() const { return headers; }
+    int getColumnIndex(const string& columnName) const; 
 };
 
 #endif

@@ -57,6 +57,14 @@ public:
     // join
     vector<vector<string>> join(const string& tabA, int colA, const string& tabB, int colB, 
         const vector<int>& projA, const vector<int>& projB);
+
+    // headers management
+    void setTableHeaders(const string& tableName, const vector<string>& headers);
+    vector<string> getTableHeaders(const string& tableName) const;
+    int getColumnIndex(const string& tableName, const string& columnName) const;
+
+    // export table to csv
+    bool exportTableToCsv(const string& tableName, const string& dirPath);
 };
 
 #endif

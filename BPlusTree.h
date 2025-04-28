@@ -12,7 +12,7 @@ class BPlusTree {
 private:
     BPlusNode<K,P>* root;
     set<K> keySet;
-    size_t treeSize;  // 新增: 跟踪树的大小
+    size_t treeSize;  
     
     void splitLeaf(BPlusNode<K,P>* node, BPlusNode<K,P>*& newChild, K& newKey);
     void splitInternal(BPlusNode<K,P>* node, BPlusNode<K,P>*& newChild, K& newKey);
@@ -32,7 +32,7 @@ public:
     bool contains(K& key) const;
     void print();
     void printLeaves();
-    size_t size() const { return treeSize; }  // 新增: 获取树的大小
+    size_t size() const { return treeSize; }  
     
     template<typename Fn>
     void forEachLeaf(Fn&& f) const {

@@ -36,6 +36,7 @@ void printHelp() {
          << "16.  drop <table>                - Delete a table\n"
          << "17.  help                        - Show this help menu\n"
          << "18.  exit                        - Exit the program\n"
+         << "19.  save                        - Save all tables to CSV files\n"
          << "----------------------------------------------\n";
 }
 
@@ -57,6 +58,20 @@ int main() {
     if (!file.is_open()) {
         cerr << "Could not open " << path << '\n';
         return 1;
+    }
+
+    // 读取表头
+    string headerLine;
+    getline(file, headerLine);
+    stringstream ss(headerLine);
+    vector<string> headers;
+    string header;
+    while(getline(ss, header, ',')) {
+        headers.push_back(header);
+    }
+    
+    if(!headers.empty()) {
+        db.setTableHeaders("default", headers);
     }
 
     string line;
@@ -232,11 +247,44 @@ int main() {
             cout << "Enter CSV file path: ";
             cin >> filepath;
             
-            if (db.loadFromFile(db.getCurrentTable(), filepath)) {
-                cout << "Data loaded successfully into table: " << db.getCurrentTable() << "\n";
-            } else {
-                cout << "Failed to load data from " << filepath << "\n";
+            ifstream file(filepath);
+            if (!file.is_open()) {
+                cout << "Failed to open file.\n";
+                continue;
             }
+
+            // 读取表头
+            string headerLine;
+            getline(file, headerLine);
+            stringstream ss(headerLine);
+            vector<string> headers;
+            string header;
+            while(getline(ss, header, ',')) {
+                headers.push_back(header);
+            }
+            
+            if(headers.empty()) {
+                cout << "No headers found in file.\n";
+                continue;
+            }
+
+            db.setTableHeaders(db.getCurrentTable(), headers);
+            
+            string line;
+            while (getline(file, line)) {
+                auto fields = splitCSV(line);
+                if (fields.empty()) continue;
+
+                string key = fields.front();
+                vector<string> attrs(fields.begin() + 1, fields.end());
+                try {
+                    db.create(key, attrs);
+                } catch(const exception& e){
+                    cout << "Error: " << e.what() << '\n';       
+                }
+            }
+            file.close();
+            cout << "Data loaded successfully into table: " << db.getCurrentTable() << "\n";
         }
         /* ---------- RANGE ---------- */
          else if (command == "range") {
@@ -263,28 +311,64 @@ int main() {
         }
         /* build secondary index */
         else if (command == "createindex") {
-            int col; 
-            cin >> col;
+            string columnName;
+            cout << "Enter column name: ";
+            cin >> columnName;
+            
+            int col = db.getColumnIndex(db.getCurrentTable(), columnName);
+            if(col == -1) {
+                cout << "Column " << columnName << " not found.\n";
+                continue;
+            }
+            
+            
+            col = col - 1;  // -1 to skip key column
+            if(col < 0) {
+                cout << "Cannot create index on key column.\n";
+                continue;
+            }
+            
             db.createSecondaryIdx(col);
-            cout << "Secondary index built on column " << col << ".\n";
+            cout << "Secondary index built on column " << columnName << ".\n";
         }
         /* indexed find */
         else if (command == "find") {
-            int col; 
-            string val; 
-            cin >> col >> val;
+            string columnName, val;
+            cout << "Enter column name: ";
+            cin >> columnName;
+            cout << "Enter value to find: ";
+            cin >> val;
+
+            int col = db.getColumnIndex(db.getCurrentTable(), columnName);
+            if(col == -1) {
+                cout << "Column " << columnName << " not found.\n";
+                continue;
+            }
+
+            
+            col = col - 1;  // -1 to skip key column
+            if(col < 0) {
+                cout << "Cannot search on key column.\n";
+                continue;
+            }
+
             auto rows = db.findByAttr(col, val);
-            if (rows.empty()) cout << "No match.\n";
-            else {
-                for (auto& a : rows) {
-                    for (size_t i= 0; i < a.size(); i++){
-                        if(i)   
-                            cout << ", ";
-                        cout << a[i];
+            if (rows.empty()) {
+                cout << "No match.\n";
+            } else {
+                // 获取表头用于显示列名
+                auto headers = db.getTableHeaders(db.getCurrentTable());
+                for (auto& row : rows) {
+                    for (size_t i = 0; i < row.size(); i++){
+                        if(i) cout << ", ";
+                        if (i < headers.size()) {
+                            cout << headers[i] << ": ";
+                        }
+                        cout << row[i];
                     }
                     cout << '\n';
                 }
-                cout << "Total: " << rows.size() << '\n';
+                cout << "Total: " << rows.size() << " records\n";
             }
         }
         else if (command == "select") {
@@ -292,35 +376,52 @@ int main() {
             getline(cin, line);    
             stringstream ss(line);
         
-            
             string colPart;
             ss >> colPart;                             
             vector<int> proj;
             if (colPart != "*") {
                 stringstream cs(colPart);
-                string tok;
-                while (getline(cs, tok, ','))
-                    proj.push_back(stoi(tok));
+                string columnName;
+                while (getline(cs, columnName, ',')) {
+                    int colIdx = db.getColumnIndex(db.getCurrentTable(), columnName);
+                    if(colIdx != -1) {
+                        colIdx = colIdx - 1;  
+                        if(colIdx >= 0) {  
+                            proj.push_back(colIdx);
+                        }
+                    } else {
+                        cout << "Column " << columnName << " not found.\n";
+                    }
+                }
             }
         
-            
             string whereKw;
             ss >> whereKw;
             if (whereKw != "where") {
                 cout << "Syntax error: expected 'where'.\n"; continue;
             }
         
-            
             string cond;
             ss >> cond;                                
             auto pos = cond.find('=');
             if (pos == string::npos) {
                 cout << "Syntax error: expected '='.\n"; continue;
             }
-            int whereCol = stoi(cond.substr(0,pos));
-            string whereVal = cond.substr(pos+1);
-        
+
             
+            string whereColName = cond.substr(0, pos);
+            int whereCol = db.getColumnIndex(db.getCurrentTable(), whereColName);
+            if(whereCol == -1) {
+                cout << "Column " << whereColName << " not found.\n";
+                continue;
+            }
+            whereCol = whereCol - 1; 
+            if(whereCol < 0) {
+                cout << "Cannot search on key column.\n";
+                continue;
+            }
+
+            string whereVal = cond.substr(pos+1);
             auto rows = db.selectWhere(proj, whereCol, whereVal);
             if (rows.empty()) { cout << "No match.\n"; continue; }
         
@@ -338,6 +439,9 @@ int main() {
                 db.createTable("users");
             }
             db.switchTable("users");
+
+            vector<string> usersHeaders = {"id", "email", "userId", "registeredAt"};
+            db.setTableHeaders("users", usersHeaders);
 
             string email;
             cout << "Enter user email: ";
@@ -388,12 +492,12 @@ int main() {
             cin >> ans;
             if (ans == "yes") {
                 uploadSavedPlaces(db, to_string(userId));
-            db.switchTable("default");
-}
+                db.switchTable("default");
+            }
 
         }
         else if (command == "join") {
-            // 示例: join A.1 B.2 0,2 *    
+            // example: join A.1 B.2 0,2 *    
             string tcolA, tcolB; cin >> tcolA >> tcolB;
             string projA = "*", projB = "*";
             if (cin.peek()==' ') cin >> projA;
@@ -426,6 +530,22 @@ int main() {
                 cout<<"Total: "<<res.size()<<'\n';
             }
         }
+        else if (command == "save") {
+            
+            string outputDir = "./output";
+            filesystem::create_directory(outputDir);
+            
+            
+            auto tables = db.listTables();
+            for (const auto& table : tables) {
+                if (db.exportTableToCsv(table, outputDir)) {
+                    cout << "✅ Saved " << table << " to " << outputDir << "/" 
+                         << table << ".csv\n";
+                } else {
+                    cout << "❌ Failed to save " << table << "\n";
+                }
+            }
+        }
 
         /* ---------- UNKNOWN ---------- */
         else {
@@ -437,7 +557,7 @@ int main() {
     return 0;
 }
 
-void uploadSavedPlaces(LeaderDB& db, const string& userId){
+void uploadSavedPlaces(LeaderDB& db, const string& userId) {
     cout << "Enter folder path with Saved Places csv file: ";
     string folderPath;
     cin >> folderPath;
@@ -455,46 +575,46 @@ void uploadSavedPlaces(LeaderDB& db, const string& userId){
         return;
     }
 
-    for(const auto& filePath: csvFiles){
+    for(const auto& filePath: csvFiles) {
         auto places = parseCsvFile(filePath);
-        if(places.empty()){
+        if(places.empty()) {
             cout << "Warning: " << filePath << "is empty or failed to parse.\n";
             continue;
         }
         string listTitle = fileNameWithoutExtension(filePath);
         string listId = generateRandomListId();
+        
+        
         db.switchTable("savedlists");
+        vector<string> savedListHeaders = {"listId", "userId", "title", "createdAt"};
+        db.setTableHeaders("savedlists", savedListHeaders);
         insertSavedList(db, userId, listId, listTitle);
 
-        // for (const auto& place: places){
-        //     if(!placeExists(db, place.placeId)){
-        //         insertPlace(db, place);
-        //     }
-        //     insertListPlace(db, listId, place.placeId);
-        // }
         for (const auto& place : places) {
-            cout << "Processing placeId: " << place.placeId << " (" << place.name << ")\n";
+            
             db.switchTable("places"); 
+            vector<string> placesHeaders = {"hashedId", "placeId", "name", "address", "latitude", "longitude", "description"};
+            db.setTableHeaders("places", placesHeaders);
             try {
-                    if (!placeExists(db, place.placeId)) {
-                        cout << "Inserting new place into database.\n";
-                        insertPlace(db, place);
-                    } else {
-                        cout << "Place already exists in database. Skipping insert.\n";
-                    }
-                } catch (const exception& e) {
-                    cout << " Exception during place insertion: " << e.what() << endl;
+                if (!placeExists(db, place.placeId)) {
+                    insertPlace(db, place);
+                } else {
+                    cout << "Place already exists in database. Skipping insert.\n";
                 }
+            } catch (const exception& e) {
+                cout << "Exception during place insertion: " << e.what() << endl;
+            }
 
-                db.switchTable("listplaces");  // Switch to listplaces table before inserting relation
-                try {
-                    insertListPlace(db, listId, place.placeId);
-                } catch (const exception& e) {
-                    cout << "Exception during list-place insertion: " << e.what() << endl;
-                }
+            
+            db.switchTable("listplaces");
+            vector<string> listPlacesHeaders = {"combinedKey", "listId", "placeId"};
+            db.setTableHeaders("listplaces", listPlacesHeaders);
+            try {
+                insertListPlace(db, listId, place.placeId);
+            } catch (const exception& e) {
+                cout << "Exception during list-place insertion: " << e.what() << endl;
+            }
         }
-        cout << "Uploaded list: " << listTitle << "( " << places.size() << "places) \n";
+        cout << "Uploaded list: " << listTitle << "( " << places.size() << " places)\n";
     }
-
- 
 }

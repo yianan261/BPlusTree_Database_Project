@@ -256,3 +256,54 @@ vector<vector<string>> LeaderDB::join(const string& tabA, int colA, const string
     });
     return result;
 }
+
+void LeaderDB::setTableHeaders(const string& tableName, const vector<string>& headers) {
+    if (tables.find(tableName) != tables.end()) {
+        tables[tableName].setHeaders(headers);
+    }
+}
+
+vector<string> LeaderDB::getTableHeaders(const string& tableName) const {
+    auto it = tables.find(tableName);
+    if (it != tables.end()) {
+        return it->second.getHeaders();
+    }
+    return vector<string>();
+}
+
+int LeaderDB::getColumnIndex(const string& tableName, const string& columnName) const {
+    auto it = tables.find(tableName);
+    if (it != tables.end()) {
+        return it->second.getColumnIndex(columnName);
+    }
+    return -1;
+}
+
+bool LeaderDB::exportTableToCsv(const string& tableName, const string& dirPath) {
+    if (!hasTable(tableName)) return false;
+    
+    string filepath = dirPath + "/" + tableName + ".csv";
+    ofstream file(filepath);
+    if (!file.is_open()) return false;
+
+    
+    auto headers = getTableHeaders(tableName);
+    for (size_t i = 0; i < headers.size(); i++) {
+        if (i > 0) file << ",";
+        file << headers[i];
+    }
+    file << "\n";
+
+    
+    auto& btree = tables[tableName].raw();
+    btree.forEachLeaf([&](const Entry<int, vector<string>>& e) {
+        file << e.key;  
+        for (const auto& attr : e.attrs) {
+            file << "," << attr;
+        }
+        file << "\n";
+    });
+
+    file.close();
+    return true;
+}
