@@ -24,13 +24,14 @@ void LeaderDB::create(const string& key, const vector<string>& attrs) {
 }
 
 void LeaderDB::update(const string& key, const vector<string>& attrs) {
-
-    int pk = stoi(key);
-    if (!tables[currentTable].contains(pk))
+    auto oldAttrs = tables[currentTable].search(key);
+    if (oldAttrs.empty())
         throw runtime_error("Key does not exist. Use create instead.");
+
     wal.logWrite(key, attrs);
 
-    auto oldAttrs = tables[currentTable].search(key);
+    int pk = stoi(key);
+
     for (auto& [c, idx] : secondary[currentTable])
         idx.remove(oldAttrs, pk);
 
@@ -38,15 +39,6 @@ void LeaderDB::update(const string& key, const vector<string>& attrs) {
 
     for (auto& [c, idx] : secondary[currentTable])
         idx.insert(attrs, pk);
-}
-
-vector<vector<string>> LeaderDB::getPrefix(const string& prefixKey) {
-    string high = prefixKey; high.push_back(CHAR_MAX);
-    vector<vector<string>> result;
-    for (const auto& item : tables[currentTable].rangeQuery(prefixKey, high)) {
-        result.push_back({item});
-    }
-    return result;
 }
 
 vector<vector<string>> LeaderDB::getRange(const string& lowKey, const string& highKey){

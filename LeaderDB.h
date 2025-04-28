@@ -29,7 +29,6 @@ public:
     void update(const string& key, const vector<string>& attrs) override;
     vector<string> get(const string& key) override;
     void deleteKey(const string& key) override;
-    vector<vector<string>> getPrefix(const string& prefixKey) override;
 
     // range query
     vector<vector<string>> getRange(const string& lowKey, const string& highKey);
