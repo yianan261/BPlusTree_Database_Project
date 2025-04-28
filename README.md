@@ -19,6 +19,11 @@ Implemented the B Plus Tree Algorithm in BPlusTreeFull.cpp and defining the skel
 - **WriteAheadLog**: Ensures database durability by logging changes before applying them to disk. Supports crash recovery.
 - **CsvParser / FileUtils / DataInserter**: Utilities for loading CSV files into tables and inserting structured place data.
 
+## Inheritance and Polymorphism
+
+1. InternalNode and LeafNode inherit publicly from base class BPlusNode
+2. LeaderDB inherits publicly from abstract base class DBInstance. This class could extend to future DB nodes for multiple DB instances.
+
 ## Database Schema
 
 The database schema supports users importing their saved places lists from Google Maps:

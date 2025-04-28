@@ -79,7 +79,7 @@ void insertSavedList(LeaderDB& db, const string& userId, const string& listId, c
     db.create(listId, attrs);
 }
 
-
+// hash combined key to save as primary key to DB.
 int generateCombinedKeyHash(const string& listId, const string& placeId) {
     string combinedStr = listId + "_" + placeId;
     hash<string> hasher;

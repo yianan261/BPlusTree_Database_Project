@@ -10,3 +10,5 @@ myenv
 venv
 venv/
 *.o
+output/
+output
