@@ -110,3 +110,19 @@ pip install -r requirements.txt
 ```bash
 python fetch_places.py takeout/Saved <user email>
 ```
+
+---
+
+## Credits
+
+### Authors:
+
+Zirui Wen, Yian Chen
+
+### Dataset:
+
+Google takeout data from Yian Chen
+
+### ASCII Art:
+
+From [Patorjk](http://patorjk.com/software/taag/)

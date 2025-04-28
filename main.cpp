@@ -14,7 +14,32 @@
 using namespace std;
 
 void uploadSavedPlaces(LeaderDB& db, const string& userId);
+void printASCII(){
+        cout << R"(
 
+    ________  ___       ________  ________  _______   ________                          
+    |\   __  \|\  \     |\   __  \|\   ____\|\  ___ \ |\   ____\                         
+    \ \  \|\  \ \  \    \ \  \|\  \ \  \___|\ \   __/|\ \  \___|_                        
+    \ \   ____\ \  \    \ \   __  \ \  \    \ \  \_|/_\ \_____  \                       
+    \ \  \___|\ \  \____\ \  \ \  \ \  \____\ \  \_|\ \|____|\  \                      
+    \ \__\    \ \_______\ \__\ \__\ \_______\ \_______\____\_\  \                     
+        \|__|     \|_______|\|__|\|__|\|_______|\|_______|\_________\                    
+                                                        \|_________|                    
+                                                                                        
+                                                                                        
+    ________  ________  _________  ________  ________  ________  ________  _______      
+    |\   ___ \|\   __  \|\___   ___\\   __  \|\   __  \|\   __  \|\   ____\|\  ___ \     
+    \ \  \_|\ \ \  \|\  \|___ \  \_\ \  \|\  \ \  \|\ /\ \  \|\  \ \  \___|\ \   __/|    
+    \ \  \ \\ \ \   __  \   \ \  \ \ \   __  \ \   __  \ \   __  \ \_____  \ \  \_|/__  
+    \ \  \_\\ \ \  \ \  \   \ \  \ \ \  \ \  \ \  \|\  \ \  \ \  \|____|\  \ \  \_|\ \ 
+    \ \_______\ \__\ \__\   \ \__\ \ \__\ \__\ \_______\ \__\ \__\____\_\  \ \_______\
+        \|_______|\|__|\|__|    \|__|  \|__|\|__|\|_______|\|__|\|__|\_________\|_______|
+                                                                    \|_________|         
+                                                                                        
+                                                                                        
+        )" << endl;
+    
+}
 void printHelp() {
     cout << "\nAvailable Commands:\n"
          << "----------------------------------------------\n"
@@ -90,20 +115,19 @@ int main() {
                         
     }
     file.close();
-    cout << "Finished loading dataset.\n";
 
     // create tables for google takeout
     vector<string> requiredTables = { "users", "places", "savedlists", "listplaces" };
     for (const auto& table : requiredTables) {
         if (!db.hasTable(table)) {
             db.createTable(table);
-            cout << "✅ Created missing table: " << table << endl;
+            cout << "Created missing table: " << table << endl;
         }
     }
 
 
-    
-    cout << "Welcome to LeaderDB Command Line Interface!\n";
+    printASCII();
+    cout << "Welcome to Places Database Command Line Interface!\n";
     printHelp();
 
     string command;
@@ -607,9 +631,7 @@ void uploadSavedPlaces(LeaderDB& db, const string& userId) {
             try {
                 if (!placeExists(db, place.placeId)) {
                     insertPlace(db, place);
-                } else {
-                    cout << "Place already exists in database. Skipping insert.\n";
-                }
+                } // only insert if not in DB already
             } catch (const exception& e) {
                 cout << "Exception during place insertion: " << e.what() << endl;
             }
