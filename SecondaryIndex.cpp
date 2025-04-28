@@ -43,10 +43,11 @@ vector<int> SecondaryIndex::searchPK(const string& v)
 template<typename RowIter>
 void SecondaryIndex::bulkBuild(RowIter first, RowIter last)
 {
-    for (auto it = first; it != last; ++it)
+    for (auto it = first; it != last; ++it){
         insert(it->second, it->first);   
+    }
+        
 }
-template void SecondaryIndex::bulkBuild<
-    vector<pair<int,vector<string>>>::iterator>(
+template void SecondaryIndex::bulkBuild<vector<pair<int,vector<string>>>::iterator>(
     vector<pair<int,vector<string>>>::iterator,
     vector<pair<int,vector<string>>>::iterator);

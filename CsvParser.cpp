@@ -4,23 +4,49 @@
 #include <iostream>
 
 using namespace std;
+
 string parseField(stringstream& ss) {
     string field;
     
     
+    while (ss.peek() == ' ' || ss.peek() == '\t') {
+        ss.get();
+    }
+    
     if (ss.peek() == '"') {
-        ss.get(); 
+        ss.get();  
         
         
-        getline(ss, field, '"');
-        
-        
-        if (ss.peek() == ',') {
-            ss.get();
+        bool inQuote = true;
+        while (inQuote && ss.peek() != EOF) {
+            char c = ss.get();
+            if (c == '"') {
+                if (ss.peek() == '"') {  
+                    field += '"';
+                    ss.get();  
+                } else {
+                    inQuote = false;  
+                }
+            } else {
+                field += c;
+            }
         }
+        
+        
+        while (ss.peek() == ' ' || ss.peek() == '\t') ss.get();
+        if (ss.peek() == ',') ss.get();
+        
     } else {
         
-        getline(ss, field, ',');
+        while (ss.peek() != ',' && ss.peek() != EOF) {
+            field += ss.get();
+        }
+        if (ss.peek() == ',') ss.get();
+        
+        
+        while (!field.empty() && (field.back() == ' ' || field.back() == '\t')) {
+            field.pop_back();
+        }
     }
     
     return field;

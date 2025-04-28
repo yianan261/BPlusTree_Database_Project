@@ -54,6 +54,7 @@ int main() {
     srand(0);
     
     const string path = "./dataset_project/data.csv";
+    //const string path = "./output/listplaces.csv";
     ifstream file(path);
     if (!file.is_open()) {
         cerr << "Could not open " << path << '\n';
@@ -402,14 +403,17 @@ int main() {
             }
         
             string cond;
-            ss >> cond;                                
+            getline(ss, cond);                        
+            cond = cond.substr(cond.find_first_not_of(" \t"));
+            
             auto pos = cond.find('=');
             if (pos == string::npos) {
                 cout << "Syntax error: expected '='.\n"; continue;
             }
 
-            
             string whereColName = cond.substr(0, pos);
+            whereColName = whereColName.substr(0, whereColName.find_last_not_of(" \t") + 1);
+            
             int whereCol = db.getColumnIndex(db.getCurrentTable(), whereColName);
             if(whereCol == -1) {
                 cout << "Column " << whereColName << " not found.\n";
@@ -421,7 +425,9 @@ int main() {
                 continue;
             }
 
-            string whereVal = cond.substr(pos+1);
+            string whereVal = cond.substr(pos + 1);
+            whereVal = whereVal.substr(whereVal.find_first_not_of(" \t"));
+            
             auto rows = db.selectWhere(proj, whereCol, whereVal);
             if (rows.empty()) { cout << "No match.\n"; continue; }
         
