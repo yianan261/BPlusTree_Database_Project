@@ -61,7 +61,7 @@ int main() {
         return 1;
     }
 
-    // 读取表头
+    // get headers
     string headerLine;
     getline(file, headerLine);
     stringstream ss(headerLine);
@@ -136,8 +136,10 @@ int main() {
 
         /* ---------- CREATE ---------- */
         else if (command == "create") {
+            cout << "Create table or instance?";
             string type; cin >> type;
             if (type == "table") {
+                cout << "Enter table name: ";
                 string tableName; cin >> tableName;
                 if (tableName == "default") {
                     cout << "Cannot create table named 'default'.\n";
@@ -254,7 +256,7 @@ int main() {
                 continue;
             }
 
-            // 读取表头
+            
             string headerLine;
             getline(file, headerLine);
             stringstream ss(headerLine);
@@ -357,7 +359,6 @@ int main() {
             if (rows.empty()) {
                 cout << "No match.\n";
             } else {
-                // 获取表头用于显示列名
                 auto headers = db.getTableHeaders(db.getCurrentTable());
                 for (auto& row : rows) {
                     for (size_t i = 0; i < row.size(); i++){
@@ -502,6 +503,7 @@ int main() {
             }
 
         }
+        /* ---------- JOIN ---------- */
         else if (command == "join") {
             // example: join A.1 B.2 0,2 *    
             string tcolA, tcolB; cin >> tcolA >> tcolB;
@@ -536,6 +538,7 @@ int main() {
                 cout<<"Total: "<<res.size()<<'\n';
             }
         }
+        /* ---------- SAVE ---------- */
         else if (command == "save") {
             
             string outputDir = "./output";
@@ -545,10 +548,10 @@ int main() {
             auto tables = db.listTables();
             for (const auto& table : tables) {
                 if (db.exportTableToCsv(table, outputDir)) {
-                    cout << "✅ Saved " << table << " to " << outputDir << "/" 
+                    cout << "Saved " << table << " to " << outputDir << "/" 
                          << table << ".csv\n";
                 } else {
-                    cout << "❌ Failed to save " << table << "\n";
+                    cout << "Failed to save " << table << "\n";
                 }
             }
         }
