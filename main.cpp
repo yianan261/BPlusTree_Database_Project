@@ -10,69 +10,15 @@
 #include <random>
 #include <ctime>
 #include <filesystem>
+#include <iomanip>
 
 using namespace std;
 
 void uploadSavedPlaces(LeaderDB& db, const string& userId);
-void printASCII(){
-        cout << R"(
-
-    ________  ___       ________  ________  _______   ________                          
-    |\   __  \|\  \     |\   __  \|\   ____\|\  ___ \ |\   ____\                         
-    \ \  \|\  \ \  \    \ \  \|\  \ \  \___|\ \   __/|\ \  \___|_                        
-    \ \   ____\ \  \    \ \   __  \ \  \    \ \  \_|/_\ \_____  \                       
-    \ \  \___|\ \  \____\ \  \ \  \ \  \____\ \  \_|\ \|____|\  \                      
-    \ \__\    \ \_______\ \__\ \__\ \_______\ \_______\____\_\  \                     
-        \|__|     \|_______|\|__|\|__|\|_______|\|_______|\_________\                    
-                                                        \|_________|                    
-                                                                                        
-                                                                                        
-    ________  ________  _________  ________  ________  ________  ________  _______      
-    |\   ___ \|\   __  \|\___   ___\\   __  \|\   __  \|\   __  \|\   ____\|\  ___ \     
-    \ \  \_|\ \ \  \|\  \|___ \  \_\ \  \|\  \ \  \|\ /\ \  \|\  \ \  \___|\ \   __/|    
-    \ \  \ \\ \ \   __  \   \ \  \ \ \   __  \ \   __  \ \   __  \ \_____  \ \  \_|/__  
-    \ \  \_\\ \ \  \ \  \   \ \  \ \ \  \ \  \ \  \|\  \ \  \ \  \|____|\  \ \  \_|\ \ 
-    \ \_______\ \__\ \__\   \ \__\ \ \__\ \__\ \_______\ \__\ \__\____\_\  \ \_______\
-        \|_______|\|__|\|__|    \|__|  \|__|\|__|\|_______|\|__|\|__|\_________\|_______|
-                                                                    \|_________|         
-                                                                                        
-                                                                                        
-        )" << endl;
-    
-}
-void printHelp() {
-    cout << "\nAvailable Commands:\n"
-         << "----------------------------------------------\n"
-         << "1.   get <key>                   - Retrieve one record (all attributes)\n"
-         << "2.   create                      - Create a new record (or create table)\n"
-         << "3.   update                      - Update an existing record\n"
-         << "4.   delete <key>                - Delete a record by key\n"
-         << "5.   prefix <str>                - List all records whose key starts with <str>\n"
-         << "6.   range                       - List all records whose key falls within a range\n"
-         << "7.   createindex <col>           - Build a secondary index on column number <col>\n"
-         << "8.   find <col> <value>          - Search records by indexed attribute\n"
-         << "9.   select <cols>|* where <col>=<val> - Query with projection and filtering\n"
-         << "10.  load <filepath>             - Load data from CSV into current table\n"
-         << "11.  createuser                  - Create a new user (and upload Saved Places)\n"
-         << "12.  recover                     - Recover the database from Write-Ahead Log (WAL)\n"
-         << "13.  tables                      - List all tables\n"
-         << "14.  current                     - Show current selected table\n"
-         << "15.  use <table>                 - Switch to another table\n"
-         << "16.  drop <table>                - Delete a table\n"
-         << "17.  help                        - Show this help menu\n"
-         << "18.  exit                        - Exit the program\n"
-         << "19.  save                        - Save all tables to CSV files\n"
-         << "----------------------------------------------\n";
-}
-
-/* ─────────────── splitCSV ─────────────── */
-static vector<string> splitCSV(const string& line) {
-    vector<string> fields;
-    string field;
-    stringstream ss(line);
-    while (getline(ss, field, ',')) fields.push_back(field);
-    return fields;
-}
+void viewTable(LeaderDB& db);
+void printASCII();
+void printHelp();
+static vector<string> splitCSV(const string& line);
 
 int main() {
     LeaderDB db;
@@ -121,7 +67,7 @@ int main() {
     for (const auto& table : requiredTables) {
         if (!db.hasTable(table)) {
             db.createTable(table);
-            cout << "Created missing table: " << table << endl;
+            // cout << "Created missing table: " << table << endl;
         }
     }
 
@@ -579,6 +525,10 @@ int main() {
                 }
             }
         }
+        /* ---------- VIEW ---------- */
+        else if (command == "viewtable"){
+            viewTable(db);
+        }
 
         /* ---------- UNKNOWN ---------- */
         else {
@@ -648,4 +598,142 @@ void uploadSavedPlaces(LeaderDB& db, const string& userId) {
         }
         cout << "Uploaded list: " << listTitle << "( " << places.size() << " places)\n";
     }
+}
+
+void viewTable(LeaderDB& db){
+    cout << "View Table: \n";
+    const size_t MAX_WIDTH = 30;
+    auto& tree = db.getCurrentIndex().raw();
+
+    if(tree.size() == 0){
+        cout << "(Table is empty)\n";
+        return;
+    }
+    vector<vector<string>> rows;
+    vector<string> headers;
+    size_t numCols = 0;
+
+    // get 10 rows only, use C++ lambda
+    tree.forEachLeaf([&](const auto& entry){
+        if (rows.size() >= 10) return;
+        vector<string> row = entry.attrs;
+        rows.push_back(row);
+        numCols = max(numCols, row.size());
+    });
+
+    if (headers.empty()){
+        for (size_t i=0; i < numCols; ++i){
+            headers.push_back("col" + to_string(i));
+        }
+    }
+    vector<size_t> colWidths(numCols, 0);
+    for(size_t i=0; i < numCols; ++i){
+        colWidths[i] = min(headers[i].length(), MAX_WIDTH);
+        for (const auto& row: rows){
+            if (i < row.size()){
+                colWidths[i] = max(colWidths[i], min(row[i].length(), MAX_WIDTH));
+            }
+        }
+    }
+    // headers
+    cout << "| ";
+    for (size_t i = 0; i < numCols; ++i) {
+        string header = headers[i];
+        if (header.length() > MAX_WIDTH) {
+            header = header.substr(0, MAX_WIDTH - 3) + "...";
+        }
+        cout << setw(colWidths[i]) << left << header << " | ";
+    }
+    cout << "\n| ";
+    for (size_t i = 0; i < numCols; ++i) {
+        cout << string(colWidths[i], '-') << " | ";
+    }
+    cout << "\n";
+    //rows
+    for (const auto& row : rows) {
+        cout << "| ";
+        for (size_t i = 0; i < numCols; ++i) {
+            string val = (i < row.size()) ? row[i] : "";
+            if (val.length() > MAX_WIDTH) {
+                val = val.substr(0, MAX_WIDTH - 3) + "...";
+            }
+            cout << setw(colWidths[i]) << left << val << " | ";
+        }
+        cout << "\n";
+    }
+   
+}
+
+void printASCII(){
+        cout << R"(
+
+    ________  ___       ________  ________  _______   ________                          
+    |\   __  \|\  \     |\   __  \|\   ____\|\  ___ \ |\   ____\                         
+    \ \  \|\  \ \  \    \ \  \|\  \ \  \___|\ \   __/|\ \  \___|_                        
+    \ \   ____\ \  \    \ \   __  \ \  \    \ \  \_|/_\ \_____  \                       
+    \ \  \___|\ \  \____\ \  \ \  \ \  \____\ \  \_|\ \|____|\  \                      
+    \ \__\    \ \_______\ \__\ \__\ \_______\ \_______\____\_\  \                     
+        \|__|     \|_______|\|__|\|__|\|_______|\|_______|\_________\                    
+                                                        \|_________|                    
+                                                                                        
+                                                                                        
+    ________  ________  _________  ________  ________  ________  ________  _______      
+    |\   ___ \|\   __  \|\___   ___\\   __  \|\   __  \|\   __  \|\   ____\|\  ___ \     
+    \ \  \_|\ \ \  \|\  \|___ \  \_\ \  \|\  \ \  \|\ /\ \  \|\  \ \  \___|\ \   __/|    
+    \ \  \ \\ \ \   __  \   \ \  \ \ \   __  \ \   __  \ \   __  \ \_____  \ \  \_|/__  
+    \ \  \_\\ \ \  \ \  \   \ \  \ \ \  \ \  \ \  \|\  \ \  \ \  \|____|\  \ \  \_|\ \ 
+    \ \_______\ \__\ \__\   \ \__\ \ \__\ \__\ \_______\ \__\ \__\____\_\  \ \_______\
+        \|_______|\|__|\|__|    \|__|  \|__|\|__|\|_______|\|__|\|__|\_________\|_______|
+                                                                    \|_________|         
+                                                                                        
+                                                                                        
+        )" << endl;
+    
+}
+/** 
+ * TODO: 
+ * create: let users define headers first -> Zirui
+ * remove find, remove prefix -> Yian
+ * add try catch, don't exit program when there are errors -> both
+ * save (CSV各式有問題), -> both
+ * update (when update key, segment fault), -> yian (when users update 2nd time doesn't work)
+ * explain createindex (unclear to users what it does) -> zirui
+ * change load cout "data loaded successfully" when it's unsuccessful. -> zirui
+ * update viewtable to also show PK -> yian
+ * check recover (WAL),add try catch don't exit program, error libc++abi: terminating due to uncaught exception of type std::runtime_error: Key already exists. Use update instead. ->yian
+ * update help menu -> zirui
+ * */ 
+void printHelp() {
+    cout << "\nAvailable Commands:\n"
+         << "----------------------------------------------\n"
+         << "1.   get <key>                   - Retrieve one record (all attributes)\n"
+         << "2.   create                      - Create a new record (or create table)\n"
+         << "3.   update                      - Update an existing record\n"
+         << "4.   delete <key>                - Delete a record by key\n"
+         << "5.   prefix <str>                - List all records whose key starts with <str>\n"
+         << "6.   range                       - List all records whose key falls within a range\n"
+         << "7.   createindex <col>           - Build a secondary index on column number <col>\n"
+         << "8.   find <col> <value>          - Search records by indexed attribute\n"
+         << "9.   select <cols>|* where <col>=<val> - Query with projection and filtering\n"
+         << "10.  load <filepath>             - Load data from CSV into current table\n"
+         << "11.  createuser                  - Create a new user (and upload Saved Places)\n"
+         << "12.  recover                     - Recover the database from Write-Ahead Log (WAL)\n"
+         << "13.  tables                      - List all tables\n"
+         << "14.  current                     - Show current selected table\n"
+         << "15.  use <table>                 - Switch to another table\n"
+         << "16.  drop <table>                - Delete a table\n"
+         << "17.  help                        - Show this help menu\n"
+         << "18.  exit                        - Exit the program\n"
+         << "19.  save                        - Save all tables to CSV files\n"
+         << "20.  viewtable                   - View 10 records of a table\n"
+         << "----------------------------------------------\n";
+}
+
+// split csv 
+static vector<string> splitCSV(const string& line) {
+    vector<string> fields;
+    string field;
+    stringstream ss(line);
+    while (getline(ss, field, ',')) fields.push_back(field);
+    return fields;
 }
