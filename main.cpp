@@ -771,8 +771,8 @@ void printASCII(){
  * create: let users define headers first -> Zirui （check）
  * removed prefix and find -> yian (check)
  * add try catch, don't exit program when there are errors -> both (check)
- * save (CSV各式有問題), -> both
- * update (when update key, segment fault), -> yian (when users update 2nd time doesn't work)
+ * save (CSV各式有問題), -> both (check)
+ * update (when update key, segment fault), -> yian (when users update 2nd time doesn't work) (check)
  * explain createindex (unclear to users what it does) -> zirui
  * change load cout "data loaded successfully" when it's unsuccessful. -> zirui (check)
  * update viewtable to also show PK -> yian (check)
@@ -794,7 +794,7 @@ void printHelp() {
          << "9.   load <filepath>             - Load data from CSV into current table\n"
          << "10.  save                        - Save all tables to CSV files\n"
          << "11.  view                        - View 10 records of a table\n"
-         << "12.  createindex <col>           - Build a secondary index on column\n"
+         << "12.  createindex <col>           - Build a secondary index on column for faster select\n"
          << "13.  select <cols>|* where <col>=<val> - Query with projection and filtering\n"
          << "14.  recover                     - Recover from Write-Ahead Log (WAL)\n"
          << "15.  createuser                  - Create a new user (and upload Saved Places)\n"

@@ -271,6 +271,20 @@ int LeaderDB::getColumnIndex(const string& tableName, const string& columnName) 
     return -1;
 }
 
+
+string escapeCSV(const string& str) {
+    bool needQuotes = str.find(',') != string::npos;
+    if (!needQuotes) return str;
+    
+    string escaped = "\"";
+    for (char c : str) {
+        if (c == '\"') escaped += "\"\"";  
+        else escaped += c;
+    }
+    escaped += "\"";
+    return escaped;
+}
+
 bool LeaderDB::exportTableToCsv(const string& tableName, const string& dirPath) {
     if (!hasTable(tableName)) return false;
     
@@ -282,7 +296,7 @@ bool LeaderDB::exportTableToCsv(const string& tableName, const string& dirPath) 
     auto headers = getTableHeaders(tableName);
     for (size_t i = 0; i < headers.size(); i++) {
         if (i > 0) file << ",";
-        file << headers[i];
+        file << escapeCSV(headers[i]);
     }
     file << "\n";
 
@@ -291,7 +305,7 @@ bool LeaderDB::exportTableToCsv(const string& tableName, const string& dirPath) 
     btree.forEachLeaf([&](const Entry<int, vector<string>>& e) {
         file << e.key;  
         for (const auto& attr : e.attrs) {
-            file << "," << attr;
+            file << "," << escapeCSV(attr);
         }
         file << "\n";
     });
