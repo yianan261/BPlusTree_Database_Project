@@ -1,6 +1,6 @@
 # Database Project
 
-This is a lightweight relational database that efficiently retrieve key value storage. The database manages user-saved places, using a custom-built **B+ Tree** storage engine, **secondary indexing**, and **write-ahead logging** for crash recovery.
+This is a lightweight relational database that efficiently retrieve key value storage. The database manages user-saved places, using a custom-built **B+ Tree** storage engine, and **secondary indexing**.
 It also integrates with **Google Maps** via Python scripts to import real-world "Saved Places" data into the database.
 
 # Project Milestone 1
@@ -16,7 +16,6 @@ Implemented the B Plus Tree Algorithm in BPlusTreeFull.cpp and defining the skel
 - **BTreeIndex**: A wrapper around the B+ Tree, abstracting the interface for database use.
 - **LeaderDB**: Main database engine. Inherits publicly from DBInstance abstract class. Manages tables (with indexes), executes CRUD operations, and handles WAL (Write-Ahead Logging) for recovery.
 - **SecondaryIndex**: Supports secondary indexes (non-primary keys) for faster attribute-based search (e.g., find by email, find by title).
-- **WriteAheadLog**: Ensures database durability by logging changes before applying them to disk. Supports crash recovery.
 - **CsvParser / FileUtils / DataInserter**: Utilities for loading CSV files into tables and inserting structured place data.
 
 ## Inheritance and Polymorphism

@@ -227,12 +227,6 @@ int main() {
                     cout << "- " << table << "\n";
                 }
             }
-
-            /* ---------- CURRENT ---------- */
-            else if (command == "current") {
-                cout << "Current table: " << db.getCurrentTable() << "\n";
-            }
-
             /* ---------- LOAD ---------- */
             else if (command == "load") {
                 string filepath;
@@ -630,24 +624,7 @@ void viewTable(LeaderDB& db){
         rows.push_back(row);
         numCols = max(numCols, row.size());
     });
-    //populate table headers
     vector<string> headers = db.getTableHeaders(db.getCurrentTable());
-
-    /*
-    if (headers.size() + 1 == numCols) {
-        // if header doesn't have PK column, add
-        headers.insert(headers.begin(), "PrimaryKey");
-    }
-    else if (headers.size() == numCols) {
-    }
-    else {
-        headers.clear();
-        headers.push_back("PrimaryKey");
-        for (size_t i = 1; i < numCols; ++i)
-            headers.push_back("col" + to_string(i - 1));
-    }
-    */
-
 
     vector<size_t> colWidths(numCols, 0);
     for(size_t i=0; i < numCols; ++i){
@@ -689,27 +666,18 @@ void viewTable(LeaderDB& db){
 
 void printASCII(){
         cout << R"(
-
-    ________  ___       ________  ________  _______   ________                          
-    |\   __  \|\  \     |\   __  \|\   ____\|\  ___ \ |\   ____\                         
-    \ \  \|\  \ \  \    \ \  \|\  \ \  \___|\ \   __/|\ \  \___|_                        
-    \ \   ____\ \  \    \ \   __  \ \  \    \ \  \_|/_\ \_____  \                       
-    \ \  \___|\ \  \____\ \  \ \  \ \  \____\ \  \_|\ \|____|\  \                      
-    \ \__\    \ \_______\ \__\ \__\ \_______\ \_______\____\_\  \                     
-        \|__|     \|_______|\|__|\|__|\|_______|\|_______|\_________\                    
-                                                        \|_________|                    
-                                                                                        
-                                                                                        
-    ________  ________  _________  ________  ________  ________  ________  _______      
-    |\   ___ \|\   __  \|\___   ___\\   __  \|\   __  \|\   __  \|\   ____\|\  ___ \     
-    \ \  \_|\ \ \  \|\  \|___ \  \_\ \  \|\  \ \  \|\ /\ \  \|\  \ \  \___|\ \   __/|    
-    \ \  \ \\ \ \   __  \   \ \  \ \ \   __  \ \   __  \ \   __  \ \_____  \ \  \_|/__  
-    \ \  \_\\ \ \  \ \  \   \ \  \ \ \  \ \  \ \  \|\  \ \  \ \  \|____|\  \ \  \_|\ \ 
-    \ \_______\ \__\ \__\   \ \__\ \ \__\ \__\ \_______\ \__\ \__\____\_\  \ \_______\
-        \|_______|\|__|\|__|    \|__|  \|__|\|__|\|_______|\|__|\|__|\_________\|_______|
-                                                                    \|_________|         
-                                                                                        
-                                                                                        
+        
+ ________  ___       ________  ________  _______   ________           ________  ________  _________  ________  ________  ________  ________  _______      
+|\   __  \|\  \     |\   __  \|\   ____\|\  ___ \ |\   ____\         |\   ___ \|\   __  \|\___   ___\\   __  \|\   __  \|\   __  \|\   ____\|\  ___ \     
+\ \  \|\  \ \  \    \ \  \|\  \ \  \___|\ \   __/|\ \  \___|_        \ \  \_|\ \ \  \|\  \|___ \  \_\ \  \|\  \ \  \|\ /\ \  \|\  \ \  \___|\ \   __/|    
+ \ \   ____\ \  \    \ \   __  \ \  \    \ \  \_|/_\ \_____  \        \ \  \ \\ \ \   __  \   \ \  \ \ \   __  \ \   __  \ \   __  \ \_____  \ \  \_|/__  
+  \ \  \___|\ \  \____\ \  \ \  \ \  \____\ \  \_|\ \|____|\  \        \ \  \_\\ \ \  \ \  \   \ \  \ \ \  \ \  \ \  \|\  \ \  \ \  \|____|\  \ \  \_|\ \ 
+   \ \__\    \ \_______\ \__\ \__\ \_______\ \_______\____\_\  \        \ \_______\ \__\ \__\   \ \__\ \ \__\ \__\ \_______\ \__\ \__\____\_\  \ \_______\
+    \|__|     \|_______|\|__|\|__|\|_______|\|_______|\_________\        \|_______|\|__|\|__|    \|__|  \|__|\|__|\|_______|\|__|\|__|\_________\|_______|
+                                                     \|_________|                                                                    \|_________|         
+                                                                                                                                                          
+                                                                                                                                                          
+                                                                               
         )" << endl;
     
 }
@@ -724,17 +692,15 @@ void printHelp() {
          << "5.   drop <table>                - Delete a table\n"
          << "6.   use <table>                 - Switch to another table\n"
          << "7.   tables                      - List all tables\n"
-         << "8.   current                     - Show current selected table\n"
-         << "9.   load <filepath>             - Load data from CSV into current table\n"
-         << "10.  save                        - Save all tables to CSV files\n"
-         << "11.  view                        - View 10 records of a table\n"
-         << "12.  createindex <col>           - Build a secondary index on column for faster select\n"
-         << "13.  select <cols>|* where <col>=<val> - Query with projection and filtering\n"
-         << "14.  recover                     - Recover from Write-Ahead Log (WAL)\n"
-         << "15.  createuser                  - Create a new user (and upload Saved Places)\n"
-         << "16.  join                        - Join two tables\n"
-         << "17.  help                        - Show this help menu\n"
-         << "18.  exit                        - Exit the program\n"
+         << "8.   load <filepath>             - Load data from CSV into current table\n"
+         << "9.   save                        - Save all tables to CSV files\n"
+         << "10.  view                        - View 10 records of a table\n"
+         << "11.  createindex <col>           - Build a secondary index on column for faster select\n"
+         << "12.  select <cols>|* where <col>=<val> - Query with projection and filtering\n"
+         << "13.  createuser                  - Create a new user (and upload Saved Places)\n"
+         << "14.  join                        - Join two tables\n"
+         << "15.  help                        - Show this help menu\n"
+         << "16.  exit                        - Exit the program\n"
          << "----------------------------------------------\n";
 }
 
