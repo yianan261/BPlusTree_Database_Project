@@ -14,7 +14,7 @@ Implemented the B Plus Tree Algorithm in BPlusTreeFull.cpp and defining the skel
 - **BPlusNode**: Represents a node (internal or leaf) in a B+ Tree. Handles splitting, merging, and traversal.
 - **BPlusTree**: Manages the B+ Tree structure. Provides insert, delete, search, range search, and prefix search operations.
 - **BTreeIndex**: A wrapper around the B+ Tree, abstracting the interface for database use.
-- **LeaderDB**: Main database engine. Inherits publicly from DBInstance abstract class. Manages tables (with indexes), executes CRUD operations, and handles WAL (Write-Ahead Logging) for recovery.
+- **LeaderDB**: Main database engine. Inherits publicly from DBInstance abstract class. Manages tables (with indexes), executes CRUD operations.
 - **SecondaryIndex**: Supports secondary indexes (non-primary keys) for faster attribute-based search (e.g., find by email, find by title).
 - **CsvParser / FileUtils / DataInserter**: Utilities for loading CSV files into tables and inserting structured place data.
   
