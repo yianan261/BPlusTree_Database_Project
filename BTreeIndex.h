@@ -7,12 +7,16 @@
 using namespace std;
 
 using PrimTree = BPlusTree<int, vector<string>>;
+using RemoveCallback = function<void(int, const vector<string>&)>;
+
 class BTreeIndex {
 private:
     PrimTree tree;
-    vector<string> headers; 
+    vector<string> headers;
+    RemoveCallback onRemoveCallback;
 
 public:
+    void setOnRemoveCallback(RemoveCallback cb) { onRemoveCallback = cb; }
     void insert(const string& key, const vector<string>& attrs);
     vector<string> search(const string& key);
     vector<vector<string>> rangeQuery(const string& lowKey, const string& highKey);

@@ -507,43 +507,55 @@ int main() {
                 }
 
                 try {
+                    // Create secondary indexes if they don't exist
+                    db.switchTable("savedlists");
+                    db.createSecondaryIdx(0);  // Index on userId column
+                    
+                    db.switchTable("listplaces");
+                    db.createSecondaryIdx(0);  // Index on listId column
+                    
+                    // 1. Delete from users table first
                     db.switchTable("users");
                     db.deleteKey(userId);
 
+                    // 2. Find and delete saved lists
                     db.switchTable("savedlists");
                     vector<string> listsToDelete;
                     {
                         auto& tree = db.getCurrentIndex().raw();
-                        tree.forEachLeaf([&](const auto& entry){
+                        tree.forEachLeaf([&](const auto& entry) {
                             if (!entry.attrs.empty() && entry.attrs[0] == userId) {
                                 listsToDelete.push_back(to_string(entry.key));
                             }
                         });
                     }
 
+                    // 3. Delete linked places for each list
                     for (const auto& listId : listsToDelete) {
                         db.switchTable("listplaces");
-                        vector<string> listPlacesToDelete;
+                        vector<string> placesToDelete;
                         {
                             auto& lpTree = db.getCurrentIndex().raw();
-                            lpTree.forEachLeaf([&](const auto& entry){
+                            lpTree.forEachLeaf([&](const auto& entry) {
                                 if (!entry.attrs.empty() && entry.attrs[0] == listId) {
-                                    listPlacesToDelete.push_back(to_string(entry.key));
+                                    placesToDelete.push_back(to_string(entry.key));
                                 }
                             });
                         }
-
-                        for (const auto& pk : listPlacesToDelete) {
-                            db.deleteKey(pk);
+                        
+                        for (const auto& placeId : placesToDelete) {
+                            db.deleteKey(placeId);
                         }
 
-                    db.switchTable("savedlists");
-                    db.deleteKey(listId);
-                }
-                    cout << "User and related data deleted.\n";
+                        // 4. Delete the list itself
+                        db.switchTable("savedlists");
+                        db.deleteKey(listId);
+                    }
 
+                    cout << "User and related data deleted successfully.\n";
                 } catch (const exception& e) {
-                    cout << "Error during deletion: " << e.what() << "\n";
+                    cerr << "Error during deletion: " << e.what() << "\n";
+                    db.switchTable("default");  // Reset to default table on error
                 }
             }
 

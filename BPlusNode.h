@@ -23,6 +23,7 @@ class BPlusNode {
         vector<Entry<KeyT, PayloadT>> entries;                    // leaf node entries
         BPlusNode* next = nullptr;                // for leaf node traversal
         BPlusNode* prev = nullptr;
+        BPlusNode<KeyT, PayloadT>* parent;
 
     public:
         explicit BPlusNode(bool leaf);
@@ -41,8 +42,11 @@ class BPlusNode {
         
         BPlusNode* getNext() const;
         BPlusNode* getPrev() const;
+        BPlusNode<KeyT, PayloadT>* getParent() const {return parent;}
         void setNext(BPlusNode* n);
         void setPrev(BPlusNode* p);
+        void setParent(BPlusNode<KeyT, PayloadT>* p){parent=p;}
+
 };
 
 template<typename KeyT, typename PayloadT>

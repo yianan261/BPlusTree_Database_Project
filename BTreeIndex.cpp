@@ -16,7 +16,13 @@ vector<string> BTreeIndex::search(const string& key)
 
 void BTreeIndex::remove(const string& key) {
     int intKey = stoi(key);
+    auto oldAttrs = tree.search(intKey);  // Get old attributes before deletion
     tree.remove(intKey);
+    
+    // Notify secondary indexes about deletion
+    if (onRemoveCallback) {
+        onRemoveCallback(intKey, oldAttrs);
+    }
 }
 
 void BTreeIndex::clear(){

@@ -20,7 +20,11 @@ private:
     bool deleteEntry(BPlusNode<K,P>* node, const K& key);
     void borrowLeaf(BPlusNode<K,P>* node);
     void mergeLeaf(BPlusNode<K,P>* node);
-    void printTree(BPlusNode<K,P>* node, int level);
+    void printTree(BPlusNode<K,P>* node, size_t level);
+    BPlusNode<K,P>* findParent(BPlusNode<K,P>* node);
+    void updateParentAfterMerge(BPlusNode<K,P>* parent,BPlusNode<K,P>* updateNode, BPlusNode<K,P>* mergedNode);
+    void borrowOrMergeInternal(BPlusNode<K,P>* node);
+                                           
 
 public:
     BPlusTree();
