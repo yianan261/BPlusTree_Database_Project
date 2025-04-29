@@ -1,6 +1,6 @@
 # Database Project
 
-This is a lightweight relational database that efficiently retrieve key value storage. The database manages user-saved places, using a custom-built **B+ Tree** storage engine, and **secondary indexing**.
+This is a simulated relational database that efficiently retrieve key value storage. The database manages user-saved places, using a custom-built **B+ Tree** storage engine, and **secondary indexing**.
 It also integrates with **Google Maps** via Python scripts to import real-world "Saved Places" data into the database.
 
 # Project Milestone 1
