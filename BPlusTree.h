@@ -21,6 +21,7 @@ private:
     void borrowLeaf(BPlusNode<K,P>* node);
     void mergeLeaf(BPlusNode<K,P>* node);
     void printTree(BPlusNode<K,P>* node, int level);
+    void updateInternal(K& key, P& attrs, BPlusNode<K, P>* node);
 
 public:
     BPlusTree();

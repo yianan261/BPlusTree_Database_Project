@@ -12,14 +12,31 @@ template<typename K, typename P>
 BPlusTree<K, P>::BPlusTree() : root(new LeafNode<K, P>()), treeSize(0) {}
 
 template<typename K, typename P>
-void BPlusTree<K, P>::update(K& key, P& attrs){
-    if(!keySet.count(key)){
+void BPlusTree<K, P>::update(K& key, P& attrs) {
+    if(!keySet.count(key)) {
         throw runtime_error("Key does not exist. Use create instead.");
     }
-    remove(key);
-    BPlusNode<K, P>* tempChild = nullptr;
-    K tempKey;
-    insertInternal(key, attrs, root, tempChild, tempKey);
+    updateInternal(key, attrs, root);
+}
+
+template<typename K, typename P>
+void BPlusTree<K, P>::updateInternal(K& key, P& attrs, BPlusNode<K, P>* node) {
+    if (node->isLeafNode()) {
+        auto& entries = static_cast<LeafNode<K, P>*>(node)->getEntries();
+        auto it = find_if(entries.begin(), entries.end(), 
+            [&key](const Entry<K, P>& e) { return e.key == key; });
+        if (it != entries.end()) {
+            it->attrs = attrs;  
+            return;
+        }
+        throw runtime_error("Key not found in leaf node");
+    }
+    
+    
+    auto& keys = node->getKeys();
+    auto& children = node->getChildren();
+    int childIndex = upper_bound(keys.begin(), keys.end(), key) - keys.begin();
+    updateInternal(key, attrs, children[childIndex]);
 }
 
 template<typename K, typename P>
@@ -123,7 +140,7 @@ void BPlusTree<K, P>::remove(K &key) {
     // Zirui
     if (deleteEntry(root, key)){
         keySet.erase(key);
-        treeSize--;  // 新增: 更新大小
+        treeSize--;  
         if(!root->isLeafNode() && root->getKeys().empty()) {
             root = root->getChildren().front();
         } 

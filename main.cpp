@@ -131,8 +131,24 @@ int main() {
                     } else if (db.hasTable(tableName)) {
                         cout << "Table " << tableName << " already exists.\n";
                     } else {
-                        db.createTable(tableName);
-                        cout << "Table " << tableName << " created.\n";
+                        cout << "Enter headers (comma separated): ";
+                        cin.ignore();
+                        string headerLine;
+                        getline(cin, headerLine);
+                        vector<string> headers = splitCSV(headerLine);
+                        
+                        if (headers.empty()) {
+                            cout << "Headers cannot be empty.\n";
+                        } else {
+                            db.createTable(tableName);
+                            db.setTableHeaders(tableName, headers);
+                            cout << "Table " << tableName << " created with headers: ";
+                            for (size_t i = 0; i < headers.size(); ++i) {
+                                if (i > 0) cout << ", ";
+                                cout << headers[i];
+                            }
+                            cout << "\n";
+                        }
                     }
                 } else if (type == "instance") {
                     string key;
@@ -228,38 +244,63 @@ int main() {
                     continue;
                 }
 
-                
+                vector<string> existingHeaders = db.getTableHeaders(db.getCurrentTable());
+                bool hasExistingHeaders = !existingHeaders.empty();
+                size_t expectedColumns = hasExistingHeaders ? existingHeaders.size() - 1 : 0; // -1 因为不包括主键列
+
                 string headerLine;
                 getline(file, headerLine);
-                stringstream ss(headerLine);
-                vector<string> headers;
-                string header;
-                while(getline(ss, header, ',')) {
-                    headers.push_back(header);
-                }
                 
-                if(headers.empty()) {
-                    cout << "No headers found in file.\n";
-                    continue;
-                }
+                if (!hasExistingHeaders) {
+                    stringstream ss(headerLine);
+                    vector<string> headers;
+                    string header;
+                    while(getline(ss, header, ',')) {
+                        headers.push_back(header);
+                    }
+                    
+                    if(headers.empty()) {
+                        cout << "No headers found in file.\n";
+                        file.close();
+                        continue;
+                    }
 
-                db.setTableHeaders(db.getCurrentTable(), headers);
+                    db.setTableHeaders(db.getCurrentTable(), headers);
+                    expectedColumns = headers.size() - 1;  // 设置期望的列数
+                }
                 
+                bool hasError = false;
                 string line;
+                int lineNum = 1;  // 用于错误提示
                 while (getline(file, line)) {
+                    lineNum++;
                     auto fields = splitCSV(line);
                     if (fields.empty()) continue;
 
-                    string key = fields.front();
-                    vector<string> attrs(fields.begin() + 1, fields.end());
                     try {
+                        if (fields.size() - 1 != expectedColumns) {  // -1 because first field is key
+                            throw runtime_error("Line " + to_string(lineNum) + 
+                                             ": Column count mismatch (expected " + 
+                                             to_string(expectedColumns) + 
+                                             " columns, got " + 
+                                             to_string(fields.size() - 1) + ")");
+                        }
+
+                        string key = fields.front();
+                        vector<string> attrs(fields.begin() + 1, fields.end());
                         db.create(key, attrs);
-                    } catch(const exception& e){
-                        cout << "Error: " << e.what() << '\n';       
+                    } catch(const exception& e) {
+                        cout << "Error: " << e.what() << '\n';
+                        hasError = true;
                     }
                 }
                 file.close();
-                cout << "Data loaded successfully into table: " << db.getCurrentTable() << "\n";
+                
+                if (!hasError) {
+                    cout << "Data loaded successfully into table: " << db.getCurrentTable() << "\n";
+                } else {
+                    cout << "Failed to load some records into table: " << db.getCurrentTable() << "\n";
+                }
             }
             /* ---------- RANGE ---------- */
             else if (command == "range") {
@@ -645,6 +686,7 @@ void viewTable(LeaderDB& db){
     //populate table headers
     vector<string> headers = db.getTableHeaders(db.getCurrentTable());
 
+    /*
     if (headers.size() + 1 == numCols) {
         // if header doesn't have PK column, add
         headers.insert(headers.begin(), "PrimaryKey");
@@ -657,6 +699,8 @@ void viewTable(LeaderDB& db){
         for (size_t i = 1; i < numCols; ++i)
             headers.push_back("col" + to_string(i - 1));
     }
+    */
+
 
     vector<size_t> colWidths(numCols, 0);
     for(size_t i=0; i < numCols; ++i){
@@ -724,13 +768,13 @@ void printASCII(){
 }
 /** 
  * TODO: 
- * create: let users define headers first -> Zirui
+ * create: let users define headers first -> Zirui （check）
  * removed prefix and find -> yian (check)
  * add try catch, don't exit program when there are errors -> both (check)
  * save (CSV各式有問題), -> both
  * update (when update key, segment fault), -> yian (when users update 2nd time doesn't work)
  * explain createindex (unclear to users what it does) -> zirui
- * change load cout "data loaded successfully" when it's unsuccessful. -> zirui
+ * change load cout "data loaded successfully" when it's unsuccessful. -> zirui (check)
  * update viewtable to also show PK -> yian (check)
  * check recover (WAL),add try catch don't exit program, error libc++abi: terminating due to uncaught exception of type std::runtime_error: Key already exists. Use update instead. ->yian
  * update help menu -> zirui
