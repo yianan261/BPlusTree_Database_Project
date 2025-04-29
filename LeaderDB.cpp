@@ -1,15 +1,20 @@
 #include "LeaderDB.h"
-
+#include <iostream>
 vector<string> LeaderDB::get(const string& key) {
     return tables[currentTable].search(key);
 }
 
 void LeaderDB::deleteKey(const string& key) {
     auto oldAttrs = tables[currentTable].search(key);
+    if (oldAttrs.empty()) {
+        cout << "Key does not exist.\n";
+        return;
+    }
     int pk = stoi(key);
     tables[currentTable].remove(key);
     for (auto& [c, idx] : secondary[currentTable]) 
         idx.remove(oldAttrs, pk);
+    cout << "Key removed.\n";
 }
 
 void LeaderDB::create(const string& key, const vector<string>& attrs) {
