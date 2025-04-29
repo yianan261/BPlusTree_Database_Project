@@ -7,8 +7,7 @@ using namespace std;
 
 string parseField(stringstream& ss) {
     string field;
-    
-    
+
     while (ss.peek() == ' ' || ss.peek() == '\t') {
         ss.get();
     }
