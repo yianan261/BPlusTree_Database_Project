@@ -61,14 +61,14 @@ The database schema supports users importing their saved places lists from Googl
 
 ## Commands (Database Menu Options)
 
-1. get <key>
+1. `get <key>`
    Retrieve one record (all attributes) from the current table using its primary key.
 
 ```bash
 get <key>
 ```
 
-2. create
+2. `create`
    Create a new record or a new table. You will be prompted to specify if you want to create a table or a record.
 
 ```bash
@@ -81,7 +81,7 @@ Enter headers (comma separated): name,age
 Table pets created with headers: name,  age
 ```
 
-3. update
+3. `update`
    Update an existing record in the current table by specifying a key and providing new attributes.
 
 ```bash
@@ -91,7 +91,7 @@ Attributes (comma separated): (Enter comma separated attributes)
 Record updated.
 ```
 
-4. delete <key>
+4. `delete <key>`
    Delete a specific record from the current table using its primary key.
 
 ```bash
@@ -100,25 +100,25 @@ Enter key to delete: 5
 Key removed.
 ```
 
-5. drop (table)
+5. `drop (table)`
    Delete an entire table from the database (except the default table).
 
-   ```bash
-   drop
-   Please enter table name to drop: places
-   Table dropped.
-   ```
-6. use (table)
+ ```bash
+ drop
+ Please enter table name to drop: places
+ Table dropped.
+ ```
+6. `use (table)`
    Switch to a different table for subsequent operations.
 
 ```bash
 use (tablename)
 
 ```
-7. tables
-   List all existing tables in the database.
+7. `tables`
+ List all existing tables in the database.
 
-8. load <filepath>
+8. `load <filepath>`
    Load records from a CSV file into the current table. The first line of the CSV should contain column headers.
 
 ```bash
@@ -126,7 +126,7 @@ load
 Enter CSV file path: (enter path)
 ```
 
-9. save
+9. `save`
    Save all tables into CSV files. Each table will be saved to its own CSV under the output/ directory.
 
 ```bash
@@ -134,14 +134,14 @@ save
 Saved default to ./output/default.csv
 ```
 
-10. view
+10. `view`
     View up to 10 records from the current table, formatted nicely in columns.
 
 ```bash
 view
 ```
 
-11. createindex <col>
+11. `createindex <col>`
     Build a secondary index on a specified column to speed up select queries.
 
 ```bash
@@ -150,14 +150,14 @@ Enter column name: (column name)
 Secondary index built on <column name>
 ```
 
-12. select <cols>|\* where <col>=<val>
+12. `select <cols>|\* where <col>=<val>`
     Query the current table by applying a filter condition (where) and optionally projecting specific columns.
 
 ```bash
 select * where name=(name)
 ```
 
-13. createuser
+13. `createuser`
     Create a new user account and optionally upload Google Maps Saved Places data into your database.
 
 ```bash
@@ -166,21 +166,21 @@ Enter user email: (email)
 Would you like to upload your Saved Places? (yes/no):
 ```
 
-14. join
+14. `join`
     Perform a join between two tables based on matching column values, with optional projection of columns.
 
 ```bash
 join A.1 B.2
 ```
 
-15. help
+15. `help`
     Display the full list of available commands and their descriptions.
 
 ```bash
 help
 ```
 
-16. exit
+16. `exit`
     Exit the program.
 
 ```bash
