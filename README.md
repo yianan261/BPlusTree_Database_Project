@@ -212,7 +212,7 @@ The `dataset_project` files can be used for other table command testing
 
 ---
 
-### To Upload Google Takeout File
+### To Upload Google Takeout File (Optional)
 
 #### 1. Get Google API Key and keep in a .env file
 
