@@ -13,8 +13,9 @@ private:
 
 public:
     WriteAheadLog();  
-    void logWrite(const string& key, const vector<string>& attrs);
-    vector<pair<string, vector<string>>> loadLog();
+    void logWrite(const string& tableName, const string& key, const vector<string>& attrs, const vector<string>& headers);
+    vector<tuple<string, string, vector<pair<string,string>>>> loadLog();
+
 };
 
 #endif
