@@ -17,7 +17,7 @@ void LeaderDB::create(const string& key, const vector<string>& attrs) {
     if (tables[currentTable].contains(keyInt)) {
         throw runtime_error("Key already exists. Use update instead.");
     }
-    wal.logWrite(key, attrs);
+    wal.logWrite(currentTable, key, attrs, getTableHeaders(currentTable));
     tables[currentTable].insert(key, attrs);
     for (auto& [c, idx] : secondary[currentTable]) 
         idx.insert(attrs, keyInt);
@@ -28,7 +28,7 @@ void LeaderDB::update(const string& key, const vector<string>& attrs) {
     if (oldAttrs.empty())
         throw runtime_error("Key does not exist. Use create instead.");
 
-    wal.logWrite(key, attrs);
+    wal.logWrite(currentTable, key, attrs, getTableHeaders(currentTable));
 
     int pk = stoi(key);
 
@@ -88,12 +88,20 @@ string LeaderDB::getCurrentTable() const {
 
 void LeaderDB::recoverFromWAL() {
     tables.clear();
-    tables["default"] = BTreeIndex();
     currentTable = "default";
+    tables["default"] = BTreeIndex();
     
     auto entries = wal.loadLog();
-    for (const auto& [key, val] : entries) {
-        tables[currentTable].insert(key, {val});
+    for(const auto& [tableName, key, attrPairs] : entries){
+        if (!tables.count(tableName)){
+            tables[tableName] = BTreeIndex(); // if missing, create
+        }
+        vector<string> attrs;
+        for (const auto& [header, value]: attrPairs){
+            attrs.push_back(value);
+        }
+
+        tables[tableName].insert(key,attrs);
     }
 }
 

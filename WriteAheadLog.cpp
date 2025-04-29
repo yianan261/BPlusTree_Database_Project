@@ -12,35 +12,43 @@ WriteAheadLog::WriteAheadLog(){
     }
 }
 
-void WriteAheadLog::logWrite(const string& key, const vector<string>& attrs){
+void WriteAheadLog::logWrite(const string& tableName, const string& key, const vector<string>& attrs, const vector<string>& headers){
         if(!logFile.is_open()) return;
-        logFile << key;
+        logFile << tableName << "," << key;
         for (size_t i = 0; i < attrs.size(); ++i) {
-            logFile << (i==0 ? "," : "|") << attrs[i];  // ,key|attr1|attr2...
+            logFile << (i == 0 ? "," : "|") << headers[i] << "=" << attrs[i];
         }
-       logFile << "\n";
+        logFile << "\n";
 }
 
-vector<pair<string, vector<string>>> WriteAheadLog::loadLog() {
-    vector<pair<string, vector<string>>> logEntries;
+vector<tuple<string, string, vector<pair<string,string>>>> WriteAheadLog::loadLog()
+ {
+    vector<tuple<string, string, vector<pair<string,string>>>> logEntries;
     ifstream infile("wal.log");
-
-    if(!infile.is_open()){
-        cerr << "Failed to open wal.log for reading. \n";
+    if (!infile.is_open()) {
+        cerr << "Failed to open wal.log\n";
         return logEntries;
     }
 
     string line;
-    while(getline(infile,line)){
+    while (getline(infile, line)) {
         stringstream ss(line);
-        string key, rest;
-        if(getline(ss, key, ',') && getline(ss, rest)){
-            vector<string> attrs;
+        string tableName, key, rest;
+        if (getline(ss, tableName, ',') && getline(ss, key, ',') && getline(ss, rest)) {
+            vector<pair<string,string>> attrs;
             string attr;
             stringstream ss2(rest);
-            while(getline(ss2, attr, '|')) attrs.push_back(attr);
-            logEntries.emplace_back(key, attrs);
+            while (getline(ss2, attr, '|')) {
+                auto pos = attr.find('=');
+                if (pos != string::npos) {
+                    string header = attr.substr(0, pos);
+                    string value = attr.substr(pos + 1);
+                    attrs.emplace_back(header, value);
+                }
+            }
+            logEntries.emplace_back(tableName, key, attrs);
         }
     }
     return logEntries;
+
 }

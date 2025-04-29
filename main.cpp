@@ -187,7 +187,8 @@ int main() {
             /* ---------- DELETE ---------- */
             else if (command == "delete") {
                 if (db.getCurrentTable() == "users"){
-                    cout << "To delete user safely, use 'deleteuser' command. \n";
+                    // 'deleteuser' currently unsupported
+                    cout << "Delete user currently unsupported. \n";
                     continue;
                 }
                 string key; cin >> key;
@@ -534,60 +535,6 @@ int main() {
             else if (command == "view"){
                 viewTable(db);
             }
-            /* ---------- DELETEUSER ---------- */
-            else if (command == "deleteuser") {
-                string userId;
-                cout << "Enter User ID to delete: ";
-                cin >> userId;
-                cout << "Are you sure you want to delete user " << userId << " and their lists and places? (yes/no): ";
-                string confirm;
-                cin >> confirm;
-                if (confirm != "yes") {
-                    cout << "Abort deletion.\n";
-                    continue;
-                }
-
-                try {
-                    db.switchTable("users");
-                    db.deleteKey(userId);
-
-                    db.switchTable("savedlists");
-                    vector<string> listsToDelete;
-                    {
-                        auto& tree = db.getCurrentIndex().raw();
-                        tree.forEachLeaf([&](const auto& entry){
-                            if (!entry.attrs.empty() && entry.attrs[0] == userId) {
-                                listsToDelete.push_back(to_string(entry.key));
-                            }
-                        });
-                    }
-
-                    for (const auto& listId : listsToDelete) {
-                        db.switchTable("listplaces");
-                        vector<string> listPlacesToDelete;
-                        {
-                            auto& lpTree = db.getCurrentIndex().raw();
-                            lpTree.forEachLeaf([&](const auto& entry){
-                                if (!entry.attrs.empty() && entry.attrs[0] == listId) {
-                                    listPlacesToDelete.push_back(to_string(entry.key));
-                                }
-                            });
-                        }
-
-                        for (const auto& pk : listPlacesToDelete) {
-                            db.deleteKey(pk);
-                        }
-
-                    db.switchTable("savedlists");
-                    db.deleteKey(listId);
-                }
-                    cout << "User and related data deleted.\n";
-
-                } catch (const exception& e) {
-                    cout << "Error during deletion: " << e.what() << "\n";
-                }
-            }
-
             /* ---------- UNKNOWN ---------- */
             else {
                 cout << "Unknown command. Type 'help' for help.\n";
@@ -798,10 +745,9 @@ void printHelp() {
          << "13.  select <cols>|* where <col>=<val> - Query with projection and filtering\n"
          << "14.  recover                     - Recover from Write-Ahead Log (WAL)\n"
          << "15.  createuser                  - Create a new user (and upload Saved Places)\n"
-         << "16.  deleteuser                  - Deletes user and their savedlists and associated listplaces\n"
-         << "17.  join                        - Join two tables\n"
-         << "18.  help                        - Show this help menu\n"
-         << "19.  exit                        - Exit the program\n"
+         << "16.  join                        - Join two tables\n"
+         << "17.  help                        - Show this help menu\n"
+         << "18.  exit                        - Exit the program\n"
          << "----------------------------------------------\n";
 }
 
