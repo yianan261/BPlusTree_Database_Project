@@ -105,7 +105,6 @@ drop
 Please enter table name to drop: places
 Table dropped.
 ```
-
 6. use <table>
    Switch to a different table for subsequent operations.
 
@@ -113,7 +112,6 @@ Table dropped.
 use (tablename)
 
 ```
-
 7. tables
    List all existing tables in the database.
 
