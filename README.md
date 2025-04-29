@@ -97,15 +97,15 @@ Enter key to delete: 5
 Key removed.
 ```
 
-5. drop <table>
+5. drop (table)
    Delete an entire table from the database (except the default table).
 
-```bash
-drop
-Please enter table name to drop: places
-Table dropped.
-```
-6. use <table>
+   ```bash
+   drop
+   Please enter table name to drop: places
+   Table dropped.
+   ```
+6. use (table)
    Switch to a different table for subsequent operations.
 
 ```bash
