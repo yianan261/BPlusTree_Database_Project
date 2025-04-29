@@ -17,6 +17,9 @@ Implemented the B Plus Tree Algorithm in BPlusTreeFull.cpp and defining the skel
 - **LeaderDB**: Main database engine. Inherits publicly from DBInstance abstract class. Manages tables (with indexes), executes CRUD operations, and handles WAL (Write-Ahead Logging) for recovery.
 - **SecondaryIndex**: Supports secondary indexes (non-primary keys) for faster attribute-based search (e.g., find by email, find by title).
 - **CsvParser / FileUtils / DataInserter**: Utilities for loading CSV files into tables and inserting structured place data.
+  
+### Note
+Currently Write Ahead Log implementations are incomplete, please disregard at the current time of project. We are keeping it to continue working on it later.
 
 ## Inheritance and Polymorphism
 
@@ -205,6 +208,11 @@ After compiling, run
 ```bash
 ./leaderdb
 ```
+
+### To Test with createuser uploads
+Users may use the provided csv files in the filepath `saved_places_dir/yian261_at_gmail_dot_com`
+<br>
+The `dataset_project` files can be used for other table command testing
 
 ---
 
