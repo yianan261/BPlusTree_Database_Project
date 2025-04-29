@@ -30,11 +30,11 @@ The database schema supports users importing their saved places lists from Googl
 
 - `email`: Email address (used as key).
 - `user_id`(PK): Random unique generated integer ID.
-- `created_at`: Account creation timestamp.
+- `created_at`: creation timestamp.
 
 ### 2. Places Table (`places`)
 
-- Hashed Google Place ID(PK): The place_id is hashed to integers for primary key, and the original place id will be kept as a string attribute.
+- `hashedId` (PK): The Google place_id is hashed to integers as the primary key, and the original place id will be kept as a string attribute.
 - `place_id`: original place id kept as a string attribute.
 - `name`: Name of the place (e.g., "Central Park").
 - `address`: Formatted address.
@@ -43,15 +43,16 @@ The database schema supports users importing their saved places lists from Googl
 - `description`: Description of the place.
 
 ### 3. SavedLists Table (`savedlists`)
-
 - `list_id` (PK): Random unique list ID.
 - `user_id` (FK): Belongs to a user.
 - `title`: Title of the list (e.g., "Favorites").
+- `createdAt`: timestamp.
 
 ### 4. ListPlaces Table (`listplaces`)
 
-- Combined Primary Key: (`list_id`, `place_id`)
-- Links places to lists (many-to-many relationship)
+- Combined Primary Key of `list_id` and `place_id`: int IDs
+- `list_id`: Mapped to `list_id`
+- `place_Id`: Links places to lists (many-to-many relationship)
 
 ---
 
