@@ -7,15 +7,20 @@ It also integrates with **Google Maps** via Python scripts to import real-world 
 
 ## Project Components
 
-- **BPlusNode**: Represents a node (internal or leaf) in a B+ Tree. Handles splitting, merging, and traversal.
-- **BPlusTree**: Manages the B+ Tree structure. Provides insert, delete, search, range search, and prefix search operations.
+- **BPlusNode**: Represents a node (internal or leaf) in a B+ Tree. Handles splitting, merging, and traversal. Internal nodes store keys, key-value pairs (key and record pointers) are stored in leaf nodes , which are linked together using a doubly-linked list data structure.
+- **BPlusTree**: Manages the self-balancing B+ Tree structure (order 3). Provides insert, delete, search, range search, and prefix search operations. When the keys in a node overflows it will automatically split. When it underflows it will borrow or merge with sibling nodes. 
 - **BTreeIndex**: A wrapper around the B+ Tree, abstracting the interface for database use.
-- **LeaderDB**: Main database engine. Inherits publicly from DBInstance abstract class. Manages tables (with indexes), executes CRUD operations.
-- **SecondaryIndex**: Supports secondary indexes (non-primary keys) for faster attribute-based search (e.g., find by email, find by title).
+- **LeaderDB**: Main database engine. Inherits publicly from DBInstance abstract class. Manages tables (with indexes), executes CRUD operations in the CLI.
+- **SecondaryIndex**: Supports secondary indexes (non-primary keys) for attribute-value to list-of-PKs mapping to support faster attribute-based search (e.g., find by email, find by title). 
 - **CsvParser / FileUtils / DataInserter**: Utilities for loading CSV files into tables and inserting structured place data.
   
 ### Note
 Currently Write Ahead Log implementations are incomplete, please disregard at the current time of project. We are keeping it to continue working on it later.
+
+## Complexity of search time 
+m = order = 3 for this implementation, meaning each internal node has at least m/2 children. Assume n total keys, then height h of tree is h = logn.
+At each internal node binary search is performed to search the local key array (O(logm)) time, but since m is fixed, this is done in O(1) time.
+Since we established height h of the tree is approximately logn, so search/insert/delete is O(logn) operation.
 
 ## Inheritance and Polymorphism
 
