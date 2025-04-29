@@ -11,11 +11,10 @@ string parseField(stringstream& ss) {
     while (ss.peek() == ' ' || ss.peek() == '\t') {
         ss.get();
     }
-    
+    // deal with double quotes
     if (ss.peek() == '"') {
         ss.get();  
-        
-        
+
         bool inQuote = true;
         while (inQuote && ss.peek() != EOF) {
             char c = ss.get();
@@ -30,19 +29,16 @@ string parseField(stringstream& ss) {
                 field += c;
             }
         }
-        
-        
+   
         while (ss.peek() == ' ' || ss.peek() == '\t') ss.get();
         if (ss.peek() == ',') ss.get();
         
-    } else {
-        
+    } else {        
         while (ss.peek() != ',' && ss.peek() != EOF) {
             field += ss.get();
         }
         if (ss.peek() == ',') ss.get();
-        
-        
+         
         while (!field.empty() && (field.back() == ' ' || field.back() == '\t')) {
             field.pop_back();
         }

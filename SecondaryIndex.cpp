@@ -35,19 +35,6 @@ void SecondaryIndex::remove(const vector<string>& attrs, int pk)
     tree.remove(val);
     if (!list.empty())
         tree.insert(val, list);
-
-    // if (col >= (int)attrs.size()) 
-    //     return;
-    // auto val = attrs[col];
-    // auto list = tree.search(val);
-    // if (list.empty()) {
-    //     cout << "PRINTING FROM SECINDEX REMOVE, TREE SEARCH VAL LIST IS EMPTY" << endl;
-    //     return;
-    // }
-    // list.erase(std::remove(list.begin(), list.end(), pk), list.end());
-    // tree.remove(val);
-    // if (!list.empty()) 
-    //     tree.insert(val, list);
 }
 
 vector<int> SecondaryIndex::searchPK(const string& v)

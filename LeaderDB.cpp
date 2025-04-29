@@ -29,9 +29,8 @@ void LeaderDB::update(const string& key, const vector<string>& attrs) {
         throw runtime_error("Key does not exist. Use create instead.");
 
     wal.logWrite(currentTable, key, attrs, getTableHeaders(currentTable));
-
     int pk = stoi(key);
-
+    // secondary index update
     for (auto& [c, idx] : secondary[currentTable])
         idx.remove(oldAttrs, pk);
 
@@ -158,7 +157,7 @@ vector<vector<string>> LeaderDB::findByAttr(int col, const string& val)
     return res;
 }
 
-
+/* ---------- selectWhere ---------- */
 vector<vector<string>> LeaderDB::selectWhere(const vector<int>& projCols, int whereCol, const string& whereVal)
 {
     vector<vector<string>> rows;
@@ -205,6 +204,7 @@ vector<vector<string>> LeaderDB::join(const string& tabA, int colA, const string
     int  oCol = colA, iCol = colB;
     auto *outer = &tA, *inner = &tB;
 
+    // check which table is smaller
     if (tB.size() < tA.size()){
         outerName.swap(innerName);
         std::swap(oCol,iCol);
@@ -212,14 +212,14 @@ vector<vector<string>> LeaderDB::join(const string& tabA, int colA, const string
     }
 
     
-    bool innerHasIdx =
-        secondary[innerName].count(iCol);
+    bool innerHasIdx = secondary[innerName].count(iCol);
 
     vector<vector<string>> result;
 
     
     outer->raw().forEachLeaf([&](const Entry<int,vector<string>>& eO){
-        if (oCol >= (int)eO.attrs.size()) return;
+        if (oCol >= (int)eO.attrs.size()) 
+            return;
         const string& matchVal = eO.attrs[oCol];
 
         
@@ -238,7 +238,8 @@ vector<vector<string>> LeaderDB::join(const string& tabA, int colA, const string
         for (auto& rI : rowsI){
             vector<string> row;
             
-            if (projA.empty()) row.insert(row.end(), eO.attrs.begin(), eO.attrs.end());
+            if (projA.empty()) 
+                row.insert(row.end(), eO.attrs.begin(), eO.attrs.end());
             else
                 for (int c:projA)
                     if (c < (int)eO.attrs.size()) 
@@ -279,7 +280,7 @@ int LeaderDB::getColumnIndex(const string& tableName, const string& columnName) 
     return -1;
 }
 
-
+// help save deal with csv format
 string escapeCSV(const string& str) {
     bool needQuotes = str.find(',') != string::npos;
     if (!needQuotes) return str;
@@ -298,7 +299,8 @@ bool LeaderDB::exportTableToCsv(const string& tableName, const string& dirPath) 
     
     string filepath = dirPath + "/" + tableName + ".csv";
     ofstream file(filepath);
-    if (!file.is_open()) return false;
+    if (!file.is_open()) 
+        return false;
 
     
     auto headers = getTableHeaders(tableName);

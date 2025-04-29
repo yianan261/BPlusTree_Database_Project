@@ -22,7 +22,6 @@ int hashPlaceId(const string& placeId) {
 
 /**
  * @brief  Check if a place already exists in the "places" table
- * 
  * @param db LeaderDB address
  * @param placeId string address of placeId
  * @return true 
@@ -36,7 +35,6 @@ bool placeExists(LeaderDB& db, const string& placeId) {
 
 /**
  * @brief Insert a Place into the "places" table if it doesn't exist
- * 
  * @param db LeaderDB address
  * @param place Place object
  */
@@ -59,7 +57,6 @@ void insertPlace(LeaderDB& db, const Place& p) {
 
 /**
  * @brief Insert a new SavedList into "savedLists" table
- * 
  * @param db address of LeaderDB
  * @param userId address of userId (string)
  * @param listId address of listId (string)
@@ -69,7 +66,8 @@ void insertSavedList(LeaderDB& db, const string& userId, const string& listId, c
     db.switchTable("savedLists");
     time_t now = time(0);
     string createdAt = ctime(&now);
-    if (! createdAt.empty() && createdAt.back() == '\n') createdAt.pop_back();
+    if (! createdAt.empty() && createdAt.back() == '\n') 
+        createdAt.pop_back();
 
     vector<string> attrs = {
         userId, 
@@ -88,7 +86,6 @@ int generateCombinedKeyHash(const string& listId, const string& placeId) {
 
 /**
  * @brief Insert mapping of SavedList and Place into "listPlaces" table
- * 
  * @param db address of LeaderDB
  * @param listId address
  * @param placeId address

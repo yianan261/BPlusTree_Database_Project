@@ -25,14 +25,12 @@ int main() {
     srand(0);
     
     const string path = "./dataset_project/data.csv";
-    //const string path = "./output/listplaces.csv";
     ifstream file(path);
     if (!file.is_open()) {
         cerr << "Could not open " << path << '\n';
         return 1;
     }
 
-    // get headers
     string headerLine;
     getline(file, headerLine);
     stringstream ss(headerLine);
@@ -98,14 +96,11 @@ int main() {
         try{
             if (command == "exit") break;
             else if (command == "help") printHelp();
-            else if (command == "recover") {
-                db.recoverFromWAL();
-                cout << "Database recovered from WAL\n";
-            }
 
             /* ---------- GET ---------- */
             else if (command == "get") {
-                string key;  cin >> key;
+                string key;  
+                cin >> key;
                 auto attrs = db.get(key);
                 if (attrs.empty())
                     cout << "Key not found.\n";
@@ -121,11 +116,13 @@ int main() {
 
             /* ---------- CREATE ---------- */
             else if (command == "create") {
-                cout << "Create table or instance?";
-                string type; cin >> type;
+                cout << "Create table or instance? ";
+                string type; 
+                cin >> type;
                 if (type == "table") {
                     cout << "Enter table name: ";
-                    string tableName; cin >> tableName;
+                    string tableName; 
+                    cin >> tableName;
                     if (tableName == "default") {
                         cout << "Cannot create table named 'default'.\n";
                     } else if (db.hasTable(tableName)) {
@@ -144,7 +141,8 @@ int main() {
                             db.setTableHeaders(tableName, headers);
                             cout << "Table " << tableName << " created with headers: ";
                             for (size_t i = 0; i < headers.size(); ++i) {
-                                if (i > 0) cout << ", ";
+                                if (i > 0) 
+                                    cout << ", ";
                                 cout << headers[i];
                             }
                             cout << "\n";
@@ -172,9 +170,11 @@ int main() {
             /* ---------- UPDATE ---------- */
             else if (command == "update"){
                 string key;
-                cout << "Key: "; cin >> key;
+                cout << "Key: "; 
+                cin >> key;
                 cout << "Attributes (comma separated): ";
-                cin.ignore(); getline(cin, line);
+                cin.ignore(); 
+                getline(cin, line);
                 auto attrs = splitCSV(line);
                 try{
                     db.update(key, attrs);
@@ -191,13 +191,15 @@ int main() {
                     cout << "Delete user currently unsupported. \n";
                     continue;
                 }
-                string key; cin >> key;
+                string key; 
+                cin >> key;
                 db.deleteKey(key);
                 cout << "Record deleted.\n";
             }
             /* ---------- DROP ---------- */
             else if (command == "drop") {
-                string tableName; cin >> tableName;
+                string tableName; 
+                cin >> tableName;
                 if (tableName == "default") {
                     cout << "Cannot drop default table.\n";
                 } else if (!db.hasTable(tableName)) {
@@ -210,7 +212,8 @@ int main() {
 
             /* ---------- USE ---------- */
             else if (command == "use") {
-                string tableName; cin >> tableName;
+                string tableName; 
+                cin >> tableName;
                 if (!db.hasTable(tableName)) {
                     cout << "Table does not exist.\n";
                 } else {
@@ -241,7 +244,7 @@ int main() {
 
                 vector<string> existingHeaders = db.getTableHeaders(db.getCurrentTable());
                 bool hasExistingHeaders = !existingHeaders.empty();
-                size_t expectedColumns = hasExistingHeaders ? existingHeaders.size() - 1 : 0; // -1 因为不包括主键列
+                size_t expectedColumns = hasExistingHeaders ? existingHeaders.size() - 1 : 0; 
 
                 string headerLine;
                 getline(file, headerLine);
@@ -261,24 +264,22 @@ int main() {
                     }
 
                     db.setTableHeaders(db.getCurrentTable(), headers);
-                    expectedColumns = headers.size() - 1;  // 设置期望的列数
+                    expectedColumns = headers.size() - 1;  
                 }
                 
                 bool hasError = false;
                 string line;
-                int lineNum = 1;  // 用于错误提示
+                int lineNum = 1;  
                 while (getline(file, line)) {
                     lineNum++;
                     auto fields = splitCSV(line);
                     if (fields.empty()) continue;
 
                     try {
-                        if (fields.size() - 1 != expectedColumns) {  // -1 because first field is key
+                        if (fields.size() - 1 != expectedColumns) { 
                             throw runtime_error("Line " + to_string(lineNum) + 
-                                             ": Column count mismatch (expected " + 
-                                             to_string(expectedColumns) + 
-                                             " columns, got " + 
-                                             to_string(fields.size() - 1) + ")");
+                                             ": Column count mismatch (expected " + to_string(expectedColumns) + 
+                                             " columns, got " + to_string(fields.size() - 1) + ")");
                         }
 
                         string key = fields.front();
@@ -400,11 +401,14 @@ int main() {
                 whereVal = whereVal.substr(whereVal.find_first_not_of(" \t"));
                 
                 auto rows = db.selectWhere(proj, whereCol, whereVal);
-                if (rows.empty()) { cout << "No match.\n"; continue; }
+                if (rows.empty()) { 
+                    cout << "No match.\n"; continue; 
+                }
             
                 for (auto& r : rows) {
                     for (size_t i=0;i<r.size();++i){
-                        if(i) cout << ", ";
+                        if(i) 
+                            cout << ", ";
                         cout << r[i];
                     }
                     cout << '\n';
@@ -443,7 +447,8 @@ int main() {
                 while (true) {
                     userId = rand();
                     // Check if random userId is already taken
-                    if (db.get(to_string(userId)).empty()) break;
+                    if (db.get(to_string(userId)).empty()) 
+                        break;
                 }
 
                 time_t timestamp;
@@ -456,7 +461,7 @@ int main() {
                 }
                 
                 // insert
-                vector<string> userRec = { email, to_string(userId), timeStr};
+                vector<string> userRec = {email, to_string(userId), timeStr};
                 try{
                     db.create(to_string(userId), userRec);
                     cout << "User created successfullly. \n";
@@ -476,10 +481,13 @@ int main() {
             /* ---------- JOIN ---------- */
             else if (command == "join") {
                 // example: join A.1 B.2 0,2 *    
-                string tcolA, tcolB; cin >> tcolA >> tcolB;
+                string tcolA, tcolB; 
+                cin >> tcolA >> tcolB;
                 string projA = "*", projB = "*";
-                if (cin.peek()==' ') cin >> projA;
-                if (cin.peek()==' ') cin >> projB;
+                if (cin.peek()==' ') 
+                    cin >> projA;
+                if (cin.peek()==' ') 
+                    cin >> projB;
             
                 auto parseTC = [](const string& s){      // "A.1"
                     auto dot=s.find('.');
@@ -491,21 +499,25 @@ int main() {
             
                 auto toVec = [](const string& s){
                     vector<int> v;
-                    if (s=="*") return v;
+                    if (s=="*") 
+                        return v;
                     stringstream ss(s); string tok;
-                    while(getline(ss,tok,',')) v.push_back(stoi(tok));
+                    while(getline(ss,tok,',')) 
+                        v.push_back(stoi(tok));
                     return v;
                 };
                 auto res = db.join(tA,cA,tB,cB,toVec(projA),toVec(projB));
-                if(res.empty()) cout<<"No match.\n";
+                if(res.empty()) 
+                    cout<<"No match.\n";
                 else{
                     for(auto& r:res){
                         for(size_t i=0;i<r.size();++i){
-                            if(i) cout<<", ";
+                            if(i) 
+                                cout<<", ";
                             cout<<r[i];
                         } cout<<'\n';
                     }
-                    cout<<"Total: "<<res.size()<<'\n';
+                    cout<<"Total: "<< res.size() <<'\n';
                 }
             }
             /* ---------- SAVE ---------- */
@@ -518,8 +530,7 @@ int main() {
                 auto tables = db.listTables();
                 for (const auto& table : tables) {
                     if (db.exportTableToCsv(table, outputDir)) {
-                        cout << "Saved " << table << " to " << outputDir << "/" 
-                            << table << ".csv\n";
+                        cout << "Saved " << table << " to " << outputDir << "/" << table << ".csv\n";
                     } else {
                         cout << "Failed to save " << table << "\n";
                     }
@@ -618,7 +629,8 @@ void viewTable(LeaderDB& db){
 
     // get 10 rows only, use lambda
     tree.forEachLeaf([&](const auto& entry){
-        if (rows.size() >= 10) return;
+        if (rows.size() >= 10) 
+            return;
         vector<string> row = entry.attrs;
         row.insert(row.begin(), to_string(entry.key));
         rows.push_back(row);

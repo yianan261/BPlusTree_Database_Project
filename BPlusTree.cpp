@@ -49,7 +49,7 @@ void BPlusTree<K, P>::insert(K &key, const P& attrs) {
 
     BPlusNode<K, P>* newChild = nullptr;
     K newKey;
-    insertInternal(key, const_cast<P&>(attrs), root, newChild, newKey);  // 临时解决方案
+    insertInternal(key, const_cast<P&>(attrs), root, newChild, newKey);  
     if (newChild != nullptr) {
         InternalNode<K,P>* newRoot = new InternalNode<K, P>();
         newRoot->getKeys().push_back(newKey);
