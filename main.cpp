@@ -713,20 +713,7 @@ void printASCII(){
         )" << endl;
     
 }
-/** 
- * TODO: 
- * create: let users define headers first -> Zirui （check）
- * removed prefix and find -> yian (check)
- * add try catch, don't exit program when there are errors -> both (check)
- * save (CSV各式有問題), -> both (check)
- * update (when update key, segment fault), -> yian (when users update 2nd time doesn't work) (check)
- * explain createindex (unclear to users what it does) -> zirui
- * change load cout "data loaded successfully" when it's unsuccessful. -> zirui (check)
- * update viewtable to also show PK -> yian (check)
- * check recover (WAL),add try catch don't exit program, error libc++abi: terminating due to uncaught exception of type std::runtime_error: Key already exists. Use update instead. ->yian
- * update help menu -> zirui
- * added deleteuser -> yian (check)
- * */ 
+
 void printHelp() {
     cout << "\nAvailable Commands:\n"
          << "----------------------------------------------\n"
