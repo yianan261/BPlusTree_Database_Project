@@ -115,7 +115,6 @@ Key removed.
 
 ```bash
 use (tablename)
-
 ```
 7. `tables`
  List all existing tables in the database.
@@ -167,7 +166,10 @@ createuser
 Enter user email: (email)
 Would you like to upload your Saved Places? (yes/no):
 ```
-
+Paste the relative path, the project use this relative path:
+```bash
+saved_places_dir/yian261_at_gmail_dot_com
+```
 14. `join`
     Perform a join between two tables based on matching column values, with optional projection of columns.
 
